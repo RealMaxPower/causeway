@@ -6,6 +6,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/RealMaxPower/causeway/ci.yml?branch=main&style=flat-square)](https://github.com/RealMaxPower/causeway/actions/workflows/ci.yml)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Verified commits](https://img.shields.io/badge/commits-signed-2da44e?style=flat-square&logo=github)](https://docs.github.com/en/authentication/managing-commit-signature-verification)
 
 Causeway is an interactive learning environment for global economics. Every concept comes in three layers — a thirty-second pocket answer, a five-minute working model you can manipulate, and a twenty-minute deep dive with sources. Every concept ends with the only question that matters: *so what does this change about a decision you actually make?*
 
