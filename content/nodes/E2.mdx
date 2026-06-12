@@ -1,0 +1,193 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "The Fed, ECB, Bank of Japan, Bank of England and People's Bank of China all share a job title but do very different jobs. Their mandates, tools, and political audiences differ enough that the same word — \"central bank\" — hides more than it reveals.",
+    sub: "The common analyst error: treating them as equivalent. Most cross-border monetary commentary trips on this.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Globally consequential central banks", val: "5", sub: "Federal Reserve · ECB · Bank of Japan · Bank of England · People's Bank of China." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Fed, ECB, BoE, BoJ, PBoC. Same job description, very different jobs.
+        Treating them as equivalent is the most common error in central-bank commentary.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Your mortgage rate is set by the Fed; your imported-goods prices by an
+        exchange rate that depends on Tokyo, Frankfurt, and Beijing as well.
+        You have multiple central banks in your life — knowing which one does what
+        changes how you read every &quot;central banks are doing X&quot; headline.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Five central banks · primary mandate
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Fed</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>prices + employment</dd>
+        <dt style={{ color: "var(--ink-2)" }}>ECB</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>prices first</dd>
+        <dt style={{ color: "var(--ink-2)" }}>BoE</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>prices, with caveats</dd>
+        <dt style={{ color: "var(--ink-2)" }}>BoJ</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>prices (after deflation)</dd>
+        <dt style={{ color: "var(--ink-2)" }}>PBoC</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>stability + state goals</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Five mandates, not one">
+    <L2Grid>
+      <L2Step num="01" title="The Fed's dual mandate">
+        <p className="lede">
+          Fed, ECB, BoE, BoJ, PBoC. Same job description, very different jobs.
+        </p>
+        <p>
+          The Fed has a <strong>dual mandate</strong>: stable prices AND maximum
+          employment. It can be relatively dovish in inflation overshoots if
+          labor is weak. Its 2020 framework review made this explicit: the Fed
+          will tolerate above-target inflation if it&apos;s following a period
+          of below-target inflation, and won&apos;t pre-empt phantom inflation
+          based on tight labor alone.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="ECB and BoE — prices first">
+        <p>
+          The <strong>ECB</strong> has price stability as a primary mandate;
+          employment is secondary. It is structurally more hawkish than the Fed
+          and has to balance the interests of 20 different national economies
+          inside the eurozone.
+        </p>
+        <p>
+          The <strong>BoE</strong> nominally has a price-stability mandate too,
+          with explicit caveats about supporting government economic policy.
+          The Truss episode in 2022 showed how those caveats interact with
+          political risk.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="BoJ — deflation made it different">
+        <p>
+          The <strong>BoJ</strong> has spent 30 years fighting deflation; its
+          toolkit (yield curve control, QE on a massive scale, negative rates
+          for years) is alien to the others. It only began normalising in 2024;
+          its frame for what &quot;normal&quot; looks like is still distinct.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="PBoC — credit allocation as a tool">
+        <p>
+          The <strong>PBoC</strong> operates inside a managed-currency regime
+          and a state-directed banking system. Its &quot;rate&quot; moves are
+          about credit allocation as much as monetary stance. Calling the
+          PBoC&apos;s actions &quot;Chinese QE&quot; or &quot;Chinese rate cuts&quot;
+          in the western sense misses what&apos;s actually happening.
+        </p>
+        <p>
+          <strong>When commentary says &quot;central banks are doing X,&quot;</strong>
+          ask which one. The next line of analysis usually falls apart.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Your monetary life touches at least three central banks."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          Your mortgage rate is set by the Fed&apos;s reading of US labor and
+          prices. Your imported-goods prices are set by an exchange rate that
+          depends on policy in Tokyo, Frankfurt, and Beijing as well. You have
+          multiple central banks in your life, even if you only voted for one.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "bis-annual-economic-report",
+            "tucker-unelected-power-2018",
+            "king-end-of-alchemy-2016",
+            "goodhart-evolution-central-banks-1988",
+          ]}
+        />
+      }
+    >
+      <h3>Central-bank independence is post-Volcker</h3>
+      <p>
+        Modern central-bank independence is post-Volcker (1980s). The shift to
+        explicit inflation targeting was 1990s (Reserve Bank of New Zealand
+        first, 1990). The 2008 crisis dragged all of them into balance-sheet
+        expansion. Independence is contested again in the 2020s, especially for
+        the Fed.
+      </p>
+
+      <Debate question="How independent should central banks be?">
+        <DebateSide side="mainstream" who="● Independence">
+          <p>
+            Insulate from politics. Politicians inflate; technocrats don&apos;t.
+            Granger and others made the empirical case in the 1980s–90s. The
+            post-Volcker disinflation is exhibit A.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Accountability">
+          <p>
+            Independence has gone too far. Central banks now make distributional
+            choices (whose assets QE bids up, whose mortgage gets re-priced).
+            They need democratic oversight commensurate with their reach.
+            Tucker&apos;s <em>Unelected Power</em> is the careful version.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The 2008–2020 expansion changed the job</h3>
+      <p>
+        Pre-2008, the Fed&apos;s balance sheet was about $900B and policy was
+        almost entirely the federal funds rate. Post-2008, the balance sheet
+        peaked at $9T, IOR became the operative floor, and the Fed effectively
+        became a market-maker of last resort in Treasuries and (briefly)
+        corporate bonds and money-market funds. The job description didn&apos;t
+        change; the tools did, dramatically. Other central banks did the same
+        thing in their own ways, but the divergence in toolkits across the five
+        banks widened sharply.
+      </p>
+
+      <Check
+        question="The ECB has a single mandate (price stability) while the Fed has a dual mandate (price stability + maximum employment). What does this difference actually change in policy?"
+        options={[
+          {
+            label: "Nothing in practice — both banks watch unemployment and inflation; the mandate is a legal formality.",
+            explain: "The mandates do matter. The ECB has tightened into recessions (2008 lift-off, 2011 hikes) that the Fed would have avoided under its dual mandate. Whether the formal mandate or institutional culture drives this is debated, but the actions diverge."
+          },
+          {
+            label: "The ECB will tolerate higher unemployment to defend price stability; the Fed will tolerate higher inflation to defend employment. Both have done so in the past two decades.",
+            correct: true,
+            explain: "Right. The 2008-2011 ECB hikes are the standard example on one side; the 2021 Fed's 'transitory' framing while unemployment was still elevated is the standard example on the other. Mandates produce different reaction functions even when the macro picture is similar."
+          },
+          {
+            label: "The Fed has lower inflation on average because the dual mandate allows more flexibility in monetary policy.",
+            explain: "Historical inflation across the two has been broadly similar; if anything the ECB has run somewhat below its target since 2014. The dual mandate isn't a free lunch."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/E2?l=2", label: "the central-bank comparison in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

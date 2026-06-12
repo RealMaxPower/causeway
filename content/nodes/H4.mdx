@@ -1,0 +1,178 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { CareerScorer } from "@/components/widgets/career-scorer";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Every industry runs on its own clock, not the headline business cycle's. Your negotiating leverage peaks just before that clock turns down — once the turn happens, your offer evaporates.",
+    sub: "Across late expansions and early recessions, which sector you're in matters more than how good you are at your job. The macro pattern overwhelms the individual one.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Career decisions look personal but follow regimes. Knowledge work, finance,
+        autos, construction, healthcare, public sector — each runs on its own clock.
+        Tech and finance lead; autos and construction are mid-cycle; healthcare is
+        counter-cyclical.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Negotiating leverage is highest just before your sector&apos;s hiring slows.
+        The skill is reading the sector clock and timing major moves to it — not
+        waiting until everyone else is also looking.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Sector hiring · by cycle phase
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Tech / finance</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>early-cycle hiring</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Autos / construction</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>mid- to late-cycle</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Manufacturing</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>mid-cycle</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Healthcare</dt>
+        <dd style={{ margin: 0, color: "var(--cw-blue)", fontFamily: "var(--cw-mono)" }}>counter-cyclical</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Time the move to the sector clock, not the headline cycle">
+    <L2Grid>
+      <L2Step num="01" title="Each sector has its own clock">
+        <p className="lede">
+          Career decisions look personal but follow regimes. Your sector&apos;s
+          cyclicality, more than your individual skill, determines when leverage
+          is high and low.
+        </p>
+        <p>
+          Knowledge work, finance, autos, construction, healthcare, public
+          sector — each runs on different clocks. Tech and finance lead the
+          cycle; construction and autos are mid-cycle; healthcare and public
+          sector are late- or counter-cyclical.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Leverage peaks just before your sector slows">
+        <p>
+          <strong>Leverage is highest just before your sector&apos;s hiring
+          slows.</strong> Once it slows, your offer in hand evaporates. The
+          skill is reading the sector clock and timing major moves to it.
+        </p>
+        <p>
+          Specifically: in late expansions, knowledge workers get aggressive
+          offers, and the right move is to lock in or use the offer to
+          negotiate. In early recessions, knowledge workers are first cut;
+          cyclical sectors (autos, construction) are second; healthcare last.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The 30-minute exercise">
+        <p>
+          Before any major career move, spend 30 minutes mapping three things:
+          (1) what cycle phase is the overall economy in (use H1&apos;s regime
+          read); (2) what sector is your target in, and where does it sit on
+          the lead-coincident-lag spectrum; (3) when does that sector&apos;s
+          hiring usually peak relative to the cycle. The answer reframes
+          everything from &quot;should I ask for more&quot; to &quot;how soon
+          do I need to decide.&quot;
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Read sectors before you read offers."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          If you&apos;re job-hunting, take 30 minutes to map: what cycle phase
+          is the economy in? what sector is your target in? when does that
+          sector&apos;s hiring usually peak? The answer reframes everything
+          you&apos;re negotiating.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <CareerScorer />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "bls-ces",
+            "bls-jolts",
+            "conference-board-lei",
+          ]}
+          entries={[
+            { who: "Cain Miller", title: "How sector matters for careers", year: "various" },
+          ]}
+        />
+      }
+    >
+      <h3>Sectoral cyclicality is a staple of labor economics</h3>
+      <p>
+        The granular structure (which sectors lead which) varies modestly
+        across cycles but is recognizable. The pattern showed cleanly in 2001,
+        2008, and 2020 US cycles. Tech-and-finance led down each time;
+        construction and autos followed; healthcare absorbed displaced workers.
+      </p>
+
+      <Debate question="Does sector or skill matter more for individual career outcomes?">
+        <DebateSide side="mainstream" who="● Sector-driven">
+          <p>
+            Even strong skills don&apos;t override a sector contraction. Read
+            sectors. A top performer in a shrinking industry is still subject
+            to its layoffs; the same person in an expanding industry has
+            multiple offers.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Skill-driven">
+          <p>
+            If you&apos;re in the top 10% of your field, sector is noise. Build
+            skill above all; the cycle eventually delivers opportunities to
+            anyone genuinely good. The sector argument over-rewards luck and
+            under-rewards capability.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The honest synthesis</h3>
+      <p>
+        Both are real. Sector cyclicality moves the median outcome by a lot;
+        skill moves variance around the median. If you&apos;re early-career,
+        invest in skill. If you&apos;re mid- or late-career with skill
+        established, time the moves to the cycle. The mistake is to apply
+        early-career skill-first advice to a mid-career timing decision.
+      </p>
+
+      <Check
+        question="You work in late-cycle finance and your sector is hiring aggressively, bonuses are at multi-year highs. Per Track H, what's the right move?"
+        options={[
+          {
+            label: "Take the bonuses, prepare for the turn. The high bonuses are the late-cycle signal — they peak just before they vanish.",
+            correct: true,
+            explain: "Right. Late-cycle peak compensation is information, not opportunity. Don't extrapolate the curve; use the windfall to build runway for the trough."
+          },
+          {
+            label: "Negotiate aggressively for more — the leverage is real and the sector is rewarding you for being there.",
+            explain: "The leverage IS real, but treating it as ongoing is the late-cycle mistake. Use the leverage to lock in better terms NOW, with awareness that this window closes — not to extrapolate further."
+          },
+          {
+            label: "Switch into a counter-cyclical sector to lock in stability.",
+            explain: "Possible move, but expensive: you'd give up the late-cycle premium without compensation. Counter-cyclical is the move when YOUR sector is in trouble, not when it's peaking."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H4?l=2", label: "the career-resilience scorer in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

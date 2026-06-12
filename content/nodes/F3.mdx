@@ -1,0 +1,164 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { BubbleMeter } from "@/components/widgets/bubble-meter";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "You can't reliably call the top of a bubble — anyone who sells you timing is selling you something else. But you can size where it is: leverage, valuation, and credit growth all have public data.",
+    sub: "The honest response isn't \"sell everything\" or \"this time is different.\" It's position sizing — how much risk to carry through the late innings.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        You can&apos;t reliably call the top, but you can size leverage,
+        valuation, and credit growth. Bubbles are visible as risk; the
+        timing is the part that&apos;s unknowable.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        The actionable response isn&apos;t &quot;sell everything,&quot;
+        it&apos;s <em>position sizing</em>: less leverage, more cash,
+        shorter duration in risk assets. You give up some upside in
+        exchange for a less catastrophic downside. Over a long horizon
+        this trade is worth making.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Bubble sizing indicators
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Margin debt / GDP</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>vs 50y range</dd>
+        <dt style={{ color: "var(--ink-2)" }}>CAPE (Shiller P/E)</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>vs 50y range</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Credit growth (3y)</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>vs trend</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Cross-asset correlation</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>elevated late-cycle</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Size the bubble; don't try to time it">
+    <L2Grid>
+      <L2Step num="01" title="Three things size up reliably">
+        <p className="lede">
+          Bubbles are visible as risk; the timing is the part that&apos;s
+          unknowable. Sizing is what you can do.
+        </p>
+        <p>
+          Three things size up reliably: <strong>leverage</strong> (debt
+          to GDP, margin debt, securities financing), <strong>valuation</strong>{" "}
+          (CAPE, price-to-earnings, price-to-rent), and <strong>credit
+          growth</strong> (year-on-year, adjusted for trend). All three
+          have public data; none of them are a secret.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Timing is the part nobody owns">
+        <p>
+          When all three are at the high end of their historical range,
+          future returns are low and crash probability is elevated — but
+          timing varies from &quot;next month&quot; to &quot;six years.&quot;
+          This is the part that humbles forecasters. Confident dates are
+          marketing.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Position size, don't capitulate">
+        <p>
+          The actionable response isn&apos;t &quot;sell everything,&quot;
+          it&apos;s <strong>position sizing</strong>: less leverage, more
+          cash, shorter duration in risk assets. You give up some upside
+          in exchange for a less catastrophic downside. Over a long
+          horizon this trade is worth making — and it doesn&apos;t require
+          predicting the top.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="The chip count is sizable; the closing time is unknown."
+        link={{ to: "/nodes/H8", text: "H8 · Portfolio under regime change" }}
+      >
+        <p>
+          If you&apos;re at the casino and the chips are getting easier to
+          come by, the game is later than you think. The chip count is
+          sizable; the closing time is unknown. Size positions, not
+          predictions.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <BubbleMeter />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "shiller-irrational-exuberance",
+            "reinhart-rogoff-this-time-different-2009",
+            "galbraith-short-history-financial-euphoria-1990",
+            "mackay-extraordinary-popular-delusions-1841",
+          ]}
+        />
+      }
+    >
+      <h3>The same pattern, again and again</h3>
+      <p>
+        Tulip Mania (1637), South Sea (1720), Mississippi (1720), Florida
+        real estate (1925), 1929, Japan (1989), dot-com (2000), US housing
+        (2007), crypto (2017, 2021). The composition changes; the pattern
+        doesn&apos;t — leverage build, valuation extreme, credit-fueled
+        story, then trigger.
+      </p>
+
+      <Debate question="Can bubbles be reliably identified before they pop?">
+        <DebateSide side="mainstream" who="● Identifiable">
+          <p>
+            Shiller: long-term valuation reverts; periods of extreme
+            deviation are bubbles. Some can be called by sizing — even if
+            timing can&apos;t be. The historical record shows recognisable
+            structural signatures.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Unknowable">
+          <p>
+            Fama: by definition, you can&apos;t beat the market.
+            &quot;Bubble&quot; is post-hoc rationalisation. If they were
+            reliably identifiable, the identification would arbitrage them
+            away in real time.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="What's the most accurate statement of Track F's bubble-detection claim?"
+        options={[
+          {
+            label: "You can reliably call the top of a bubble using a combination of valuation metrics; the trick is patience.",
+            explain: "Track F is explicit that you CAN'T reliably call the top. Valuation can stay extreme for years longer than your conviction does (or your fund does)."
+          },
+          {
+            label: "You can size leverage, valuation, and credit growth to identify when bubble conditions are present, but the timing of the turn is unknowable.",
+            correct: true,
+            explain: "Right. The framing flips the question: bubble detection isn't market timing, it's risk sizing. Position accordingly, accept variance, don't claim foresight on the date."
+          },
+          {
+            label: "Bubbles are visible only after they pop; in real time you're indistinguishable from a permabear.",
+            explain: "Stronger claim than the framework supports. The conditions ARE visible; the pop date isn't. The middle ground (risk-sizing in real time) is the whole pedagogy."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/F3?l=2", label: "the leverage + valuation + credit-growth triple in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

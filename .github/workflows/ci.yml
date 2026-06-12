@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # Catch slow link rot independent of PR cadence — once a week, Sunday 06:00 UTC.
+  schedule:
+    - cron: "0 6 * * 0"
+  # Allow running the source-URL audit on demand.
+  workflow_dispatch:
+
+# Cancel superseded runs on the same branch to save minutes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least-privilege default for every job: read-only access to the repo.
+# Every job here only reads / lints / audits — none need write access to
+# contents, packages, or any other scope.
+permissions:
+  contents: read
+
+jobs:
+  lint-and-typecheck:
+    name: Lint + typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        # Clear stale Next.js generated validator that can lag a new route addition.
+        run: |
+          rm -f .next/dev/types/validator.ts
+          pnpm typecheck
+
+  build-corpus-drift:
+    name: Search corpus is in sync with MDX
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Regenerate corpus
+        run: pnpm build:corpus
+
+      - name: Fail if corpus drifted
+        run: |
+          if ! git diff --exit-code lib/search-corpus.generated.ts; then
+            echo "::error::lib/search-corpus.generated.ts is out of sync with content/nodes/*.mdx."
+            echo "::error::Run 'pnpm build:corpus' locally and commit the result."
+            exit 1
+          fi
+
+  check-links:
+    name: Internal link integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify every /nodes/<id>, Cite id, and Sources.ids resolves
+        run: pnpm check:links
+
+  check-sources:
+    name: Source URLs resolve
+    runs-on: ubuntu-latest
+    # External URL rot is time-based, not commit-based, and anti-bot hosts
+    # return contradictory 403/404s that flake on every push. Run only on the
+    # weekly cron (and manual dispatch), and keep it non-blocking.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: HEAD-check every URL in lib/sources.ts
+        run: pnpm check:sources
+
+  audit:
+    name: pnpm audit (prod, high+)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit production dependencies (fail on high+)
+        run: pnpm audit --prod --audit-level=high

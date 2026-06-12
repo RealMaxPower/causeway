@@ -1,0 +1,173 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The live debate",
+    text: "Credible economists put the net employment effect of AI anywhere from a mild productivity boost to a civilization-defining labor shock. The direction (some substitution will happen) is agreed; everything else — magnitude, distribution, speed — is wide open.",
+    sub: "On a question this contested, the honest framing is personal hedging, not personal betting.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        The honest answer about AI and labor: nobody knows. The dishonest
+        answers come from anyone with a confident number. Track G holds the
+        disagreement up to the light instead of resolving it.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Decisions about career, education, and skill investment depend on
+        beliefs about which way the AI wave runs. The right strategy under
+        uncertainty isn&apos;t paralysis — it&apos;s hedging: build skills
+        in both the substitutable and complementary layers, and watch where
+        the data lands over the next five years.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Where the disagreement lives
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Direction (substitution real)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>broad agreement</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Magnitude (% jobs affected)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>10–80% (!)</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Speed (years to transition)</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>5–25</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Distribution (who gains)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>highly contested</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="What we know, what we don't, what to do anyway">
+    <L2Grid>
+      <L2Step num="01" title="What we know">
+        <p className="lede">
+          We&apos;re inside the change. The honest position is uncertainty
+          about magnitudes, with strong priors about direction.
+        </p>
+        <p>
+          AI substitutes for some cognitive tasks (writing, coding, analysis,
+          customer service). It complements others. The substitution is
+          happening faster than most prior automation waves; the
+          complementation is also faster. Both forces are real and visible
+          in 2026 data.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="What we don't know">
+        <p>
+          The net employment effect, the distribution of gains, the
+          transition speed. Estimates from credible economists span
+          &quot;mild productivity boost&quot; to &quot;civilization-defining
+          shift,&quot; often citing the same data. The spread is genuinely
+          this wide — and pretending otherwise costs trust.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The dishonest answers are the confident ones">
+        <p>
+          <strong>The dishonest answers are the confident ones.</strong>
+          {" "}Track G holds the disagreement up rather than resolving it.
+          Personal positioning under this kind of uncertainty should hedge,
+          not bet — and the hedge has an asymmetric upside.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If you can build the AI-as-tool layer, the upside is asymmetric."
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          If you can build skill in the AI-as-tool layer (using it to do
+          more), you have asymmetric upside. If your job is the
+          substitutable layer (the same task done many times),
+          the downside risk is real and you should plan for it. The skill
+          is being on the complement side of the equation.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "frey-osborne-future-of-employment-2013",
+            "acemoglu-restrepo-tasks-automation-2022",
+            "brynjolfsson-productivity-jcurve-2019",
+            "korinek-ai-economic-growth",
+          ]}
+        />
+      }
+    >
+      <h3>Every prior automation wave told us not to worry</h3>
+      <p>
+        Every prior automation wave produced doomsday predictions and net
+        job creation; we don&apos;t know if AI fits the same pattern or
+        breaks it. The cotton gin (1793), Luddites (1810s), automation
+        panic of the 1960s, internet (1990s) all featured similar
+        arguments. The base rate says: panic was wrong. The honest answer
+        says: the base rate may not apply when the substitute is cognitive
+        labor at this speed.
+      </p>
+
+      <Debate question="Same pattern as prior waves — or this time different?">
+        <DebateSide side="mainstream" who="● Net positive">
+          <p>
+            Same as prior automation. Productivity gains create new
+            categories. Transition pain real but temporary. Acemoglu and
+            Restrepo&apos;s tasks framework leans this direction at most
+            time horizons.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Different">
+          <p>
+            This wave is faster and broader. Cognitive work is most of
+            developed-economy employment; substitution is much wider than
+            prior waves. The transition&apos;s political feasibility, not
+            just its economic logic, is the real question.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>What honest analysis says, in 2026</h3>
+      <p>
+        The honest answer is: real productivity gains in narrow domains
+        (coding, writing, analysis, customer service); real displacement
+        in those domains too; net employment effect not yet visible at
+        aggregate scale; distribution of gains skewed toward
+        capital-and-skill owners. None of these is yet a confident
+        prediction; all are observable trends. Stay close to the data, not
+        to the louder commentators.
+      </p>
+
+      <Check
+        question="A commentator predicts that AI will eliminate 40% of white-collar jobs within ten years. How should Track G have you read this?"
+        options={[
+          {
+            label: "Take it seriously and reposition immediately — the prediction's specificity suggests careful modeling.",
+            explain: "Specificity isn't evidence of rigor; in genuinely uncertain domains, confident numbers are usually evidence of the opposite. Nobody has the data to make this prediction with that precision."
+          },
+          {
+            label: "Dismiss it as alarmism — past automation predictions consistently overstated displacement.",
+            explain: "Track G doesn't take the dismissive position either. The honest answer is the framework can't yet support either confident prediction; observable trends matter, but so does humility about timing and magnitude."
+          },
+          {
+            label: "The number is dishonest by construction — no one has the data to make that prediction with that precision. Focus on observable trends (sector-level adoption, task composition shifts, wage premia) rather than aggregate forecasts.",
+            correct: true,
+            explain: "Right. The honest position is the trends are real and worth tracking; the specific numbers are a marketing exercise. Anyone selling you a precise displacement figure is selling something."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/G4?l=2", label: "the trends-vs-predictions breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

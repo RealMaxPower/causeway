@@ -1,0 +1,163 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Every real economy uses many mechanisms to allocate scarce things — not just price. Queues, lotteries, relationships, regulation, and prestige all clear markets where money doesn't.",
+    sub: "When price won't clear (ER beds, university seats, donated kidneys), something else does. The skill is knowing which mechanism fits which good.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Every economy mixes price-cleared markets with non-price clearing.
+        Queues, rationing, status, relationships, regulation — they all do
+        work prices won&apos;t or can&apos;t.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Knowing which mechanism is allocating each scarce thing in your life
+        — and why — is the difference between a productive complaint and a
+        category-error one. &quot;Just use markets&quot; and &quot;markets
+        are evil&quot; are equally lazy.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Clearing mechanisms · examples
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Price</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>groceries, fuel</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Queue</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>ER, public services</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Lottery</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>school admissions</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Relationship</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>favors, hiring</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Regulation</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>rent control, drugs</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="When price can't clear, something else does">
+    <L2Grid>
+      <L2Step num="01" title="Examples that resist price clearing">
+        <p className="lede">
+          Every economy mixes price-cleared markets with non-price clearing.
+          Queues, rationing, status, relationships, regulation — they all do
+          work prices won&apos;t or can&apos;t.
+        </p>
+        <p>
+          Universities don&apos;t sell admission to the highest bidder.
+          Concert venues don&apos;t auction front-row seats to the breaking
+          point. Doctors don&apos;t (usually) charge what dying patients would
+          pay. Kidney donations operate on a non-market matching system.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="It's deliberate non-market clearing">
+        <p>
+          These aren&apos;t market failures; they&apos;re <strong>deliberate
+          non-market clearing</strong>. The norm in each case says
+          price-clearing would damage something — fairness, the producer&apos;s
+          identity, the institution&apos;s mission. Replacing the norm with
+          price-clearing changes the thing itself.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The skill is matching mechanism to good">
+        <p>
+          &quot;Just use markets&quot; and &quot;markets are evil&quot; are
+          equally lazy; the question is always which mechanism for which
+          good, and what each preserves. Market design as a field
+          (kidney exchanges, school matching, spectrum auctions) has shown
+          that the choice of mechanism is itself a powerful policy lever.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="When you call a system 'inefficient,' check what it's allocating by."
+        link={{ to: "/nodes/B3", text: "B3 · When markets fail" }}
+      >
+        <p>
+          If a system isn&apos;t price-clearing, it&apos;s optimising for
+          something else — fairness, equality of access, professional
+          identity, social cohesion — and that something else may be the
+          actual point. The label &quot;inefficient&quot; only applies if
+          you accept the price-allocation goal in the first place.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "sandel-what-money-cant-buy-2012",
+            "walzer-spheres-of-justice-1983",
+            "roth-who-gets-what-2015",
+            "titmuss-gift-relationship-1970",
+          ]}
+        />
+      }
+    >
+      <h3>The modern frame</h3>
+      <p>
+        Sandel (<em>What Money Can&apos;t Buy</em>), Walzer (<em>Spheres of
+        Justice</em>), and Roth (market design) frame the modern debate.
+        Empirical market design — kidney exchanges, school matching, spectrum
+        auctions — has shown the choice of mechanism is itself a powerful
+        policy lever. Sometimes price wins; sometimes matching does; sometimes
+        random allocation does.
+      </p>
+
+      <Debate question="Should markets do more — or less — work?">
+        <DebateSide side="mainstream" who="● Expansion">
+          <p>
+            Markets in more places. Repugnance fades; market mechanisms
+            produce better outcomes. Kidney exchange, congestion pricing,
+            carbon markets all work. Use price where price doesn&apos;t
+            actively destroy something.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Limits">
+          <p>
+            Some goods shouldn&apos;t be priced. Pricing crowds out norms
+            (Titmuss on blood donation: paid donors are worse than volunteer
+            donors). Once you pay for it, you can&apos;t make it not-paid.
+            Choose carefully.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Why does Causeway argue that 'queues, rationing, relationships, status' are also clearing mechanisms — not just second-best substitutes for prices?"
+        options={[
+          {
+            label: "Because every real economy uses them somewhere, and pretending otherwise leads to bad reasoning about the trade-offs of replacing them with prices.",
+            correct: true,
+            explain: "Right. Friendship, organ transplants, military service, kidney donation — all clear without prices, and pricing them changes the goods themselves. The framing matters because it stops people from assuming 'add a market' is always neutral."
+          },
+          {
+            label: "Because they're more efficient than prices in most cases — markets are a special case of more general clearing.",
+            explain: "Overstated. Prices are extraordinarily efficient at coordination when they apply; the argument isn't that non-market clearing is better, it's that it's distinct and has its own logic."
+          },
+          {
+            label: "Because they're harder to corrupt than prices, since money can be bribed but queues can't.",
+            explain: "Queues, rationing, and status can all be corrupted — that's how black markets emerge. The argument isn't about corruption-resistance."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/B4?l=2", label: "non-price clearing in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

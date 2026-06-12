@@ -1,0 +1,167 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { Demographics } from "@/components/widgets/demographics";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Demographics is the slowest and most predictable macro variable. Babies born this year are the working-age labor force 25 years from now — there is no policy that changes that arithmetic.",
+    sub: "Every major developed economy is aging in the same direction, at different speeds. The same regime, with different timing.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Aging is the slowest-moving variable in macro and the most predictable.
+        It pushes labor up, savings up, real rates down, fiscal stress up. The
+        whole world is getting older; the rates are different.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Demographics work themselves into every other track. They shape labor
+        bargaining power, the real-rate floor, fiscal sustainability, and the
+        political coalition between young and old. Most decade-out macro
+        forecasts that ignore demographics turn out wrong; the ones that
+        center demographics tend to be right.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Working-age population trend (15–64)
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>US</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>slow growth (immig.)</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Japan</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>fell 15% since peak</dd>
+        <dt style={{ color: "var(--ink-2)" }}>China</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>now declining</dd>
+        <dt style={{ color: "var(--ink-2)" }}>India</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>still growing</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Africa</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>growing fast</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Aging is durable, decade-long, much harder to reverse than to predict">
+    <L2Grid>
+      <L2Step num="01" title="Where workforces are going">
+        <p className="lede">
+          Aging is the slowest-moving variable in macro and the most
+          predictable. Its implications run through every other track.
+        </p>
+        <p>
+          Working-age populations are shrinking in Japan, Germany, China,
+          Korea, Italy. Plateauing in the rest of Europe and most of East
+          Asia. Still growing in the US (slowly, via immigration), India,
+          and sub-Saharan Africa.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The macro consequences">
+        <p>
+          <strong>Labor scarcity pushes wages up, savings rates push real
+          rates down, dependency ratios push fiscal stress up.</strong>
+          {" "}These are durable, decade-long forces, much harder to reverse
+          than to predict. The peak-then-decline of working-age populations
+          across developed economies is the dominant macro story of the
+          2020s–2040s.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The political consequence">
+        <p>
+          More spending on aging populations, less on the young, harder
+          fiscal politics every year. Every developed country is running
+          this script — different speeds, same direction. The political
+          coalitions between voters in their 60s+ and voters in their
+          20s–40s will be the defining domestic-politics frame for the
+          next two decades.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If you're in your 30s in a developed country…"
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          You&apos;ll work past 65 and pay higher taxes than your parents.
+          If you have skills aging populations need (medical, eldercare,
+          automation, asset management), your career has tailwinds. If
+          you&apos;re in sectors competing with young Indian or African
+          workforces, plan accordingly.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <Demographics />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "un-world-population-prospects",
+            "goodhart-pradhan-demographic-reversal-2020",
+            "lee-mason-population-aging-2011",
+            "oecd-pensions-at-a-glance",
+          ]}
+        />
+      }
+    >
+      <h3>The demographic transition</h3>
+      <p>
+        Demographic transition theory (Thompson 1929, Notestein 1945)
+        describes the move from high-fertility / high-mortality to low /
+        low. Most of the world has now made the transition; the consequences
+        are still working through. The next few decades are about what
+        happens <em>after</em> the transition completes — sustained low
+        fertility, lengthening lifespans, age structures inverting.
+      </p>
+
+      <Debate question="Aging means slow growth — or productivity offsets?">
+        <DebateSide side="mainstream" who="● Stagnation">
+          <p>
+            Lower workforce, lower investment, lower demand. Japan as
+            preview. The total-economy growth numbers slow whether or not
+            per-capita numbers do.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Adaptation">
+          <p>
+            Older societies invest more per worker, automate more
+            aggressively. Headline numbers obscure per-capita gains. The
+            stagnation framing confuses aggregate with per-capita; per-capita
+            growth in aging economies can remain healthy.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="An aging population, all else equal, should push which combination of macro variables?"
+        options={[
+          {
+            label: "Labor scarcity, savings glut, real rates down, fiscal stress up.",
+            correct: true,
+            explain: "Right. Fewer workers → wage pressure (labor up). Older population saves more for retirement → savings supply up. Excess savings pushes real rates down. Promises to retirees + smaller working-age tax base → fiscal stress up. The combination is structural and predictable."
+          },
+          {
+            label: "Labor scarcity, real rates up, fiscal stress up.",
+            explain: "Half right. Labor scarcity does push wages up, and fiscal stress does rise. But real rates should fall, not rise — because the saving cohort is expanding faster than the dissaving (retired, drawing down) cohort, the savings glut dominates."
+          },
+          {
+            label: "Inflation surge, capital flight, currency depreciation.",
+            explain: "These can happen at the country level if policy responses are bad (e.g. monetising fiscal stress), but they're not the structural consequences of aging itself. The structural story is real-rate-down, not inflation-up."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/G3?l=2", label: "the demographic mechanics in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

@@ -1,0 +1,172 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Markets fail in four canonical ways: when costs spill onto bystanders, when goods can't be excluded, when buyers and sellers don't know the same things, and when one side has the only chair at the table.",
+    sub: "Real-world failures usually combine several at once — US healthcare hits all four.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Canonical market-failure modes", val: "4", sub: "Externalities · public goods · asymmetric information · market power." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Externalities, public goods, asymmetric information, market power.
+        Memorise these four; almost every real market failure is a combination.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Knowing the failure modes by name lets you diagnose <em>why</em> a
+        market isn&apos;t working — instead of either defending it on principle
+        or condemning it on principle. The cure for each is different.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        The four failure modes · with examples
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Externalities</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>pollution, vaccines</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Public goods</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>defense, research</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Asymm. information</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>insurance, used cars</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Market power</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>monopoly, network effects</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Memorise the four; diagnose the combinations">
+    <L2Grid>
+      <L2Step num="01" title="Externalities">
+        <p className="lede">
+          Externalities, public goods, asymmetric information, market power.
+          Memorise these four; almost every real failure is a combination.
+        </p>
+        <p>
+          <strong>Externalities</strong>: actions whose costs or benefits fall
+          on third parties. Pollution is the canonical case; vaccines are the
+          positive version. Markets under-supply benefits and over-supply
+          costs.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Public goods">
+        <p>
+          <strong>Public goods</strong>: non-rival, non-excludable. National
+          defense, basic research. Markets under-supply because individual
+          buyers can free-ride — why pay for what you&apos;ll get anyway?
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Asymmetric information">
+        <p>
+          <strong>Asymmetric information</strong>: one side knows more than
+          the other. Used cars, insurance, healthcare. Adverse selection
+          collapses some markets entirely (Akerlof&apos;s lemons): the
+          informed side withdraws, the uninformed side overpays for the
+          remainder, the informed side withdraws further, and so on.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Market power">
+        <p>
+          <strong>Market power</strong>: not enough competition. Monopoly is
+          the textbook case; tacit collusion, regulatory capture, and network
+          effects produce the modern versions (where any one firm could be
+          replaced but the structural advantage of being &quot;the platform&quot;
+          is what holds price up).
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Healthcare combines all four. That's why no country gets it 'right.'"
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          Healthcare combines all four: externalities (contagion), public
+          good (research), information asymmetry (you vs your doctor vs the
+          insurer), and market power (insurance consolidation). That&apos;s
+          why no country gets it &quot;right&quot; — every fix addresses one
+          mode and ignores the other three.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "coase-problem-of-social-cost-1960",
+            "akerlof-market-for-lemons-1970",
+            "pigou-economics-of-welfare-1920",
+            "stiglitz-nobel-lecture-2001",
+          ]}
+        />
+      }
+    >
+      <h3>Old frameworks, still-hard diagnostics</h3>
+      <p>
+        Pigou (1920) for externalities, Samuelson (1954) for public goods,
+        Akerlof (1970) for asymmetric information, antitrust dating to
+        Sherman (1890). The frameworks are old; the diagnostic skill of
+        identifying which combination is at play in any specific case is
+        still hard, and the prescription depends on the diagnosis.
+      </p>
+
+      <Debate question="Government solves failures, or makes them worse?">
+        <DebateSide side="mainstream" who="● Government solves">
+          <p>
+            Pigovian taxes, public provision, regulation, antitrust.
+            Imperfect but better than the failure. Empirical record on
+            specific interventions (cap-and-trade, vaccine mandates,
+            antitrust enforcement) is mixed-positive.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Markets often solve">
+          <p>
+            Coase: bargaining can internalise externalities. Government
+            failure may exceed market failure. Be skeptical of any single
+            fix; check the counterfactual.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Which of these is NOT one of the four canonical market-failure modes?"
+        options={[
+          {
+            label: "Externalities — costs or benefits that fall on parties outside the trade.",
+            explain: "This IS one of the four. Pollution is the classic example."
+          },
+          {
+            label: "Asymmetric information — one side knows more than the other, distorting the trade.",
+            explain: "This IS one of the four. Akerlof's used-car market is the textbook case."
+          },
+          {
+            label: "Inequality — the resulting distribution of gains and losses is uneven.",
+            correct: true,
+            explain: "Distributional outcomes are a separate concern from the four canonical failure modes (externalities, public goods, asymmetric information, market power). Markets can clear and still produce inequality — that's a political question, not a coordination failure."
+          },
+          {
+            label: "Market power — one side has enough influence to set prices unilaterally.",
+            explain: "This IS one of the four. Monopolies and monopsonies."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/B3?l=2", label: "the four failure modes in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

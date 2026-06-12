@@ -1,0 +1,161 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "The energy transition has an unusual economic shape: very high up-front capital cost, very low marginal cost once built. Solar panels are expensive to install; the electrons they produce after that are nearly free.",
+    sub: "That shape gives the transition two macro signatures at once — inflationary in the build-out decade, deflationary in the operating decades that follow.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        A cleaner energy system is also a more capital-intensive one —
+        front-loaded investment, back-loaded payoff. That&apos;s an inflation
+        profile in the near term, not a deflation profile — regardless of
+        which side you&apos;re rooting for.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        The transition is good, slow, and expensive — and the macro
+        consequence is the part most analysis underplays. Your electricity in
+        2040 will likely be cheaper in real terms; your bills between now
+        and 2040 will likely be higher. Plan financially for both phases.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Transition macro signature
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Steel, copper, lithium</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>structural bid</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Skilled labor</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>shortage</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Capex / GDP</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>rising</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Real interest rates</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>structurally higher</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Good, slow, and expensive — and inflationary for years">
+    <L2Grid>
+      <L2Step num="01" title="Renewables aren't cheaper today">
+        <p className="lede">
+          The energy transition is good, slow, and expensive. The macro
+          consequence — that&apos;s the part most analysis underplays.
+        </p>
+        <p>
+          Renewables have lower marginal cost than fossil fuels but higher
+          capital cost. The lifetime levelised costs are now competitive in
+          most geographies. The transition phase is decades of front-loaded
+          investment producing back-loaded payoff.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Front-loaded capex is inflationary">
+        <p>
+          Front-loaded capex is <strong>inflationary</strong>: you&apos;re
+          consuming steel, copper, lithium, labor, and capital now to build
+          assets that pay off slowly. The real economy must reallocate from
+          current consumption to future production. Whenever a society does
+          that at scale, prices of the inputs rise.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Both can be true at different horizons">
+        <p>
+          This is the opposite of the deflationary &quot;cheap energy in the
+          future&quot; story. Both can be true: cheaper energy in 2040, more
+          inflation between now and then. The transition has macro phases.
+          Conflating them produces bad forecasts in both directions.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Plan financially for both transition phases."
+        link={{ to: "/nodes/H2", text: "H2 · Saving in this regime" }}
+      >
+        <p>
+          Your electricity bill in 2040 is likely lower than today (in real
+          terms). Your bills between now and 2040 are likely higher. Plan
+          financially for both phases — they don&apos;t have the same
+          investment implications. Commodities, real assets, and capex
+          beneficiaries are the transition winners; pure-play efficiency
+          plays are the end-state winners.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "iea-world-energy-outlook",
+            "smil-energy-transitions-2010",
+            "bnef-lcoe",
+          ]}
+          entries={[
+            { who: "Kemp", title: "Energy economics", year: "various" },
+          ]}
+        />
+      }
+    >
+      <h3>Energy transitions take generations</h3>
+      <p>
+        Energy transitions historically take 50–100 years. Wood-to-coal
+        (1700s–1900s), coal-to-oil (1900s–1960s), oil-to-electrons (now–?).
+        Each is gradual; each has macro phases. The transition acceleration
+        in the 2020s is faster than past transitions but still measured in
+        decades, not quarters.
+      </p>
+
+      <Debate question="Is the transition deflationary or inflationary?">
+        <DebateSide side="mainstream" who="● End-state cheap">
+          <p>
+            Renewables undercut fossils permanently; once installed,
+            electricity is cheap. The long-run is deflationary for energy
+            costs. The transition pain is real but temporary.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Capex inflation">
+          <p>
+            Decades of front-loaded investment produce inflation now,
+            deflation later. Both true at different horizons. The dominant
+            policy response (tighten into the capex shock) is the wrong
+            response; this is supply-side, not demand-side.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Why does Causeway argue the energy transition is an inflationary shock, regardless of one's politics?"
+        options={[
+          {
+            label: "Because clean energy is more expensive than fossil fuels, so consumer prices have to rise.",
+            explain: "At the running-cost level clean energy is now often CHEAPER (solar marginal cost is near zero). The inflation story isn't about end-use prices."
+          },
+          {
+            label: "Because building the new system is capital-intensive and front-loaded; you pay for it in higher capex and resource prices today, with the payoff in cheaper energy decades later — that profile is inflationary in the transition, deflationary afterwards.",
+            correct: true,
+            explain: "Right. The shape — front-loaded investment, back-loaded payoff — is inflationary regardless of whether the eventual destination is cheaper. Tightening monetary policy into this shock would crush the capex needed to get to the cheap-energy destination."
+          },
+          {
+            label: "Because climate disasters destroy supply, pushing prices up.",
+            explain: "Climate damages do exist, but that's separate from the transition mechanic. The argument here is about the capital cycle of building the new system, not about climate damages."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/G2?l=2", label: "the capex-profile chart in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

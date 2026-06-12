@@ -1,0 +1,397 @@
+/* Tutor FAB + panel — ported from the v0 prototype screens.css §545-653.
+   Tokens (--paper, --ink, --gold, --rule, etc.) come from styles/tokens.css. */
+
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px oklch(0 0 0 / 0.18);
+  font-family: var(--cw-sans);
+  font-size: 13.5px;
+  transition: transform 140ms var(--ease), background 140ms var(--ease);
+}
+.fab:hover {
+  background: var(--gold-deep);
+  transform: translateY(-1px);
+}
+
+/* On narrow viewports the labelled pill crowds footer links and the panel
+   trigger area. Drop to icon-only and tuck the FAB closer to the corner. */
+@media (max-width: 540px) {
+  .fab {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 12px;
+    gap: 0;
+  }
+  .fab .fabLabel {
+    display: none;
+  }
+}
+
+/* When the footer enters viewport, shrink the FAB to a small icon-only
+   pip so footer links remain clickable but the tutor still signals its
+   availability. The label hides, the gap collapses, and the bubble
+   becomes a circle pinned to the same corner. */
+.fabMini {
+  padding: 8px;
+  gap: 0;
+}
+.fabMini .fabLabel {
+  display: none;
+}
+.fabMini .glyph {
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+}
+
+.glyph {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--cw-serif);
+  font-size: 11px;
+  color: var(--gold);
+  font-style: italic;
+}
+
+.panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 60;
+  width: 460px;
+  height: calc(100vh - 48px);
+  max-height: 900px;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-md);
+  box-shadow: 0 12px 36px oklch(0 0 0 / 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 540px) {
+  .panel {
+    inset: 8px;
+    width: auto;
+    max-height: none;
+    bottom: 8px;
+    right: 8px;
+  }
+}
+
+.head {
+  padding: 14px 16px;
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border-top-left-radius: var(--r-md);
+  border-top-right-radius: var(--r-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headTitle {
+  font-family: var(--cw-serif);
+  font-size: 16px;
+}
+.headTitle em {
+  color: var(--gold-soft);
+  font-style: italic;
+}
+.close {
+  background: transparent;
+  border: 0;
+  color: var(--paper);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.context {
+  background: var(--paper-2);
+  padding: 8px 16px;
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.contextPip {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+.msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: var(--cw-serif);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.msgUser {
+  background: var(--gold-wash);
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  align-self: flex-end;
+  max-width: 85%;
+  color: var(--gold-deep);
+  font-family: var(--cw-sans);
+  font-size: 13.5px;
+}
+
+.msgBot {
+  color: var(--ink-2);
+}
+
+/* Markdown typography inside .msgBot. Tight vertical rhythm so multi-paragraph
+   answers don't feel sparse in a narrow panel. */
+.msgBot > :first-child { margin-top: 0; }
+.msgBot > :last-child { margin-bottom: 0; }
+.msgBot p {
+  margin: 0 0 0.7em;
+}
+.msgBot strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.msgBot em {
+  font-style: italic;
+}
+.msgBot ol,
+.msgBot ul {
+  margin: 0.4em 0 0.8em;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.msgBot ol { list-style: decimal; }
+.msgBot ul { list-style: disc; }
+.msgBot li > p:only-child {
+  margin: 0;
+}
+.msgBot li::marker {
+  color: var(--ink-3);
+}
+.msgBot code {
+  font-family: var(--cw-mono);
+  font-size: 0.88em;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.5px 4px;
+}
+.msgBot pre {
+  margin: 0.6em 0;
+  padding: 10px 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  overflow-x: auto;
+  font-family: var(--cw-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.msgBot pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+.msgBot blockquote {
+  margin: 0.5em 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--gold);
+  color: var(--ink-3);
+  font-style: italic;
+}
+.msgBot a {
+  color: var(--gold-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.msgBot a:hover {
+  color: var(--gold);
+}
+.msgBot hr {
+  margin: 0.8em 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+.msgBot h1,
+.msgBot h2,
+.msgBot h3,
+.msgBot h4 {
+  font-family: var(--cw-serif);
+  margin: 0.8em 0 0.3em;
+  color: var(--ink);
+  line-height: 1.25;
+}
+.msgBot h1 { font-size: 1.15em; }
+.msgBot h2 { font-size: 1.08em; }
+.msgBot h3,
+.msgBot h4 { font-size: 1em; font-weight: 600; }
+.msgBot table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6em 0;
+  font-size: 0.95em;
+}
+.msgBot th,
+.msgBot td {
+  border: 1px solid var(--rule);
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.msgBot th {
+  background: var(--paper-2);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.src {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--gold-deep);
+  letter-spacing: 0.06em;
+}
+
+/* Inline citation link (Track H pointer). */
+.citeLink {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--gold-wash);
+  color: var(--gold-deep);
+  font-family: var(--cw-mono);
+  font-size: 0.85em;
+  text-decoration: none;
+  border: 1px solid var(--gold);
+}
+.citeLink:hover {
+  background: var(--gold);
+  color: var(--paper);
+}
+
+/* Inline source citation badge — not a link, just visible attribution. */
+.citeBadge {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--paper-2);
+  color: var(--ink-3);
+  font-family: var(--cw-mono);
+  font-size: 0.82em;
+  border: 1px solid var(--rule);
+}
+
+.typing {
+  display: inline-flex;
+  gap: 3px;
+}
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: typingBounce 1s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30%           { transform: translateY(-3px); opacity: 1; }
+}
+
+.suggest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 16px 8px;
+}
+.suggest button {
+  font-family: var(--cw-sans);
+  font-size: 11.5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--rule-2);
+  background: var(--paper);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.suggest button:hover {
+  background: var(--gold-wash);
+  border-color: var(--gold);
+  color: var(--gold-deep);
+}
+.suggest button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.input {
+  border-top: 1px solid var(--rule);
+  padding: 10px 12px;
+  display: flex;
+  gap: 8px;
+}
+.input input {
+  flex: 1;
+  font-family: var(--cw-sans);
+  font-size: 13.5px;
+  border: 1px solid var(--rule-2);
+  border-radius: var(--r-md);
+  padding: 8px 10px;
+  outline: none;
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.input input:focus {
+  border-color: var(--gold-deep);
+  background: var(--paper);
+}
+.input button {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border: 0;
+  padding: 0 14px;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  cursor: pointer;
+}
+.input button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

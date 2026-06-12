@@ -1,0 +1,44 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--gold-deep);
+  background: var(--gold-wash);
+  border-radius: var(--r-sm);
+  margin-bottom: 16px;
+}
+
+.bannerLabel {
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.bannerName {
+  font-family: var(--cw-serif);
+  font-size: 14px;
+  color: var(--ink);
+  flex: 1 1 auto;
+}
+
+.bannerClose {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--gold-deep);
+  cursor: pointer;
+  padding: 2px 8px;
+  min-height: 28px;
+}
+.bannerClose:hover {
+  background: var(--paper);
+}
+.bannerClose:focus-visible {
+  outline: 2px solid var(--gold-deep);
+  outline-offset: 2px;
+}

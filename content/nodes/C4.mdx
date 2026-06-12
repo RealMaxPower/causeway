@@ -1,0 +1,228 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { InflationQuadrant } from "@/components/widgets/inflation-quadrant";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Same headline inflation number, four different stories underneath — too much demand, supply shocks, runaway expectations, or fiscal dominance. Each calls for a different cure.",
+    sub: "The common policy error: applying the wrong cure for the regime — hiking rates into a supply shock, or staying loose into a demand-pull boom.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Distinct inflation regimes", val: "4", sub: "Demand-pull · cost-push (supply shock) · expectations-driven · fiscal-dominant." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Demand-pull, cost-push, expectations-driven, fiscal-dominant. Same
+        headline number, four different causes, four different cures. Knowing
+        which one you&apos;re in is the whole game.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        The right policy response is regime-dependent. Hiking into a supply
+        shock destroys output without curing prices. Sitting on your hands
+        in an expectations-driven regime entrenches it. The quadrant tells
+        you which mistake is on the table.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Four regimes · four cures
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Demand-pull</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>gentle hikes</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Cost-push</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>wait it out</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Expectations-driven</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>Volcker</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Fiscal-dominant</dt>
+        <dd style={{ margin: 0, color: "var(--cw-blue)", fontFamily: "var(--cw-mono)" }}>fiscal consolidation</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Place the moment, then pick the cure">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Demand-pull">
+            Aggregate spending exceeds productive capacity. Cure: cool
+            demand with monetary or fiscal tightening.
+          </KeyTerm>
+          <KeyTerm term="Cost-push">
+            Supply shocks (energy, commodities, shipping) raise costs and
+            propagate. Tightening into this destroys output without curing
+            prices.
+          </KeyTerm>
+          <KeyTerm term="Expectations">
+            Households and firms come to expect higher inflation and price
+            accordingly. Once unanchored, requires aggressive credibility
+            action.
+          </KeyTerm>
+          <KeyTerm term="Fiscal-dominant">
+            Government deficits large enough that monetary tightening
+            can&apos;t offset them. Monetary policy stops mattering until
+            the fiscal side adjusts.
+          </KeyTerm>
+          <KeyTerm term="Anchored expectations">
+            Long-run inflation expectations stay near the central bank&apos;s
+            target despite short-run surprises. The cheapest form of
+            disinflation.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="One headline, four cures">
+        <p className="lede">
+          Demand-pull, cost-push, expectations-driven, fiscal-dominant.
+          Same headline number, four different causes, four different
+          cures. Knowing which one you&apos;re in is the whole game.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The two axes">
+        <p>
+          The quadrant has two axes. <strong>Demand vs supply origin</strong>
+          {" "}— is the impulse coming from spending exceeding capacity, or
+          from supply shocks raising costs?{" "}
+          <strong>Anchored vs unanchored expectations</strong> — are
+          long-run expectations still near the target, or are households
+          and firms re-pricing toward sustained higher inflation?
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Walk the quadrants">
+        <p>
+          <strong>Demand-pull (anchored × demand)</strong> — 2018 US. Cure:
+          gentle, well-telegraphed hikes. Anchored expectations do most of
+          the work.
+        </p>
+        <p>
+          <strong>Cost-push (anchored × supply)</strong> — early 2022. Cure:
+          wait it out, supply-side policy where possible. Hiking into a
+          supply shock destroys output without curing prices.
+        </p>
+        <p>
+          <strong>Expectations-driven (unanchored × demand)</strong> —
+          late 1970s. Cure: aggressive credibility move, front-loaded
+          hikes, hawkish guidance. Volcker-style. Recession is the price.
+        </p>
+        <p>
+          <strong>Fiscal-dominant (unanchored × supply)</strong> —
+          Argentina 2024. Cure: monetary policy alone can&apos;t fix
+          this. Requires fiscal consolidation or currency reform.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Try the presets">
+        <p>
+          The widget below has five history snapshots. Click each and
+          watch the dot move and the cure change. Then try moving the
+          drivers manually: if you push expectations and fiscal together,
+          watch how fast the regime shifts from &quot;manageable&quot; to
+          &quot;Volcker required.&quot;
+        </p>
+      </L2Step>
+
+      <Callout
+        title="The cure that fits one quadrant is wrong in the others."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          The most expensive mistakes in monetary policy come from
+          applying the wrong quadrant&apos;s cure. The 1970s Fed hiked
+          into mostly-supply shocks for years before Volcker eventually
+          had to do the expectations-driven cure. The 2022 Fed did the
+          opposite — read it correctly as supply-plus-fiscal early and
+          adjusted.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <InflationQuadrant />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "friedman-role-of-monetary-policy-1968",
+            "cleveland-fed-inflation-expectations",
+            "volcker-keeping-at-it-2018",
+            "sargent-ends-of-four-inflations-1982",
+            "sims-fiscal-theory-price-level",
+          ]}
+        />
+      }
+    >
+      <h3>The quadrant is taught one cell at a time</h3>
+      <p>
+        Most macro education teaches the demand-pull cure (monetary
+        tightening) as the universal one because the post-1982 environment
+        was overwhelmingly demand-driven with anchored expectations. The
+        other three quadrants get one paragraph each. The 2022 episode
+        re-introduced supply-driven inflation to a generation that had
+        never personally encountered it.
+      </p>
+
+      <Debate question="Is fiscal-dominant inflation a real category, or a fringe theory?">
+        <DebateSide side="mainstream" who="● Real and important">
+          <p>
+            Sims and the fiscal theory of the price level make a careful
+            mainstream case: when fiscal deficits are large enough,
+            monetary tightening doesn&apos;t bite — the bond market prices
+            in eventual default-or-inflation, and the inflation expectation
+            stops responding to rate moves.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Niche, mostly EM">
+          <p>
+            The pure case is rare in developed economies; Argentina and
+            Turkey are the obvious examples. In the US, fiscal-dominance
+            framing is mostly a metaphor — the actual problem is
+            expectations contamination from the deficit, not literal
+            fiscal dominance.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper observation</h3>
+      <p>
+        Most actual inflation episodes blend quadrants. 2022 was
+        cost-push + fiscal + some demand. 1970s was supply + fiscal +
+        expectations contamination over time. The quadrant is a
+        diagnostic tool, not a label: the question is which mix of
+        forces dominates, and the cure should be weighted accordingly.
+      </p>
+
+      <Check
+        question="A policymaker faces 5% inflation and a 70% probability the cause is cost-push (energy shock). What's the textbook policy move?"
+        options={[
+          {
+            label: "Hike rates aggressively to anchor expectations and crush the inflation before it becomes embedded.",
+            explain: "This is the demand-pull playbook applied to a cost-push problem. Tightening into a supply shock produces recession without solving the inflation — the 1970s-style mistake."
+          },
+          {
+            label: "Ride out the supply shock if expectations stay anchored, intervene if expectations slip. The cure for cost-push isn't tighter monetary policy unless it migrates to demand or expectations.",
+            correct: true,
+            explain: "Right. The quadrant matters because the cure does. Cost-push that doesn't contaminate expectations resolves itself; aggressive tightening produces unnecessary unemployment and doesn't fix the supply problem."
+          },
+          {
+            label: "Subsidise the affected sector to suppress the cost increase directly, then deal with the subsidy cost later.",
+            explain: "Subsidies can mask the symptom but rarely fix the underlying scarcity. Most central banks don't have this tool anyway; this is fiscal."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/C4?l=2", label: "the four quadrants in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

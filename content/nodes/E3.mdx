@@ -1,0 +1,176 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "The IMF, World Bank, BIS, and WTO were built at the end of WWII to solve the specific dysfunctions of the 1930s — rigid gold convertibility, unpayable reparations, beggar-thy-neighbor trade wars. The world they were designed for no longer exists.",
+    sub: "What they actually do now is very different from their original mandates. Reading them through the old job description is how most commentary goes wrong.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Bretton Woods founding year", val: "1944", sub: "IMF and World Bank · BIS predates them (1930). WTO followed in 1995." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        IMF, World Bank, BIS, WTO. Created in the rubble of WWII to prevent a
+        repeat. Doing very different jobs now than they were designed for.
+        Built in 1944 (BIS earlier; WTO is the GATT successor) for a world
+        that no longer exists. Still running it anyway.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        These institutions feel remote. They&apos;re not — they set the rules
+        under which your country borrows, your bank is regulated, your imports
+        clear customs. The remoteness is part of the design; the consequences
+        aren&apos;t.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        The four · what they actually do
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>IMF</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>crisis lending + surveillance</dd>
+        <dt style={{ color: "var(--ink-2)" }}>World Bank</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>development finance</dd>
+        <dt style={{ color: "var(--ink-2)" }}>BIS</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>coordination + Basel rules</dd>
+        <dt style={{ color: "var(--ink-2)" }}>WTO</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>trade rules (broken)</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The Bretton Woods siblings, post-WWII">
+    <L2Grid>
+      <L2Step num="01" title="IMF — crisis lender">
+        <p className="lede">
+          IMF, World Bank, BIS, WTO. Created in the rubble of WWII to prevent
+          a repeat. Doing very different jobs now than they were designed for.
+        </p>
+        <p>
+          <strong>IMF</strong>: lender of last resort to governments.
+          Originally about defending fixed exchange rates; now about
+          emerging-market crisis lending and surveillance. Often blamed for
+          the policies it imposes; the policies are partly the borrower&apos;s
+          own request and partly a binding constraint that the country
+          couldn&apos;t apply to itself politically.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="World Bank — development finance">
+        <p>
+          <strong>World Bank</strong>: long-term development finance.
+          Originally for European reconstruction; now for poverty alleviation
+          and structural projects in developing countries. Effectively a
+          competitor to (and sometime collaborator with) China&apos;s BRI and
+          the AIIB on infrastructure lending.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="BIS — central bankers' central bank">
+        <p>
+          <strong>BIS</strong>: &quot;central bankers&apos; central bank.&quot;
+          A coordination forum and a research shop, plus the Basel
+          banking-rule-setting body. Most of the prudential rules your bank
+          obeys are Basel Committee outputs implemented domestically; the
+          BIS is where they&apos;re negotiated.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="WTO — broken dispute system">
+        <p>
+          <strong>WTO</strong>: rules of trade. The Appellate Body has been
+          hobbled since 2019 because the US won&apos;t appoint judges; the
+          dispute system is technically broken. Day-to-day trade still
+          follows WTO rules, but there&apos;s no neutral arbiter to enforce
+          them — disputes go nowhere, or get resolved bilaterally.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Remote institutions, immediate consequences."
+        link={{ to: "/nodes/D5", text: "D5 · Tariffs and industrial policy" }}
+      >
+        <p>
+          These institutions feel remote. They&apos;re not — they set the
+          rules under which your country borrows, your bank is regulated,
+          your imports clear customs. The remoteness is part of the design.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "steil-battle-of-bretton-woods-2013",
+            "wto-annual-reports",
+            "subramanian-eclipse-2011",
+            "toniolo-cbcoop-bis-2005",
+          ]}
+        />
+      }
+    >
+      <h3>What 1944 was solving for</h3>
+      <p>
+        Bretton Woods (1944) created the IMF and IBRD (later World Bank).
+        The BIS predates it (1930). The WTO came in 1995, succeeding GATT
+        (1947). Each was responding to a specific 1930s pathology — gold
+        standard rigidity, unmanaged reparations, beggar-thy-neighbour
+        trade — none of which exist now in their original forms. The
+        institutions persist; the problems they were built to solve have
+        morphed.
+      </p>
+
+      <Debate question="Reform the legacy institutions or build new ones?">
+        <DebateSide side="mainstream" who="● Reform">
+          <p>
+            Modernise governance. Voting weights still reflect 1944 economic
+            realities — China underweighted; Europe overweighted relative to
+            its current global share. Incremental rebalancing rather than
+            wholesale replacement.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Replace">
+          <p>
+            BRICS Bank, AIIB, RCEP. The legacy institutions are too rigid;
+            build parallel ones aligned with the actual distribution of
+            economic power. The post-WWII rules-based order is over; design
+            the multipolar successor.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Match the Bretton Woods sibling to its primary job."
+        options={[
+          {
+            label: "IMF lends to development projects; World Bank lends to crisis countries; BIS sets trade rules; WTO is the central bankers' meeting club.",
+            explain: "Swapped. IMF is the crisis lender, World Bank does development finance, BIS is the central bankers' bank, WTO does trade rules."
+          },
+          {
+            label: "IMF is the lender of last resort for governments; World Bank funds long-term development; BIS is the central bankers' central bank; WTO sets trade rules.",
+            correct: true,
+            explain: "Right. Each institution has a distinct mandate. They were all designed in 1944 for a world that no longer exists, and have evolved unevenly — but the core jobs are stable enough that getting the lineup straight is the entry point."
+          },
+          {
+            label: "All four are essentially trade-finance institutions; the differences are organisational, not functional.",
+            explain: "Each is structurally distinct. IMF lends money; World Bank lends money; BIS doesn't lend at all; WTO has no money. Conflating them is the standard commentary error."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/E3?l=2", label: "the four-sibling breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

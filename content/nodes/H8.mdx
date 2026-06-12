@@ -1,0 +1,211 @@
+import Link from "next/link";
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { DurationStagger } from "@/components/widgets/duration-stagger";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Across a rate cycle, the biggest dial in a bond-heavy portfolio is duration — how sensitive your holdings are to rate changes. The canonical late-cycle move is to extend duration into expected cuts; the canonical mistake is extending too early.",
+    sub: "\"Extending too early\" is how careful investors lose money waiting for the pivot — the cuts get pushed out, the long bonds keep selling off, and a strategy that's right in two years is wrong in two quarters.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Duration is your single biggest portfolio dial. Extending duration
+        into a cuts cycle is the canonical late-cycle move; doing it too early
+        is the canonical mistake. The right approach is to{" "}
+        <strong>stagger</strong> — scale duration in over months as the regime
+        confirms, rather than trying to call the pivot exactly.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Because the moves you make at regime turning points have an outsized
+        effect on a decade of returns. Most retail portfolios are built once
+        and never rebalanced for regime — which is fine in stable regimes
+        and very expensive at turning points.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Duration moves · by regime
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Hiking cycle</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>short duration</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Restrictive pause</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>begin staggering</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Cuts confirmed</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>extended duration</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Cuts cycle late</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>begin shortening</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Stagger the duration dial across the regime">
+    <L2Grid>
+      <L2Step num="01" title="Duration is the dominant dial">
+        <p className="lede">
+          Of all the levers in a household portfolio — equity allocation,
+          equity factor tilt, geographic split, alternatives — bond duration
+          is the one whose return distribution shifts most dramatically across
+          regimes. A 1pp rate move on a 10-year bond changes its price by
+          roughly 9%; the same move on a 30-year bond moves it 18%.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The canonical late-cycle move">
+        <p>
+          When the central bank has hiked into restrictive territory and the
+          economy is slowing, the highest-conviction trade is to{" "}
+          <strong>extend duration</strong>. Long bonds gain when rates fall,
+          and rates almost always fall at some point after a restrictive cycle.
+          The 2008–09 and 2020 disinflationary downturns were the canonical
+          examples: long Treasuries +20% and +16% respectively while equities
+          fell.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The canonical mistake">
+        <p>
+          Doing it too early. The trap is reading &quot;the Fed will cut
+          eventually&quot; as a green light to extend now. Eventually can be
+          18 months away — long enough for an extended duration position to
+          bleed for a full year while you wait. The 2022–23 episode burned a
+          cohort of yield-chasers who extended in 2022 expecting cuts in 2023;
+          rates kept rising through 2023.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Why stagger">
+        <p>
+          The honest middle move is to <strong>stagger</strong>: scale
+          duration in over months as the regime confirms, rather than try to
+          call the pivot exactly. A typical stagger might be: 25% of the
+          intended duration extension at the first 50bp drop in 2-year
+          yields, another 25% when the curve un-inverts, another 25% on the
+          first actual cut, the last 25% on the third cut. You give up
+          theoretical optimum and buy real-world robustness.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="The playbook outputs">
+        <p>
+          The output of working through Causeway is your <em>Personal Macro
+          Playbook</em> — your answers across the leverage axes (regime read,
+          saving stance, housing decision, career timing, big purchases,
+          currency exposure, debt structure, portfolio duration), customized
+          to where you live, what you earn, what you own, and what regime is
+          currently running. The{" "}
+          <Link href="/playbook" style={{ color: "var(--gold-deep)" }}>playbook page</Link>{" "}
+          assembles your answers into a saveable, shareable plan — kept in
+          local storage and round-trip-encodable as a URL.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Stagger beats timing in any honest backtest."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          Almost no household-finance writer admits this clearly: you cannot
+          time the pivot. Anyone telling you they can is selling something.
+          Staggering is the response that takes that limit seriously and
+          still captures most of the regime move.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <DurationStagger />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "ilmanen-expected-returns-2011",
+            "aqr-style-premia",
+            "bridgewater-all-weather",
+            "fed-fomc-calendars-sep",
+            "fred-dgs10",
+            "fred-t10y2y",
+          ]}
+        />
+      }
+    >
+      <h3>The duration trade has a long history</h3>
+      <p>
+        Riding the bull bond market from 1981 to 2020 was largely a story of
+        long duration. The 40-year disinflation produced the largest sustained
+        rally in fixed income in modern history; investors who extended
+        duration in 1982 captured the lion&apos;s share. The mirror image:
+        extending too early in the 2022 cycle produced one of the worst years
+        in long-bond history.
+      </p>
+
+      <Debate question="Can households actually time duration moves?">
+        <DebateSide side="mainstream" who="● Stagger, don't time">
+          <p>
+            Households cannot predict the pivot. Anyone telling you they can
+            is selling something. Staggering captures most of the regime
+            move with a fraction of the risk of mistiming.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Fixed allocation">
+          <p>
+            Set a target duration matched to your liabilities (years to
+            retirement, kid&apos;s college, mortgage payoff) and stick to it.
+            All this timing talk is academic; the discipline of a fixed
+            allocation beats the discretion of regime tilting for 99% of
+            households.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The end-state artifact</h3>
+      <p>
+        This is the final node in Track H. Working through A–G builds the
+        vocabulary; working through H1–H8 turns the vocabulary into a set of
+        decisions you can articulate before you have to make them. The
+        Personal Macro Playbook is a saveable record of those decisions — a
+        printable artifact you can read back to yourself the next time you&apos;re
+        tempted to do the panicky thing the next big move tempts everyone to
+        do.
+      </p>
+
+      <blockquote>
+        &quot;The job is to be diversified across regimes, not across
+        tickers. The playbook is what you take with you when the regime
+        turns and your reflex is the wrong one.&quot;
+        <cite>Causeway · framing principle</cite>
+      </blockquote>
+
+      <Check
+        question="The Fed has clearly pivoted to a cuts cycle. What's the canonical late-cycle duration move — and the canonical mistake that comes with it?"
+        options={[
+          {
+            label: "Extend duration on day one: front-run the cuts before everyone else does.",
+            explain: "Front-loading the duration trade is precisely the canonical mistake. The market often prices the cuts before the cuts come, and your one-shot bet has no second chance if the timing is off."
+          },
+          {
+            label: "Extend duration via a staggered ladder — buy in over several months rather than at one moment. The canonical move is to extend; the canonical mistake is to do it all at once.",
+            correct: true,
+            explain: "Right. Duration IS the right dial to move in a cuts cycle, but timing the bottom of the curve is a coin-flip. Staggering smooths your entry price and converts a binary 'right or wrong' into a more forgiving 'reasonable average'."
+          },
+          {
+            label: "Stay short — cuts cycles are usually priced in before they happen, so duration is a value trap.",
+            explain: "Too defensive. Cuts cycles ARE often priced in, but partial repricing is normal and the back half of a cuts cycle still has duration tailwinds. Refusing to extend at all leaves real return on the table."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H8?l=2", label: "the duration staircase in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

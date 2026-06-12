@@ -1,0 +1,317 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { DollarSmile } from "@/components/widgets/dollar-smile";
+
+export const meta = {
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Share of world reserves held in dollars", val: "~ 60%", sub: "Euro is next at ~20% · IMF COFER, 2024." },
+    { lbl: "Currency trades touching a dollar leg", val: "~ 88%", sub: "BIS Triennial Survey, 2022." },
+    { lbl: "Dollar index peak, 2022", val: "114", sub: "Highest in 20 years; the dollar smile firing on both ends at once · DXY." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        The dollar smiles: it rallies when the US does exceptionally well AND when
+        the world does exceptionally badly, only weakening in the boring middle.
+        Every EM crisis since the 1980s is also a strong-dollar event.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Knowing which side of the smile you&apos;re on predicts most global stress.
+        Most of the world&apos;s debt, trade, and reserves are denominated in dollars
+        — when the dollar moves, the world&apos;s financial weather changes.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Dollar share · global plumbing
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>FX reserves</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>59%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>FX trade volume</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>88%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Cross-border loans</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>48%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>International bonds</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>47%</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Place six moments on the smile">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="DXY">
+            Dollar index against a basket of 6 major currencies (euro 58%, yen,
+            sterling, CAD, krona, franc). The headline gauge.
+          </KeyTerm>
+          <KeyTerm term="Reserve currency">
+            Currency central banks hold to back their own. Dollar is 59% of
+            global FX reserves.
+          </KeyTerm>
+          <KeyTerm term="Triffin dilemma">
+            The reserve issuer must run deficits to supply the world with its
+            currency, but persistent deficits undermine confidence in that currency.
+          </KeyTerm>
+          <KeyTerm term="Swap lines">
+            Fed agreements with foreign CBs to lend dollars in emergencies.
+            Quietly the most important post-2008 institution.
+          </KeyTerm>
+          <KeyTerm term="Eurodollar">
+            Dollar deposits held outside the US. Most cross-border dollar lending
+            is offshore and unregulated.
+          </KeyTerm>
+          <KeyTerm term="Dollar smile">
+            Stephen Jen&apos;s 2001 model: dollar rallies in US-strong and global-weak
+            regimes.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="The smile, mechanically">
+        <p className="lede">
+          Two forces push the dollar up. <em>US exceptionalism</em>: when US growth
+          or rates exceed the rest of the world, global capital flows in — buy
+          dollars to buy US assets. <em>Flight to safety</em>: when global
+          investors are scared, they want US Treasuries, the deepest safe-asset
+          market on earth — buy dollars to buy them. The two forces are roughly
+          orthogonal, so the dollar can rally in growth-led or fear-led regimes.
+          The boring middle (US average growth, calm world) gives no buyer special
+          reason — dollar drifts.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title='Try "1995–2001 strong dollar era"'>
+        <p>
+          US tech boom, productivity miracle, Greenspan keeping rates higher than
+          Europe and Japan. Pure US-exceptionalism regime. DXY climbs from 80 to
+          120 over six years. The same period punishes Asia (1997), Russia (1998),
+          Argentina (2001).
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title='Try "2008 Q4 GFC"'>
+        <p>
+          The US is the <em>epicentre</em> of the crisis. Lehman bankruptcy, banks
+          failing, Fed flooding the system. Yet the dollar rallies hard. Why?
+          Because the world&apos;s offshore dollar funding system is short
+          dollars: every European bank holding US mortgage-backed securities
+          funded them in short-term dollar markets. When those markets froze, they
+          had to <em>buy</em> dollars to roll their funding. Risk-off rally. The
+          Fed eventually had to provide $500bn+ in central-bank swap lines just
+          to put a lid on it.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title='Try "2020 Q1 COVID"'>
+        <p>
+          Same shape, faster. Three weeks of dollar spike as everyone hoards. Fed
+          re-activates and expands swap lines. Crisis abates by April. The bullet
+          was the same one as 2008 — the dollar funding system is permanently
+          fragile because every non-US bank is structurally short dollars.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title='Try "2022–2023 Fed exceptionalism"'>
+        <p>
+          Fastest hiking cycle in 40 years. Ukraine war means Europe gets the
+          energy shock first. Both forces push dollar up at once: high US rates
+          pull capital in, geopolitical fear pushes the rest. DXY hits 114. Yen
+          falls 30% in a year. Sterling almost breaks. EM debt distress
+          everywhere.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="When the dollar is rallying, EM is in pain."
+        link={{ to: "/nodes/D4", text: "D4 · Capital flows & sudden stops" }}
+      >
+        <p>
+          If you hold EM equities, EM debt, commodities, or anything
+          dollar-funded, watch DXY. A 5-point move (e.g. 100 → 105) is meaningful;
+          a 10-point move is regime-changing. The mistake is to think a strong
+          dollar means &quot;things are good in the US.&quot; Sometimes — and
+          sometimes the dollar is strong precisely <em>because</em> things are
+          bad somewhere else.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <DollarSmile />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "eichengreen-exorbitant-privilege-2011",
+            "tooze-crashed-2018",
+            "bis-triennial-fx-survey",
+            "imf-cofer",
+            "pettis-klein-trade-wars-class-wars-2020",
+            "brunnermeier-reserve-currency-2019",
+          ]}
+          entries={[
+            { who: "Jen, S.", title: "Dollar smile working papers", year: "2001" },
+          ]}
+        />
+      }
+    >
+      <h3>Sterling, then dollar, then?</h3>
+      <p>
+        Reserve-currency status is sticky for decades, then changes in years.
+        Sterling dominated for a century. The dollar took the crown over a
+        generation. The transition wasn&apos;t a single event; it was a series of
+        war-and-trade outcomes.
+      </p>
+
+      <Timeline
+        entries={[
+          {
+            year: "1816",
+            event:
+              "Britain adopts gold standard. Sterling becomes the world's reference currency for the rest of the 19th century.",
+          },
+          {
+            year: "1914–18",
+            event:
+              "WWI exhausts British finances. Britain becomes net debtor to the US. The transition has begun in fundamentals, not yet in habits.",
+          },
+          {
+            year: "1944",
+            event:
+              "Bretton Woods. Dollar pegged to gold ($35/oz), every other currency pegged to dollar. The world adopts the dollar as numéraire by design, not accident.",
+          },
+          {
+            year: "1971",
+            event: (
+              <>
+                Nixon closes the gold window. End of Bretton Woods. Counterintuitively,
+                the dollar&apos;s role <em>strengthens</em> — without gold, the world
+                needs <em>something</em> as the unit of account, and there&apos;s no
+                alternative ready.
+              </>
+            ),
+          },
+          {
+            year: "1973",
+            event:
+              "Petrodollar arrangement: Saudi Arabia (and OPEC) agree to price oil only in dollars in exchange for US security guarantees. Every importing country now needs dollars; every exporter accumulates them.",
+          },
+          {
+            year: "1985",
+            event:
+              "Plaza Accord. G5 coordinates to weaken the over-strong dollar. Successful — and demonstrates dollar's primacy: only the dollar gets coordinated interventions.",
+          },
+          {
+            year: "1999",
+            event:
+              "Euro launches. First serious challenger in 50 years. Captures share of reserves (from 18% to 25% by 2008) but stalls thereafter; eurozone crisis from 2010 reveals it doesn't have the safe-asset depth.",
+          },
+          {
+            year: "2008",
+            event: (
+              <>
+                GFC. The dollar funding system breaks. Fed becomes lender of last
+                resort to the world via swap lines. The episode <em>reinforces</em>{" "}
+                dollar centrality — only the Fed can put out a global dollar fire.
+              </>
+            ),
+          },
+          {
+            year: "2022",
+            event:
+              "US/EU freeze Russian FX reserves over Ukraine. First time a G20 country's reserves are immobilised. Discussions of de-dollarisation intensify — but the alternatives (RMB, gold, BRICS unit) remain marginal.",
+          },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+
+      <Debate question="Will reserve status erode meaningfully this decade?" label="Live debate · Is the dollar finished?">
+        <DebateSide side="mainstream" who="● Status persists">
+          <p>
+            Reserve currency status requires: (1) deep liquid markets, (2) rule of
+            law, (3) convertibility, (4) network effects. China has none in full.
+            Europe has parts. There&apos;s no plausible challenger this decade.
+            Dollar share has drifted from 71% to 59% over 25 years — gradual, not
+            collapsing.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Decline">
+          <p>
+            2022 sanctions weaponised the dollar; central banks are diversifying
+            into gold and alternatives. China is settling more commodity trade in
+            RMB. The fiscal trajectory of the US (debt, dysfunction) erodes trust.
+            The smile won&apos;t last forever.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Debate question="Does reserve status help or hurt the US?" label="Live debate · The exorbitant privilege">
+        <DebateSide side="mainstream" who="● Helps">
+          <p>
+            Lower borrowing costs, ability to fund deficits cheaply, sanctions
+            power. The privilege is net positive even with the trade-deficit cost.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Hurts">
+          <p>
+            Persistent overvaluation that deindustrialises the country (the
+            so-called <em>Triffin dilemma</em>). Trump-era populism partly blames
+            reserve-currency overvaluation for the rust belt. Pettis &amp; Klein
+            argue this is real and underrated.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper picture</h3>
+      <p>
+        The dollar isn&apos;t strong because the US is well-run. It&apos;s strong
+        because the world has built a financial system that <em>requires</em>{" "}
+        dollars — for trade invoicing, debt issuance, central bank reserves, and
+        crisis behaviour. Switching that out is a coordination problem on a
+        planetary scale. As long as nobody can credibly start, everyone keeps
+        using the dollar by default. This is the deep insight Eichengreen calls{" "}
+        <em>incumbency</em>: the reserve role is not a quality verdict, it is a
+        coordination equilibrium.
+      </p>
+
+      <blockquote>
+        &quot;The world has been on a dollar standard for fifty years; it has
+        been on the gold standard for fifty before that. Empires fall slowly
+        until they fall quickly.&quot;
+        <cite>paraphrasing Eichengreen 2011</cite>
+      </blockquote>
+
+      <Check
+        question="Per the dollar-smile model, when is the dollar typically weakest?"
+        options={[
+          {
+            label: "When global growth is solid and broadly distributed — the 'boring middle' of the smile.",
+            correct: true,
+            explain: "Right. The dollar rallies on both extremes (US outperformance OR global crisis) and softens when no theme dominates. Persistent weakness usually signals that the rest of the world is catching up without breaking."
+          },
+          {
+            label: "When the US economy is in recession — the dollar mirrors US fundamentals.",
+            explain: "It mirrors them in normal times, but US recessions often coincide with global risk-off, which is dollar-positive. The smile breaks the linear intuition."
+          },
+          {
+            label: "During EM crises — capital flees to dollar-denominated safe assets.",
+            explain: "That's the left side of the smile and it makes the dollar STRONGER, not weaker. The crisis-haven property is the whole point of the model."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/A6?l=2", label: "the dollar-smile diagram in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

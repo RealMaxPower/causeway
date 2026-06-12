@@ -1,0 +1,205 @@
+.indicatorRow {
+  margin-top: 28px;
+  padding: 22px 24px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  background: var(--paper);
+}
+
+.indicatorHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.indicatorTitle {
+  font-family: var(--cw-serif);
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.indicatorBlurb {
+  font-family: var(--cw-serif);
+  font-size: 13.5px;
+  color: var(--ink-3);
+  line-height: 1.5;
+  margin: 6px 0 14px 0;
+  max-width: 60ch;
+}
+
+.indicatorMeta {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+
+.chartFrame {
+  margin-top: 12px;
+  border-top: 1px dashed var(--rule);
+  padding-top: 16px;
+}
+
+.chartSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  color: var(--ink-2);
+}
+
+.legendDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.tableScroll {
+  margin-top: 14px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--cw-mono);
+  font-size: 12px;
+}
+.table th, .table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--rule);
+  text-align: right;
+}
+.table th:first-child, .table td:first-child {
+  text-align: left;
+}
+.table th {
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+}
+
+.snapshotBadge {
+  display: inline-block;
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px dashed var(--rule);
+  color: var(--ink-3);
+  margin-left: 8px;
+}
+
+.empty {
+  font-family: var(--cw-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+  padding: 22px;
+  border: 1px dashed var(--rule);
+  border-radius: var(--r-sm);
+  text-align: center;
+}
+
+/* Controls — client component */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 24px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-md);
+  background: var(--paper-2);
+  margin-top: 8px;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controlLabel {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  color: var(--ink-2);
+  background: var(--paper);
+  cursor: pointer;
+}
+.chip:hover {
+  border-color: var(--rule-strong);
+}
+.chipActive {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border-color: var(--ink);
+}
+
+.chipX {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--paper-2);
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 1;
+}
+.chipActive .chipX {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+@media (max-width: 479px) {
+  .indicatorTitle {
+    font-size: 18px;
+  }
+  .table {
+    font-size: 11px;
+  }
+  .table th,
+  .table td {
+    padding: 5px 7px;
+  }
+}

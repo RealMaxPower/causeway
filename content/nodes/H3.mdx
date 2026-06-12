@@ -1,0 +1,334 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { RentVsOwn } from "@/components/widgets/rent-vs-own";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "A fixed-rate mortgage isn't just a debt — it's an asset hidden inside a debt. Once rates rise above the rate you locked in, the right to keep borrowing at the old rate is itself valuable, and that value shows up on your side of the ledger.",
+    sub: "The five-year rule of thumb (don't buy unless you'll stay five years) isn't superstition — it's selling costs plus slow early amortization plus regime risk on the resale.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        When you take out a fixed-rate mortgage, you don&apos;t only buy a house —
+        you buy a 30-year loan locked at today&apos;s rate. If rates rise after
+        you borrow, that loan becomes an asset: you owe money at below-market terms,
+        which is the same as having a small bond paying you the rate difference forever.
+        Most household-finance advice ignores this entirely.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Because the decision to sell or refinance is usually framed as comparing
+        house prices and not loans. In a high-rate environment, your low-rate
+        mortgage may be worth $50–100k more than zero. Walking away from it — to
+        chase a slightly cheaper house, to &quot;rightsize,&quot; to relocate —
+        frequently destroys that value silently.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Mortgage · regime-dependent moves
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Rates rose since you bought</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>your loan is winning</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Rates fell ≥1pp</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>evaluate refi</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Rates fell ≥1.5pp</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>refi</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Life event (job, family)</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>decide on life, not rates</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Five housing decisions, modeled honestly">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Embedded mortgage value">
+            Present-value gain on a below-market fixed-rate loan. Higher when
+            rates rise after origination.
+          </KeyTerm>
+          <KeyTerm term="Lock-in effect">
+            Households with low fixed rates can&apos;t afford to move because
+            they&apos;d lose the cheap loan. Suppresses housing transactions for
+            years.
+          </KeyTerm>
+          <KeyTerm term="Carrying cost">
+            All annual costs of owning: interest, property tax, maintenance,
+            insurance, HOA, foregone return on equity. Typically 6–8% of home value.
+          </KeyTerm>
+          <KeyTerm term="Rent-to-price ratio">
+            Annual rent ÷ home price. Above ~5% favors buying; below ~4% favors
+            renting (in current rate regime).
+          </KeyTerm>
+          <KeyTerm term="Refinance option">
+            The right (not obligation) to swap a high-rate mortgage for a lower
+            one if rates fall. Embedded in every US 30-year fixed.
+          </KeyTerm>
+          <KeyTerm term="Selling cost">
+            Realtor commissions (4–6%) + closing + repair credits. Fixed haircut
+            paid by the seller — the reason short holding periods favor renting.
+          </KeyTerm>
+          <KeyTerm term="Amortization">
+            The split of each mortgage payment between interest and principal.
+            Early payments are mostly interest; equity builds slowly for years.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="What a fair rent-vs-own model includes">
+        <p className="lede">
+          A typical online calculator compares mortgage payment to rent and
+          calls it a day. That is wrong in five places. (1) The down payment
+          has an opportunity cost — invested in the market at 7%, that&apos;s
+          real money. (2) Owner pays property tax, maintenance, insurance —
+          typically 2–3% of the home value per year, every year. (3) Rent grows;
+          mortgage payment is fixed in nominal terms — owners win this
+          comparison more each year. (4) Selling costs 5–7% of home value;
+          renting has none. (5) The mortgage itself has a value when rates
+          move. The widget below models all five honestly.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The lock-in effect, visualized">
+        <p>
+          Try the <strong>&quot;Locked in at 3%&quot;</strong> preset. A
+          homeowner who borrowed at 3% in 2021 now faces a market rate of 7%.
+          The embedded value readout shows that mortgage is worth roughly
+          $80–100k as an asset. If they sell to move, they hand the bank back
+          a loan and replace it with one at 7% — a real, calculable loss of
+          that $80–100k, before they&apos;ve moved a box. This is why{" "}
+          <em>existing-home sales hit a 30-year low in 2024</em>, even though
+          jobs and demographics implied more moves. The math told everyone the
+          same thing.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The 5-year rule, derived not asserted">
+        <p>
+          Try the <strong>&quot;Short stay (4y)&quot;</strong> preset. Even with
+          strong appreciation, owning loses on horizons under 5 years because:
+          (a) the first years of a mortgage are almost all interest — you
+          build little equity, and (b) the 6% selling cost is a fixed haircut
+          on the way out. The widely-cited &quot;rent if you&apos;ll be there
+          less than 5 years&quot; rule is not arbitrary; it&apos;s where
+          amortization and selling costs net to roughly zero on average. Move
+          the &quot;Years held&quot; slider in either direction to see the
+          rule emerge.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Buying today vs. five years ago">
+        <p>
+          Toggle between <strong>&quot;Locked in at 3%&quot;</strong> and
+          <strong> &quot;Buying at 7%&quot;</strong> with the same property. The
+          2021 buyer wins by hundreds of thousands over the same horizon. This
+          is not because they&apos;re cleverer — it&apos;s because they bought
+          a much cheaper loan. The same house, the same job, the same family;
+          only the loan rate differs. <em>Time the loan, not the house</em>:
+          that is the actual lesson of 2020–23.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="When renting honestly wins">
+        <p>
+          Try the <strong>&quot;HCOL renter&quot;</strong> preset. In coastal
+          cities where the rent-to-price ratio is low (around 3–4% annually
+          rather than 6%+), renting and investing the difference often beats
+          buying over any reasonable horizon. The math is unsentimental.
+          People stay in expensive coastal cities anyway because they value
+          other things — but they should at least know they&apos;re paying for
+          those other things, not making a financial mistake by not &quot;getting
+          on the ladder.&quot;
+        </p>
+      </L2Step>
+
+      <L2Step num="06" title="Refinance as a free option">
+        <p>
+          If you bought at 7%, you have a built-in option: refinance when
+          rates fall. That option has measurable value (Black-Scholes style)
+          — typically worth a few percent of the loan balance. So the
+          buyer-at-7% is not stuck at 7%; they&apos;re at 7% with the right to
+          drop to whatever the next trough is. Refinance windows reopen
+          roughly every 3–5 years on the historical rate cycle. The
+          buyer-at-3% has no equivalent option going the other way — and good
+          thing too, because they don&apos;t need one.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Three questions before any housing decision."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          (1) <em>What is my horizon?</em> Under 5 years almost always favors
+          renting; over 12 almost always favors owning. (2) <em>What is the
+          embedded value of my existing mortgage, if any?</em> Run the numbers;
+          the gap between your rate and today&apos;s market rate, on your
+          remaining balance, over your remaining term, in present-value terms.
+          (3) <em>What is the rent-to-price ratio in this market?</em> If
+          buying at full carrying cost (mortgage + taxes + maintenance +
+          insurance + opportunity cost) is more than 1.5× equivalent rent, you
+          are paying for something other than housing — usually the option of
+          appreciation. That option is real but not free.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <RentVsOwn />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="How the 30-year fixed-rate mortgage made American housing weird">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "shiller-irrational-exuberance",
+            "mehrling-new-lombard-street-2011",
+            "fred-mortgage30us",
+            "mian-sufi-house-of-debt-2014",
+            "glaeser-triumph-of-city-2011",
+            "fhfa-hpi",
+            "nar-existing-home-sales",
+          ]}
+        />
+      }
+    >
+      <h3>The mortgage is not a global default</h3>
+      <p>
+        The 30-year fixed-rate prepayable mortgage is almost entirely an
+        American invention. In Canada, terms reset every 5 years. In the UK,
+        every 2–5 years. In Germany, you can fix for 10–15 years but cannot
+        prepay without penalty. Nowhere else does the borrower hold both a
+        long fixed rate <em>and</em> a free option to refinance — and nowhere
+        else, consequently, are household balance sheets so sensitive to the
+        interest-rate cycle. The American mortgage exists in this form because
+        of explicit policy choices made between 1933 and 1968.
+      </p>
+
+      <Timeline
+        entries={[
+          {
+            year: "1933",
+            event:
+              "HOLC (Home Owners' Loan Corporation) refinances defaulted mortgages into long-term amortizing loans during the Depression. Establishes amortization as the standard structure.",
+          },
+          {
+            year: "1934",
+            event:
+              "FHA founded. Federal mortgage insurance enables longer terms (initially 20, then 25, then 30 years) and smaller down payments. Mass-market homeownership becomes a federal project.",
+          },
+          {
+            year: "1938",
+            event:
+              "Fannie Mae founded. The federal government creates a secondary market for mortgages, allowing lenders to originate loans they couldn't hold themselves. The mortgage becomes a tradable security.",
+          },
+          {
+            year: "1944",
+            event:
+              "GI Bill: VA loans, no down payment, low rates for veterans. Postwar suburbanization launches.",
+          },
+          {
+            year: "1968",
+            event:
+              "Fannie Mae split into Fannie + Ginnie Mae. Mortgage-backed securities born as a recognizable asset class.",
+          },
+          {
+            year: "1980s",
+            event:
+              "MBS market explodes. Prepayment becomes the central modeling problem in fixed income — because American borrowers freely refinance, MBS investors hold a short option on rates, and pricing them properly requires sophisticated math.",
+          },
+          {
+            year: "2008",
+            event:
+              "Subprime crisis. The mortgage system breaks at the underwriting layer; the structural 30-year fixed prepayable design survives because it's politically untouchable.",
+          },
+          {
+            year: "2020–21",
+            event:
+              "Pandemic rates. 30-year fixed touches 2.65%. ~14 million households lock in rates below 4%. The largest collective refinance in history.",
+          },
+          {
+            year: "2022–25",
+            event:
+              "Rates rise sharply. The locked-in households cannot move. Existing-home turnover hits a 30-year low. The lock-in effect, predicted in academic papers since the 1990s, arrives as actual macro phenomenon.",
+          },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+
+      <Debate question="Is homeownership a good investment?">
+        <DebateSide side="mainstream" who="● Defenders">
+          <p>
+            Most households would not have saved the equivalent of mortgage
+            principal if not forced to. Plus the user-value of a stable home,
+            the tax deduction, the inflation hedge, and the embedded mortgage
+            option. On a risk-adjusted basis for typical households, owning
+            beats renting in most markets over long horizons.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Skeptics">
+          <p>
+            Real US home prices have grown about 1% per year over 1900–2020
+            (Shiller). The S&amp;P 500 returned roughly 6% real over the same
+            period. A leveraged 5× investment in a 1%-return asset is not
+            obviously superior to an unleveraged investment in a 6%-return
+            asset. The &quot;homeownership builds wealth&quot; claim is mostly
+            survivorship bias plus forced savings.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deepest move</h3>
+      <p>
+        Most household-finance content treats a house as an asset and a
+        mortgage as an unfortunate liability you wish you didn&apos;t have.
+        The reverse is closer to right. The house is an illiquid asset that
+        depreciates with use and demands carrying costs. The mortgage is a
+        long-dated fixed-rate prepayable bond <em>that you sell to the bank,
+        with you as the issuer.</em> In a high-rate world, the bond is the
+        better asset of the two. When you &quot;own a home,&quot; you own one
+        good thing (a long below-market liability) and one mediocre thing (a
+        depreciating illiquid asset). Most people get this exactly backwards
+        in their heads, which is why they cheerfully sell the good one to
+        chase a different version of the mediocre one.
+      </p>
+
+      <blockquote>
+        &quot;The standard American mortgage is an extraordinary asset. It is
+        the only retail product that gives ordinary households a 30-year
+        option on interest rates. Almost no one understands they own it.&quot;
+        <cite>Perry Mehrling</cite>
+      </blockquote>
+
+      <Check
+        question="You own a home with a 3% 30-year fixed mortgage; the prevailing rate is now 7%. You want to upgrade to a larger house. What's the under-appreciated cost?"
+        options={[
+          {
+            label: "Closing costs and transaction friction — typically 6-8% of the home value.",
+            explain: "Real but not the under-appreciated cost. Closing costs are visible on every settlement statement. The hidden cost is bigger and harder to see."
+          },
+          {
+            label: "You're giving up an asset worth tens of thousands of dollars — your 3% mortgage is an in-the-money option on rates. Selling to chase a new house at 7% destroys that option.",
+            correct: true,
+            explain: "Right. The 3% lock IS an asset. At a 4pp rate spread on $400K of principal over 30 years, the present value of that option runs into six figures. Most homeowners don't put it on the balance sheet but they should."
+          },
+          {
+            label: "Capital gains taxes on the appreciation of the current home.",
+            explain: "Often zero in the US (the $250K/$500K primary-residence exclusion covers most households). Tax friction matters but isn't the largest hidden cost."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H3?l=2", label: "the mortgage-as-asset framing in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

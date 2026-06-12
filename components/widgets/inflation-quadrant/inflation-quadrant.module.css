@@ -1,0 +1,227 @@
+.widget {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  margin-top: 28px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--paper-2);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headTitle {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.preset {
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  padding: 4px 10px;
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: background 120ms ease, color 120ms ease;
+}
+.preset:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.presetActive {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border-color: var(--ink);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 320px 1fr;
+}
+
+@media (max-width: 980px) {
+  .body { grid-template-columns: 1fr; }
+}
+
+.col {
+  padding: 22px 24px;
+  border-right: 1px solid var(--rule);
+}
+.col:last-child { border-right: 0; }
+
+@media (max-width: 980px) {
+  .col { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .col:last-child { border-bottom: 0; }
+}
+
+.eyebrow {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.driverGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 18px;
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sliderLabel {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.sliderValue {
+  font-family: var(--cw-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.range {
+  width: 100%;
+}
+
+.sliderBounds {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--cw-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.quadrantCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.quadrantSvg {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin-top: 12px;
+}
+
+.readout {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.headline {
+  font-family: var(--cw-mono);
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.headlineSub {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+.regime {
+  font-family: var(--cw-serif);
+  font-size: 20px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.cureBody {
+  font-family: var(--cw-serif);
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.contribRow {
+  display: grid;
+  grid-template-columns: 110px 1fr 48px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.contribLabel {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-2);
+}
+
+.contribBar {
+  height: 8px;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.contribFill {
+  height: 100%;
+  transition: width 200ms ease;
+}
+
+.contribValue {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  text-align: right;
+}
+
+.foot {
+  padding: 10px 20px;
+  border-top: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  text-align: right;
+}
+
+@media (max-width: 479px) {
+  .body { grid-template-columns: 1fr; }
+  .contribRow { grid-template-columns: 90px 1fr 40px; gap: 6px; }
+  .foot { padding: 10px 16px; text-align: left; }
+}

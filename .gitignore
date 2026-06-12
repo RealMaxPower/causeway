@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# production
+build/
+dist/
+
+# env
+.env
+.env*.local
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.tmp
+
+# testing
+coverage/
+playwright-report/
+test-results/
+.nyc_output/
+
+# runtime data (tutor cost log) — root only; lib/data/ is source
+/data/
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo

@@ -1,0 +1,195 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { LeverageStress } from "@/components/widgets/leverage-stress";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Good debt funds something that appreciates (a home, a degree that pays, a working business) at a fixed real rate you can carry. Bad debt is short-term, high-rate, and funds consumption — a credit-card balance carried month to month is the canonical example.",
+    sub: "The trap most households fall into: building good-debt mental models around bad-debt behavior. \"I can borrow at 6% and invest at 8%\" fails most five-year windows once tax, vol, and life shocks are real.",
+  },
+  relatedNodes: ["H3", "H8", "F1"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Borrowing against an appreciating asset at a fixed real rate is one of
+        the most powerful tools available to a normal household — and the most
+        overused, on the wrong assets. The same instrument (debt) becomes a
+        wealth multiplier or a wealth drain depending on what you borrow
+        against and at what term.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Most personal-finance content moralises debt as &quot;bad&quot; or
+        &quot;good&quot; categorically. The honest framing is structural: the
+        right kind, at the right rate, against the right asset, multiplies
+        wealth. The wrong kind drains it — and the trap is using good-debt
+        mental models to justify bad-debt behavior.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Debt · sorted
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Mortgage on owner-occupied</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>good</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Federal student loans</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>context-dependent</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Auto loans</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>borderline</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Credit-card carry</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>bad</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Margin / payday</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>very bad</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The most misunderstood lever in personal finance">
+    <L2Grid>
+      <L2Step num="01" title="Good debt">
+        <p className="lede">
+          Debt is the most misunderstood lever in personal finance. The right
+          kind, at the right rate, against the right asset, is a wealth
+          multiplier. The wrong kind is a wealth drain.
+        </p>
+        <p>
+          <strong>Good debt</strong> is borrowing against an asset that
+          appreciates faster than the real interest rate, with a long fixed
+          term. Mortgages are the canonical case (see{" "}
+          <a href="/nodes/H3" style={{ color: "var(--gold-deep)" }}>H3</a> for
+          the full mechanism); some education debt qualifies; some business
+          debt qualifies. The asset works for you while the debt slowly
+          erodes in real terms.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Bad debt">
+        <p>
+          <strong>Bad debt</strong> is short-term high-rate debt against
+          assets that depreciate, or against consumption. Credit-card carry
+          is the canonical case — 20%+ rates against goods you&apos;ve
+          already consumed. Auto debt against a depreciating car is
+          borderline: the rate is moderate but the underlying loses value
+          throughout the loan.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The trap">
+        <p>
+          The trap is using good-debt mental models to justify bad-debt
+          behavior. &quot;I can borrow at 6% and invest at 8%&quot; is true
+          on average and <em>wrong in any specific 5-year window</em>. The
+          asymmetry: a 5-year window of 20% drawdown wipes out a decade of
+          the spread. Use leverage on assets you&apos;d own anyway, at terms
+          that survive bad scenarios.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="The math is unforgiving">
+        <p>
+          If you&apos;re paying credit-card interest while also investing,
+          you&apos;re earning negative real returns on the gap. A typical
+          household with $5,000 in credit-card balance at 22% and $5,000 in
+          a 7% index fund is <em>losing money</em> to the spread on a
+          dollar-for-dollar basis. The math is unforgiving; the mental
+          accounting that lets it persist is not.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Pay the cards first. The math is unforgiving."
+        link={{ to: "/nodes/H8", text: "H8 · Portfolio under regime change" }}
+      >
+        <p>
+          If you&apos;re paying credit-card interest while also investing,
+          you&apos;re earning negative real returns on the gap. Pay the
+          cards first; the investing math only starts working once you stop
+          subsidising the credit-card carry.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <LeverageStress />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "nyfed-household-debt",
+            "fed-survey-consumer-finances",
+            "mian-sufi-house-of-debt-2014",
+            "bogle-little-book-common-sense-2007",
+          ]}
+        />
+      }
+    >
+      <h3>The household-leverage arc</h3>
+      <p>
+        Household leverage rose continuously from 1945 to 2008, peaked at the
+        crisis, has been deleveraging since. The composition shifted: less
+        mortgage, more student debt, more auto debt. The structural over-use
+        of unsecured short-term debt is uniquely American among developed
+        countries — credit cards as a default consumption-smoothing tool is
+        not a global norm.
+      </p>
+
+      <Debate question="How much leverage should a household carry?">
+        <DebateSide side="mainstream" who="● Use leverage carefully">
+          <p>
+            Long-term wealth requires it. Mortgage + retirement contributions
+            + maybe one investment property. The 30-year fixed prepayable
+            mortgage is one of the most generous instruments ever extended
+            to retail; using it is not optional if you can.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Avoid beyond mortgage">
+          <p>
+            Outside of mortgage, no leverage. Margin of safety matters more
+            than expected return. Sleep at night. The variance reduction is
+            worth more than the spread you&apos;d earn from being levered up.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper rule</h3>
+      <p>
+        Use leverage on assets you&apos;d own anyway, at terms that survive
+        bad scenarios. The two preconditions are joint: levering an asset
+        you wouldn&apos;t otherwise own is gambling; levering an asset you
+        would own but at terms that fail in stress is bankruptcy. The
+        American mortgage satisfies both: most homeowners would own a home
+        anyway; the 30-year fixed structure survives almost any rate
+        scenario without changing your monthly payment.
+      </p>
+
+      <Check
+        question="A household considers borrowing against home equity to buy a second property at a 7% rate. Per Track H, what makes this decision well-structured?"
+        options={[
+          {
+            label: "If the household would own the second property without the leverage (i.e. the borrowing is sized to amplify a position they'd already take), AND the financing terms survive a stress scenario (rate hikes, loss of income, asset decline).",
+            correct: true,
+            explain: "Right. Both conditions matter. Borrowing to take a position you wouldn't otherwise hold IS speculation, not leverage; borrowing on terms that break in stress IS bankruptcy risk, not leverage. The well-structured case satisfies both."
+          },
+          {
+            label: "If the expected return on the second property exceeds the 7% borrowing cost.",
+            explain: "Necessary but not sufficient. The expected-return calculation doesn't capture stress scenarios — what happens if rates rise to 9%, or the property loses 20% of value, or income drops? Leverage that fails any of those is poorly structured even at positive expected return."
+          },
+          {
+            label: "If the household has a comfortable cash buffer to cover payments in case rents underperform.",
+            explain: "Cash buffer is part of stress-testing but doesn't address the 'would own anyway' criterion. A speculative position with a fat cash buffer is still speculative."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H7?l=2", label: "the debt-decision framework in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

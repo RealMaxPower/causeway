@@ -1,0 +1,164 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "A tariff is a tax your consumers pay to defend your producers. In the short run, the aggregate cost usually exceeds the gain — but specific producers and workers do gain, which is the political point.",
+    sub: "The case for tariffs isn't economic, it's political-economic: strategic industries, learning curves, adjustment timing. Reasonable people can disagree about when those reasons clear the bar.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        A tariff is a tax on your own consumers paid to defend your own
+        producers. Whether that&apos;s smart depends entirely on which
+        producers and over what time horizon — i.e. it is a political
+        choice, not an economic one.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Tariffs and industrial policy are quietly running in semiconductors,
+        energy, biotech, and defense across every major economy. Textbooks
+        often insist this can&apos;t work; the empirical record suggests
+        it&apos;s the rule, not the exception, at least for strategic sectors.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Tariff incidence · who pays
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Domestic consumers</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>pay more</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Government</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>collects revenue</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Domestic producers</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>earn more</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Foreign producers</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>sell less</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The redistribution dressed as trade policy">
+    <L2Grid>
+      <L2Step num="01" title="The simple incidence">
+        <p className="lede">
+          Tariffs and industrial policy are political choices, not economic
+          ones — the question is which producers, and over what time horizon.
+        </p>
+        <p>
+          A tariff raises the price of imported goods to domestic buyers.
+          Some buyers switch to domestic producers (helping them); some pay
+          more for the import (helping the government collect revenue); some
+          go without (losing surplus). Net effect on the country: usually
+          negative in the short run.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The argument that isn't economic">
+        <p>
+          <strong>The argument for tariffs isn&apos;t economic, it&apos;s
+          political-economic</strong>: protect strategic industries, build
+          learning curves, defend infrastructure, manage politics around
+          adjustment. The economic loss is the price the country accepts for
+          those non-economic gains. Whether the trade is worth it depends on
+          how much you value the non-economic gains — and that&apos;s a
+          political question.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Industrial policy by another name">
+        <p>
+          Industrial policy is the same logic, broader: directed subsidies,
+          tax incentives, public investment, government procurement. It&apos;s
+          been quietly running in semiconductors, energy, biotech, defense
+          in every major economy for decades, while textbooks insist it
+          can&apos;t work. The 2020s CHIPS Act, IRA, and EU equivalents
+          made it explicit rather than implicit.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="When tariffs go up, the redistribution becomes the policy."
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          When tariffs go up, your purchases get more expensive (small but
+          real); the government gets revenue (which may help you or not);
+          some specific industry is preserved (which may employ you or not).
+          The aggregate is a redistribution, not a free lunch.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "piie-bown-tariff-tracker",
+            "rodrik-globalization-paradox-2011",
+            "list-national-system-1841",
+            "hamilton-report-on-manufactures-1791",
+          ]}
+        />
+      }
+    >
+      <h3>The 70-year liberalisation, partially reversing</h3>
+      <p>
+        Hamilton&apos;s 1791 <em>Report on Manufactures</em> argued for
+        protective tariffs to develop US industry; List (1841) generalized
+        this. The post-WWII trade liberalisation (GATT/WTO) was a 70-year
+        departure that&apos;s now visibly reversing. The 2018–25 US-China
+        tariff cycle and the 2022 CHIPS Act make explicit what was already
+        true in semiconductors, defense, and energy: the assumption of free
+        trade was always partial.
+      </p>
+
+      <Debate question="Free trade or strategic protection?">
+        <DebateSide side="mainstream" who="● Free trade">
+          <p>
+            Tariffs are net costs. Standard economist view: use redistribution;
+            don&apos;t distort prices. Inefficient producers shouldn&apos;t be
+            kept alive by tariffs paid by everyone else.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Strategic">
+          <p>
+            Some industries are worth distorting for. Semiconductors, energy,
+            defense — the aggregate cost is small relative to the option
+            value of capability. The textbook silence on supply chain
+            resilience is a feature, not a bug.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Per Track D, what's a tariff most precisely?"
+        options={[
+          {
+            label: "A tax on foreign producers paid by them to access your market.",
+            explain: "The textbook story. The empirical evidence (2018-2024 US tariffs on China are the cleanest case) is that the cost mostly falls on domestic importers and consumers, not foreign exporters."
+          },
+          {
+            label: "A tax on your own consumers paid to defend your own producers — whether it's smart depends on which producers and over what time horizon.",
+            correct: true,
+            explain: "Right. Tariffs are transfers from consumers to protected producers. Whether the transfer is worth it depends on whether the protected sector matters strategically and whether the protection produces eventual competitiveness. Those are political judgments, not economic ones."
+          },
+          {
+            label: "A revenue tool — historically the main source of US federal revenue before the income tax.",
+            explain: "Historically true (pre-1913 US), but irrelevant in modern economies where tariffs are tiny fractions of revenue. The relevant question today is protection, not revenue."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/D5?l=2", label: "the tariff incidence breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

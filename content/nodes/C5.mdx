@@ -1,0 +1,216 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { RateTransmission } from "@/components/widgets/rate-transmission";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Interest rates aren't a switch — they're a wave. A rate decision today reaches short-term lending instantly and inflation 18 months later, with everything else strung out in between.",
+    sub: "Friedman's 'long and variable lags' — acting on today's data means acting on a world that's already 12 months old.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "How fast the fastest channel reacts", val: "~ 0 mo", sub: "Short-term lending rates re-price the day the Fed moves · FRED, federal funds rate." },
+    { lbl: "How long inflation takes to respond", val: "~ 18 mo", sub: "Median lag from rate change to peak inflation effect · standard monetary-policy literature." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        A central bank changes one number — the policy rate. Treasuries,
+        mortgages, credit, equities, the dollar, jobs, prices all respond,
+        but at different speeds. The &quot;long and variable lags&quot; are
+        the whole story.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        When a Fed cut hits the news, three things have already happened
+        and most haven&apos;t. Reading the timing — what&apos;s priced in,
+        what&apos;s in the pipe, what hasn&apos;t arrived — is the whole
+        skill of reading monetary policy in real time.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Channels · roughly when they respond
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Short rates · 10-yr · mortgages</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>0–2 mo</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Credit spreads · USD</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>3–4 mo</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Equities</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>~ 6 mo</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Unemployment</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>~ 14 mo</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Inflation</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>~ 18 mo</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Move the rate; watch the world arrive on a delay">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Policy rate">
+            The short-term interbank rate the central bank targets. In the
+            US, the federal funds rate.
+          </KeyTerm>
+          <KeyTerm term="Transmission lag">
+            Time from a policy change to an observable response in a
+            downstream variable. Varies by channel.
+          </KeyTerm>
+          <KeyTerm term="Long and variable lags">
+            Friedman&apos;s phrase. Policy effects show up on a delay, and
+            the delay itself varies cycle-to-cycle.
+          </KeyTerm>
+          <KeyTerm term="Front of the curve">
+            Short-dated Treasuries and money markets. The first responders
+            to any policy move.
+          </KeyTerm>
+          <KeyTerm term="Credit spreads">
+            Yield premium on risky bonds over Treasuries. A leading
+            indicator of financial-condition tightening or easing.
+          </KeyTerm>
+          <KeyTerm term="DXY">
+            US dollar index. Responds to rate differentials across major
+            economies, with a lag of weeks-to-months.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="One number, eight downstream channels">
+        <p className="lede">
+          A central bank changes one number — the policy rate. Everything
+          downstream — Treasuries, mortgages, credit, equities, the
+          dollar, jobs, prices — responds, but at different speeds.
+        </p>
+        <p>
+          Move the policy slider in the widget below and the timeline
+          slider beneath it. Each channel has its own lag; the visualisation
+          shows how the same policy change ripples out over months and
+          years.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="What moves first">
+        <p>
+          The front of the curve — short Treasuries, money-market funds,
+          floating-rate debt — moves the day of the change. The 10-year
+          and 30-year mortgage move within weeks as the market re-prices
+          expected future rates. So far, none of this has touched the
+          real economy.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="What moves second">
+        <p>
+          Credit spreads, the dollar, and equity multiples adjust over
+          months. Financial conditions ease (or tighten) into the real
+          economy through borrowing costs, dollar competitiveness, and
+          asset-price wealth effects. Still no real-economy data yet.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="What moves last (and matters most)">
+        <p>
+          Hiring, unemployment, and inflation respond on a 12–18 month
+          lag. By the time the labor market and inflation data confirm
+          a policy change worked, the central bank has been making the
+          decision for over a year. This is why &quot;is the policy
+          working?&quot; is the wrong question 6 months in.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="When a Fed cut hits the news, three things have already happened — and most haven't."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          Treasuries, mortgages, and credit spreads moved within hours.
+          Equities and the dollar adjust over weeks. Hiring decisions and
+          inflation move over a year. The &quot;did it work?&quot; question
+          makes sense only on the 12–18 month timescale that matches the
+          slowest channel — but the political clock is much shorter.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <RateTransmission />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "friedman-role-of-monetary-policy-1968",
+            "fred-fedfunds",
+            "fred-dgs10",
+            "fred-mortgage30us",
+            "cleveland-fed-inflation-expectations",
+            "bernanke-gertler-watson-systematic-policy-1997",
+          ]}
+        />
+      }
+    >
+      <h3>Friedman named the problem</h3>
+      <p>
+        &quot;Long and variable lags&quot; is Friedman&apos;s phrase from
+        the 1968 presidential address. The empirical work that followed
+        (Bernanke, Gertler, Romer, Christiano, Eichenbaum) put numbers
+        on the lags: 6–12 months for output, 18–24 months for inflation,
+        cycle-by-cycle variation of ±6 months. The point estimates have
+        held up; the variation is the part that humbles policymakers.
+      </p>
+
+      <Debate question="Can the central bank actually steer the economy, given the lags?">
+        <DebateSide side="mainstream" who="● Yes, with humility">
+          <p>
+            Policy works on the channels that matter most. The lag is real
+            but tolerable; central banks build in forecasting horizons that
+            roughly match the lag. The 2008 and 2020 episodes show
+            transmission can also be very fast when conditions are stressed.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● The lag is the problem">
+          <p>
+            Acting on 18-month-old data ensures you&apos;re always fighting
+            the previous regime. Better to set rules and accept the variance.
+            Friedman&apos;s constant-money-growth rule lives here; modern
+            NGDP-targeting is the contemporary version.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="The Fed hikes 100bp today. Which downstream variable typically responds LAST?"
+        options={[
+          {
+            label: "Short Treasury yields — the front of the curve.",
+            explain: "Front of the curve moves almost immediately; it's the variable closest to the policy rate. Lag near zero."
+          },
+          {
+            label: "Mortgage rates and consumer credit spreads.",
+            explain: "These respond within months, not years. Mortgage rates track the 10-year with a short lag; credit spreads adjust as risk pricing reprices."
+          },
+          {
+            label: "Inflation — particularly core CPI YoY.",
+            correct: true,
+            explain: "Right. Core inflation has the longest transmission lag (typically 12-24 months). That's why central bank credibility costs are highest here — the inflation response comes long after the policy looks like it isn't working."
+          },
+          {
+            label: "The exchange rate (DXY or USD index).",
+            explain: "FX responds quickly — often within days, on rate-differential expectations. The lag here is shorter than for the real economy."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/C5?l=2", label: "the rate-transmission widget in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

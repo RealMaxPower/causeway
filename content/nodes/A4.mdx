@@ -1,0 +1,280 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { CBLedger } from "@/components/widgets/cb-ledger";
+
+export const meta = {
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Who issues the money you use", val: "2", sub: "The central bank (cash + reserves) and commercial banks (deposits)." },
+    { lbl: "Share issued by banks, not the central bank", val: "~ 90%", sub: "Most US money is bank-deposit money; FRED M2 vs base." },
+    { lbl: "Cash banks must park at the Fed", val: "0.0%", sub: "US reserve requirement, since March 2020 · Federal Reserve." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Modern economies have <em>two</em> money issuers. The central bank issues currency
+        and bank reserves — the <strong>monetary base</strong>. Commercial banks issue
+        deposits — the <strong>broad money</strong> you actually spend. Most money is the
+        second kind.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Because &quot;money printing&quot; usually means <em>base</em> printing — and base
+        does not become broad money on its own. It&apos;s why $4 trillion of post-2008 QE
+        didn&apos;t ignite consumer inflation, and why $2 trillion of 2020 fiscal-direct-to-household
+        transfers <em>did</em>.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Two issuers, two ledgers
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Currency + reserves</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>central bank</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Deposits (most $)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-blue)", fontFamily: "var(--cw-mono)" }}>commercial banks</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Base money grows when…</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>CB acts</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Broad money grows when…</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>banks lend</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Drive both ledgers">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Base money">
+            Currency in circulation + bank reserves at the central bank. Issued by the CB.
+          </KeyTerm>
+          <KeyTerm term="Broad money">
+            Currency + deposits at commercial banks. Mostly issued by banks via lending.
+          </KeyTerm>
+          <KeyTerm term="Reserves">
+            Bank&apos;s account at the central bank. The interbank settlement asset.
+          </KeyTerm>
+          <KeyTerm term="IOR">
+            Interest on reserves — the rate the CB pays banks for holding reserves. The
+            floor of the policy corridor.
+          </KeyTerm>
+          <KeyTerm term="QE / QT">
+            Asset purchases / sales by the central bank. Swap composition, expand or
+            contract base money.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="Two issuers, two ledgers">
+        <p className="lede">
+          Below: a stacked balance sheet. <strong>Top</strong> is the central bank.
+          <strong> Bottom</strong> is a commercial bank — the same one you drove in
+          A3. The two are linked: the bank&apos;s <em>reserves</em> on the asset
+          side are also a <em>liability</em> of the central bank. They tick together.
+        </p>
+        <p>
+          Two counters at the bottom of the widget: <strong>Base money</strong> (CB
+          liabilities — currency + reserves) and <strong>Broad money</strong> (currency
+          in circulation + deposits). Watch which one each button moves.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="QE — the famous one">
+        <p>
+          Click <strong>QE</strong>. The CB buys $100B of Treasuries from the bank.
+          CB Treasuries +$100B, Bank reserves +$100B. The bank&apos;s reserves swap
+          places with its securities: same total assets, different mix.
+        </p>
+        <p>
+          <strong>Base money: +$100B.</strong> <strong>Broad money: unchanged.</strong>
+          {" "}Nothing has happened to deposits. The household sector has the same
+          checking balances it had before. This is the surprise. (Run <strong>QT</strong>
+          {" "}to reverse it.)
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="A loan — the asymmetric one">
+        <p>
+          Click <strong>Bank issues loan</strong>. The bank writes $100B onto both
+          sides of its own ledger — a loan asset and a deposit liability. The CB
+          ledger does not move at all.
+        </p>
+        <p>
+          <strong>Base money: unchanged.</strong> <strong>Broad money: +$100B.</strong>
+          {" "}This is the asymmetry that makes A4 worth its own node. The two issuers
+          create different things.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Cash withdrawal — the tax">
+        <p>
+          Click <strong>Cash withdrawal</strong>. Currency in circulation +$100B,
+          Bank reserves −$100B (and on the bank&apos;s ledger, deposits −$100B,
+          reserves −$100B). Composition of base money shifts from reserves to
+          physical notes; the totals barely move. This is the daily flow that makes
+          the CB&apos;s currency-issuance role visible.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="What the CB actually controls">
+        <p>
+          Not the quantity of broad money. <em>The price of reserves</em> (the policy
+          rate) and the rules constraining commercial-bank balance sheets (capital,
+          liquidity, IOR). Cheap reserves → banks willing to lend → broad money
+          expands. Expensive reserves → opposite.
+        </p>
+        <p>
+          This is why the textbook &quot;money multiplier&quot; is misleading. The CB
+          does not push reserves out and watch them multiply. It sets a price and
+          waits for the credit demand to respond — sometimes for quarters.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="'They printed money' usually means base, not broad."
+        link={{ to: "/nodes/A5", text: "A5 · Inflation & deflation" }}
+      >
+        <p>
+          When a commentator says the Fed &quot;printed $4 trillion,&quot; they mean
+          reserves — base money sitting at the central bank. That money has to be
+          lent into deposits before it touches a price tag. The 2020–2022 inflation
+          spike was almost entirely a <em>fiscal</em> event (cheques to households,
+          supply shock), not a QE event. The distinction matters every time you
+          read a macro headline.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <CBLedger />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "boe-money-creation-2014",
+            "bis-annual-economic-report",
+            "fred-bogmbase",
+            "fred-m2sl",
+            "mehrling-new-lombard-street-2011",
+            "tucker-unelected-power-2018",
+            "fed-policy-implementation",
+            "bordo-eichengreen-bretton-woods-1993",
+          ]}
+          entries={[
+            { who: "Pozsar, Z.", title: "Shadow Banking Maps", year: "2014–2022" },
+          ]}
+        />
+      }
+    >
+      <h3>A short history of the modern central bank</h3>
+      <p>
+        The two-issuer system is younger than people imagine. Before the twentieth
+        century, &quot;the central bank&quot; mostly meant a private bank with a public
+        charter and the right to issue notes — first among equals, not a separate
+        kind of institution. The architecture you see today (currency monopoly +
+        reserve account for every bank + policy rate as the lever) was assembled in
+        pieces across the last hundred years.
+      </p>
+
+      <Timeline
+        entries={[
+          {
+            year: "1913",
+            event:
+              "Federal Reserve Act creates the US central bank. Originally twelve quasi-private regional banks; the modern centralised structure is a 1935 amendment.",
+          },
+          {
+            year: "1944",
+            event:
+              "Bretton Woods pegs the dollar to gold and other currencies to the dollar. Central banks defend the peg with reserves; domestic policy is constrained by the external account.",
+          },
+          {
+            year: "1971",
+            event:
+              "Nixon closes the gold window. Central banks become free to set monetary policy by domestic objectives. The fiat era begins; broad money is now bank-credit-based all the way down.",
+          },
+          {
+            year: "2008",
+            event:
+              "Fed begins paying interest on reserves (IOR). Combined with QE, the operating regime shifts from 'scarce reserves' to 'abundant reserves.' The textbook money multiplier stops describing reality.",
+          },
+          {
+            year: "2020",
+            event:
+              "Reserve requirement reduced to 0%. The legal scaffolding of the multiplier story is now formally absent.",
+          },
+          {
+            year: "2022",
+            event:
+              "First post-pandemic rate-hiking cycle. The CB demonstrates — across 525bps of hikes — that the price of reserves, not the quantity, is what tightens credit.",
+          },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+      <p>Three live debates, none settled.</p>
+
+      <Debate question="Does printing base money cause inflation?" label="Live debate · Inflation">
+        <DebateSide side="mainstream" who="● Quantity-theory revival">
+          <p>
+            Sustained base expansion + accommodative banking eventually shows up in
+            prices, lags long. The 2022 inflation, on this view, was the bill for
+            2020–21 base growth coming due.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Reserves-don't-spend">
+          <p>
+            Base money sitting on bank balance sheets does not bid for goods.
+            Inflation is a fiscal phenomenon (cheques to households) plus supply
+            (energy, chips, shipping). The 2022 spike maps almost cleanly onto
+            fiscal + supply, not QE.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>Why &quot;money printing&quot; is such a sticky misnomer</h3>
+      <p>
+        Because base printing and broad printing <em>look</em> the same on a CB
+        balance sheet — both expand the asset side. The difference is on the
+        liability side: QE creates reserves (which sit), fiscal-financed deficits
+        create deposits (which spend). The casual reader sees the asset side, not
+        the liability composition. Until you internalise that the liability side
+        is where inflation pressure originates, every QE chart will mislead you.
+      </p>
+
+      <blockquote>
+        &quot;Reserves are not a binding constraint on bank lending. The textbook
+        story… is mistaken.&quot;
+        <cite>Bank of England · Quarterly Bulletin · Q1 2014</cite>
+      </blockquote>
+
+      <Check
+        question="In a modern economy, roughly what share of the money supply is central-bank money (currency + reserves) versus commercial-bank deposits?"
+        options={[
+          {
+            label: "About 90% central-bank money, 10% deposits — the central bank dominates the money supply.",
+            explain: "Backwards. Central-bank money is the small slice."
+          },
+          {
+            label: "About 10% central-bank money, 90% deposits — commercial-bank deposits dominate.",
+            correct: true,
+            explain: "Right. Most money you can actually spend is a commercial-bank deposit. The monetary base is a small foundation underneath; QE expanding it doesn't automatically expand what households spend."
+          },
+          {
+            label: "Roughly 50/50 — they're two halves of the same number by definition.",
+            explain: "Not a definitional split. The base is the issuance the central bank controls directly; deposits are issuance by commercial banks via lending. The ratio varies but deposits dominate."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/A4?l=2", label: "the central-bank ledger in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

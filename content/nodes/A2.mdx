@@ -1,0 +1,157 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { ThreeJobs } from "@/components/widgets/three-jobs";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The trilemma",
+    text: "Money does three jobs at once: medium of exchange, unit of account, store of value. No currency does all three well.",
+    sub: "Cash spends well; gold stores well; you can't have both.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Hyperinflation episodes since 1796", val: "56+", sub: "Hanke & Krus 2013, world hyperinflation table." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Money is three jobs in one object: medium of exchange, unit of account, store of value.
+        The same dollar bill is doing all three; most monetary debates are really debates about
+        which job the system should optimise for.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        When the headlines say there&apos;s a &quot;money problem,&quot; the useful next question
+        is <em>which job is failing</em>. Inflation breaks the unit of account; deflationary debt
+        traps break the medium of exchange; long-term distrust breaks the store of value. Each
+        calls for a different cure.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        The three jobs · what each prefers
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Medium of exchange</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>convenience</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Unit of account</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>stability</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Store of value</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>scarcity</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Three jobs, three constituencies">
+    <L2Grid>
+      <L2Step num="01" title="The three jobs">
+        <p className="lede">
+          Most monetary debates are really debates about which of the three jobs the
+          system should optimise.
+        </p>
+        <p>
+          A medium of exchange wants to be widely accepted, divisible, and convenient.
+          A unit of account wants to be stable so contracts written today are
+          meaningful tomorrow. A store of value wants to hold purchasing power across
+          decades.
+        </p>
+      </L2Step>
+      <L2Step num="02" title="The jobs trade off">
+        <p>
+          A currency that&apos;s wonderfully convenient (cash) is a poor long-term
+          store of value. A perfect store of value (gold) is awkward to spend at the
+          grocery store. A stable unit of account requires a credible issuer — which
+          is why monetary credibility is the entire game.
+        </p>
+      </L2Step>
+      <L2Step num="03" title="Diagnose by which job is failing">
+        <p>
+          When someone says &quot;we have a money problem,&quot; the useful question
+          is <strong>which job is failing</strong>. Inflation breaks the unit of
+          account; deflationary debt traps break the medium of exchange; long-term
+          distrust breaks the store of value. Each calls for a different cure.
+        </p>
+      </L2Step>
+      <Callout
+        title="The argument you're having is rarely about money in general."
+        link={{ to: "/nodes/H2", text: "H2 · Saving in this regime" }}
+      >
+        <p>
+          When you complain about prices, you&apos;re complaining about the unit of
+          account. When you complain about saving, you&apos;re complaining about the
+          store of value. They&apos;re not the same problem.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <ThreeJobs />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "mehrling-money-interest-public-interest-1997",
+            "graeber-debt-5000-years-2011",
+            "bis-money-digital-age-2017",
+          ]}
+          entries={[
+            { who: "Goodhart", title: "The Two Concepts of Money", year: "1998" },
+          ]}
+        />
+      }
+    >
+      <h3>The substrate keeps changing</h3>
+      <p>
+        Money has been shells, salt, cattle, silver, gold, paper claims on gold,
+        paper claims on nothing. Each transition was contested at the time and
+        obvious in retrospect. The historical pattern is that the three jobs
+        eventually want to live in different objects — and that no political
+        system tolerates that for long.
+      </p>
+
+      <Debate question="Should money be tied to a scarce thing, or judged by whether it does the jobs?">
+        <DebateSide side="mainstream" who="● Functional view">
+          <p>
+            The jobs matter, the substrate doesn&apos;t. A well-managed fiat
+            currency outperforms gold across all three over any modern sample.
+            Discipline lives in institutions, not metals.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Hard-money view">
+          <p>
+            Only a fixed-supply object (gold, bitcoin) can serve all three jobs
+            without political abuse. The cost — periodic deflation — is worth
+            the discipline.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="What does Causeway mean by 'three jobs of money'?"
+        options={[
+          {
+            label: "Money is three different uses bundled into one object — medium of exchange, unit of account, store of value — and most monetary debates are arguments about which job to optimise for.",
+            correct: true,
+            explain: "Right. The same dollar bill is doing all three at once; the political fights are about whether to prioritise stable purchasing power, settlement convenience, or store-of-value integrity when they conflict."
+          },
+          {
+            label: "Money is issued by three parties: governments, commercial banks, and shadow-banking institutions.",
+            explain: "That's a fact about issuance (covered in A3 and A4), but it isn't the 'three jobs' framing."
+          },
+          {
+            label: "Modern money derives value from three sources: trust, scarcity, and legal-tender status.",
+            explain: "Plausible-sounding but wrong framing. 'Three jobs' is about what money does, not what makes it valuable."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/A2?l=2", label: "the three-jobs breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

@@ -1,0 +1,156 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { GdpBuilder } from "@/components/widgets/gdp-builder";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "GDP measures the value of market transactions — final goods and services bought and sold in a period. It misses household work, environmental costs, and future security, and it counts hurricane cleanup as growth.",
+    sub: "Useful as a thermometer, dangerous as a goal. What it tracks is real; what it omits is most of life.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "US GDP, 2024", val: "$29.0T", sub: "Annual nominal GDP · Bureau of Economic Analysis." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        GDP measures market activity, sliced three ways — production, expenditure, income
+        — that have to come out equal. It&apos;s the agreed-upon scoreboard, not a measure
+        of welfare.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Every macro debate uses GDP. Once you see what it lenses well and what it misses, the
+        debates become legible — and you stop confusing the scoreboard with the score.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        What GDP counts and misses
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Market transactions</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>counted</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Government services</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>counted at cost</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Household production</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>missed</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Environmental harm</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>missed</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Disaster cleanup</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>counts +</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Three lenses, one number">
+    <L2Grid>
+      <L2Step num="01" title="What GDP counts">
+        <p className="lede">
+          GDP is the agreed scoreboard. It is not the score, and the gap between
+          scoreboard and game shows up everywhere.
+        </p>
+        <p>
+          GDP counts the market value of final goods and services produced in a
+          period. That excludes most household production, all volunteer work,
+          environmental damage, and the long-term value of stuff you don&apos;t
+          transact in.
+        </p>
+      </L2Step>
+      <L2Step num="02" title="What GDP positively miscounts">
+        <p>
+          GDP also <strong>positively counts</strong> a lot of things that aren&apos;t
+          production: replacing what hurricanes destroy, cleaning up pollution,
+          treating illness caused by other GDP-counted activity. A rebuilt house is
+          GDP; an undamaged house is not.
+        </p>
+      </L2Step>
+      <L2Step num="03" title="Why use it anyway">
+        <p>
+          None of this means GDP is useless. It&apos;s the best wide aggregate we
+          have for tracking activity at high frequency. The trick is using it as one
+          number among many — alongside median income, life expectancy, time-use,
+          environmental indices — instead of as the master score.
+        </p>
+      </L2Step>
+      <Callout
+        title="Read 'the economy grew 3%' as 'market activity is up.'"
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          That sentence is true. It doesn&apos;t tell you whether your neighbors are
+          better off, whether the air is cleaner, or whether your future is more
+          secure. Those answers live in different measures.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <GdpBuilder />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "coyle-gdp-affectionate-history-2014",
+            "bea-nipa",
+            "kuznets-national-income-1934",
+            "stiglitz-sen-fitoussi-mismeasuring-2010",
+          ]}
+        />
+      }
+    >
+      <h3>Kuznets warned us</h3>
+      <p>
+        Modern GDP accounting was assembled by Kuznets (1934) for the US Department
+        of Commerce. Kuznets himself warned that &quot;the welfare of a nation can
+        scarcely be inferred from a measurement of national income.&quot; Sixty
+        years of governance has ignored that warning.
+      </p>
+
+      <Debate question="Replace GDP, or augment it?">
+        <DebateSide side="mainstream" who="● Augment">
+          <p>
+            GDP is too useful to discard. Pair it with side measures: median
+            income, inequality, environmental, time-use. A dashboard, not a single
+            number.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Replace">
+          <p>
+            Use a better metric: Genuine Progress Indicator, Human Development
+            Index, Bhutan&apos;s Gross National Happiness. None has caught on; all
+            are arguably better.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Why does Causeway insist that GDP's three measurement lenses (production, expenditure, income) come out equal?"
+        options={[
+          {
+            label: "Because statisticians cross-check the three at quarter-end and adjust them to match.",
+            explain: "Cross-checks happen, but the equality isn't an editing exercise — it's an identity. Every dollar produced is spent (by someone) and earned (by someone), so the three measures count the same flow from different angles."
+          },
+          {
+            label: "By accounting identity — every dollar of production is also a dollar of expenditure and a dollar of income, by definition.",
+            correct: true,
+            explain: "Right. The three are the same number viewed from different sides of the same transaction. Statistical discrepancies appear in practice because of measurement error, but the equality is conceptually forced."
+          },
+          {
+            label: "They don't always; the production estimate is the headline and the others are derived from it.",
+            explain: "All three are independently estimated from different source data; the BEA reconciles them. The identity is what makes the reconciliation meaningful."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/C1?l=2", label: "the three-lenses diagram in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

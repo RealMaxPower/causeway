@@ -1,0 +1,300 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { CryptoSizer } from "@/components/widgets/crypto-sizer";
+
+export const meta = {
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "How much Bitcoin's price moves (annualized)", val: "60–90%", sub: "Realised volatility, annualized · roughly 5× the volatility of US equities across cycles · Coin Metrics." },
+    { lbl: "Bitcoin's worst recent crash, peak to trough", val: "−77%", sub: "Nov 2021 ($69k) to Nov 2022 ($16k). Not the first 70%+ drawdown — there have been several." },
+    { lbl: "Cash flow Bitcoin pays its holders", val: "none", sub: "No dividend, no coupon, no rent. Price appreciation is the entire return story." },
+  ],
+  relatedNodes: ["H2", "H8", "G5"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="Why is this confusing?">
+        Two honest readings of bitcoin coexist. The <strong>tail-risk
+        reading</strong>: no cashflow, regulation-killable, 80%-drawdown-prone
+        — a 100x lottery ticket sized accordingly. The <strong>reserve-asset
+        reading</strong>: fixed supply, network effects, dollar-debasement
+        hedge — digital gold sized like 2–5% gold in a portfolio. Sizing
+        under the two readings differs by an order of magnitude.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Because the discipline isn&apos;t which reading is right. It&apos;s
+        sizing such that the portfolio survives if you&apos;re wrong about
+        which one is right. A position sized for the reserve-asset reading
+        breaks the portfolio if the tail reading turns out to be true; a
+        position sized for the tail reading captures nothing if the reserve
+        reading turns out to be true.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Two readings · side by side
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto auto", gap: "10px 14px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)", gridColumn: 1 }}>Cashflow</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>none</dd>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>none</dd>
+
+        <dt style={{ color: "var(--ink-2)", gridColumn: 1 }}>Scarcity</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>code-imposed</dd>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>real & verifiable</dd>
+
+        <dt style={{ color: "var(--ink-2)", gridColumn: 1 }}>Regulation risk</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>high · existential</dd>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>moderate · contained</dd>
+
+        <dt style={{ color: "var(--ink-2)", gridColumn: 1 }}>Drawdown</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>80%+ historically</dd>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>moderating with float</dd>
+
+        <dt style={{ color: "var(--ink-2)", gridColumn: 1 }}>Implied sizing</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>0–1%</dd>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>2–5%</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Size for the wrong reading">
+    <L2Grid>
+      <L2Step num="01" title="The two readings, stated honestly">
+        <p className="lede">
+          Bitcoin is the only major asset where two intellectually serious
+          readings disagree by an order of magnitude on sizing. Most retail
+          arguments confuse pro-and-anti tribal positions with the honest
+          version of each reading. Both are worth stating clearly.
+        </p>
+        <p>
+          <strong>Tail-risk reading</strong>: bitcoin is a speculative asset
+          with no cashflow, whose price reflects expectations of future
+          adoption that may never materialise. Regulation can deplatform it
+          (banking access, exchanges, custody); a coordinated G7 ban would
+          collapse the price. Sizing should reflect a near-zero probability
+          of long-run survival paired with an asymmetric upside if it
+          survives. The honest sizing is 0–1% of net worth.
+        </p>
+        <p>
+          <strong>Reserve-asset reading</strong>: bitcoin is approaching
+          monetary network maturity. Fixed supply (21M cap), 15 years of
+          continuous operation, growing institutional custody, increasing
+          government and corporate adoption. Properties are gold-adjacent but
+          digitally native: portable, divisible, censorship-resistant. Sizing
+          should reflect its role as a dollar-debasement hedge with negative
+          carry. The honest sizing is 2–5%, similar to gold in a classic
+          portfolio.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="What bitcoin actually is — math, not magic">
+        <p>
+          Bitcoin is a public ledger maintained by a distributed network of
+          miners who compete to add the next block by guessing a number.
+          Every block contains a hash of the prior block, making history
+          tamper-evident. The 21M coin cap is a line of code; the
+          de-facto-enforced halving schedule is another. There&apos;s no
+          central issuer. The system runs because the miners are paid in new
+          bitcoin and transaction fees — a Schelling point of incentives,
+          not a guarantee.
+        </p>
+        <p>
+          The technical guarantees are real. The economic guarantees are not.
+          Code can be forked; networks can lose users; legal frameworks can
+          render an asset unusable in major jurisdictions without changing a
+          single line of code. The tail-risk reading is about the second
+          layer, not the first.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The portfolio question">
+        <p>
+          Bitcoin&apos;s realised annualised vol is 60–90% across cycles —
+          roughly five times equity vol. At a 5% allocation, crypto can
+          contribute more to portfolio vol than the entire equity sleeve
+          contributes. At a 1% allocation, it&apos;s background noise.
+          Correlation to equities has drifted from near-zero (pre-2020) to
+          0.3–0.5 (post-2020 macro era), so the diversification benefit is
+          weaker than the equity-crypto correlation chart of 2017 implies.
+        </p>
+        <p>
+          The drawdown asymmetry matters more than the vol. A position that
+          survives a 60% drawdown without forcing a rebalance is a real
+          portfolio holding; a position that triggers panic-selling at −60%
+          is a bet wearing a portfolio costume.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Size for the wrong reading">
+        <p>
+          The widget below lets you stress-test sizing under both readings
+          simultaneously. The right framing isn&apos;t to pick a reading and
+          size for it — it&apos;s to ask: <em>if I&apos;m wrong about which
+          reading is right, does the portfolio survive?</em>
+        </p>
+        <p>
+          Drag the allocation up to where the reserve-asset case becomes
+          visible to portfolio returns. Now drag the tail-drawdown slider
+          and check whether your portfolio survives the worst outcome under
+          the tail reading. If the answer is no, the position is sized for
+          one reading only — it&apos;s a bet, not a portfolio holding.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="The what-if-I'm-wrong test">
+        <p>
+          A useful default: size such that an 80% drawdown costs less than
+          one year&apos;s portfolio savings. For a household saving ~10% of
+          a $500k portfolio, that&apos;s ~$50k of loss, which implies
+          ~$63k of crypto, or ~12.5% — too high for most readings. Run it
+          again at 2%: an 80% drawdown costs $8k, recoverable. Sized for
+          the wrong-reading scenario; visible enough to capture the
+          reserve-asset upside.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="The discipline is sizing for the wrong reading, not picking the right one."
+        link={{ to: "/nodes/H2", text: "H2 · Saving in this regime" }}
+      >
+        <p>
+          Most personal-finance writing on crypto picks a side and sizes
+          accordingly. The honest version stays agnostic about which reading
+          is right and sizes such that the portfolio works under both.
+          That&apos;s the same logic that applies to gold, EM equity, and
+          any other position whose long-run distribution is unknown but
+          whose short-run risk is large.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <CryptoSizer />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "nakamoto-bitcoin-2008",
+            "yermack-bitcoin-real-currency-2013",
+            "bis-crypto-tokens-defi-2023",
+            "greer-pimco-asset-class-1997",
+          ]}
+          entries={[
+            { who: "Glassnode / Coin Metrics", title: "On-chain data references", year: "ongoing" },
+          ]}
+        />
+      }
+    >
+      <h3>The cycle history is short and informative</h3>
+      <p>
+        Bitcoin has run four complete bull-bear cycles since 2010, each
+        roughly four years long and each producing a peak-to-trough drawdown
+        in the 80–90% range. The 2017 peak ($20k) fell to $3k by late 2018;
+        the 2021 peak ($69k) fell to $16k by late 2022. The 2024–25 cycle
+        appears to be tracking similar amplitude but with more institutional
+        participation — the spot-ETF inflows of 2024 represent a structural
+        change in marginal buyer.
+      </p>
+      <p>
+        Each cycle&apos;s drawdown has been roughly the same magnitude (~80%);
+        what&apos;s changed is the volatility around it. Cycle 1 (2011–2012)
+        ran on retail and miners; cycle 4 (2021–2022) included corporate
+        treasuries (MicroStrategy), institutional custody (Coinbase, Fidelity),
+        and finally ETF wrappers in 2024. The drawdown is similar; the
+        marginal seller is wider and more legible.
+      </p>
+
+      <h3>The institutional adoption question</h3>
+      <p>
+        2024 was the year spot bitcoin ETFs were approved in the US, leading
+        to roughly $50B of net inflows by end of year — comparable to gold
+        ETF inflows in the post-2004 wave. Whether this represents a one-time
+        re-rating (the ETF wrapper unlocks new buyer pools, then steady-state
+        is reached) or a durable structural bid is the open question. The
+        reserve-asset reading depends on the second answer; the tail reading
+        depends on the first.
+      </p>
+      <p>
+        For households, the institutional-adoption question matters mostly
+        because it changes the regulatory tail. A bitcoin held in a Vanguard
+        IRA via a spot ETF is structurally different from one held on a
+        peer-to-peer wallet — the first has institutional incentives aligned
+        with regulatory permanence; the second carries the full regulatory
+        risk.
+      </p>
+
+      <h3>The CBDC interaction (cross-link G5)</h3>
+      <p>
+        The central-bank digital currency story (see{" "}
+        <a href="/nodes/G5" style={{ color: "var(--gold-deep)" }}>G5 · Digital money</a>)
+        runs in parallel. A successful CBDC rollout could either compete with
+        crypto (making private digital money less necessary) or validate it
+        (proving demand for digital monetary forms). Both readings of bitcoin
+        have answers; the answers diverge by an order of magnitude.
+      </p>
+
+      <Debate question="What's the honest sizing for bitcoin in a normal household portfolio?">
+        <DebateSide side="mainstream" who="● 0–2% · tail asymmetry">
+          <p>
+            Bitcoin has no cashflow, an unproven 15-year track record, and a
+            non-trivial tail risk of regulatory or technical failure. Position
+            sized at 0–2% gives meaningful upside if the reserve-asset reading
+            is right while being survivable if the tail-risk reading is right.
+            Larger positions are bets that the tail risk doesn&apos;t exist —
+            which is hard to defend on the evidence.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● 5–10% · digital gold">
+          <p>
+            Bitcoin is well past its tail-risk phase. The institutional
+            adoption is real, the ETF infrastructure is in place, and the
+            scarcity properties are unmatched. Sized like gold in a classic
+            portfolio (5–10%), with the same logic: a small allocation in a
+            non-correlated, hard-to-replicate store of value. Sub-2% sizing
+            is leaving the reserve-asset thesis untested in your portfolio.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper rule</h3>
+      <p>
+        The discipline isn&apos;t which reading is right. It&apos;s sizing
+        such that the portfolio survives if you&apos;re wrong about which
+        one is right. This is the same logic as Track H&apos;s thesis on
+        leverage (see <a href="/nodes/H7" style={{ color: "var(--gold-deep)" }}>H7</a>):
+        a structure that only works in the base case isn&apos;t a structure,
+        it&apos;s a bet. Sized properly, bitcoin is one position among
+        many; sized improperly, it&apos;s the entire portfolio with extra
+        steps.
+      </p>
+
+      <Check
+        question="A household sizes crypto at 8% of a $500k portfolio under the reserve-asset reading. The tail-risk reading later turns out to be more accurate and BTC drawdown is 80%. What does this episode reveal about the original sizing?"
+        options={[
+          {
+            label: "The sizing was wrong because the household picked the reserve-asset reading and that turned out to be incorrect; a smaller allocation would have avoided the loss.",
+            explain: "Reads as 'the sizing was wrong because they were wrong about which reading was right.' But that's hindsight, not a sizing rule. The honest framing is structural: the sizing was wrong before the drawdown happened because it required the reserve-asset reading to be right."
+          },
+          {
+            label: "The sizing was wrong before the outcome was known: an 8% allocation under an 80% drawdown costs 6.4% of the portfolio — a loss large enough to force panic selling, which means the position only worked if the household happened to be right about which reading was correct.",
+            correct: true,
+            explain: "Right. The sizing rule is to survive the wrong reading, not to size based on which reading you believe. An 8% allocation with an 80% drawdown is a 6.4% portfolio loss — a one-cycle catastrophe that can force selling at the bottom. The correct sizing is whatever survives the wrong-reading scenario, not whichever maximises the right-reading scenario."
+          },
+          {
+            label: "The sizing was fine — bitcoin's drawdowns recover within 18–24 months, so an 8% allocation is sustainable through any historical drawdown.",
+            explain: "Mixes up historical recovery with portfolio survivability. The drawdown does recover historically, but only if the household holds through the drawdown — and an 8% position dropping to 1.6% is a portfolio shock most households don't actually hold through. Sizing has to assume realistic holder behaviour."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H9?l=2", label: "the size-for-the-wrong-reading rule in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

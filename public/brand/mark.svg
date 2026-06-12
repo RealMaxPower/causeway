@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Causeway">
+  <g fill="#9f6736">
+    <rect x="1.5" y="8" width="21" height="2.25" rx="0.5"/>
+    <rect x="4" y="10.25" width="2.5" height="10" rx="0.4"/>
+    <rect x="10.75" y="10.25" width="2.5" height="10" rx="0.4"/>
+    <rect x="17.5" y="10.25" width="2.5" height="10" rx="0.4"/>
+  </g>
+  <rect x="1.5" y="21" width="21" height="0.5" rx="0.25" fill="#7e7872" fill-opacity="0.3"/>
+</svg>

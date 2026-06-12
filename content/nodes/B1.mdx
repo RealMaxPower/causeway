@@ -1,0 +1,159 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { SupplyDemand } from "@/components/widgets/supply-demand";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Supply and demand isn't two lines crossing — it's two distributions of buyers and sellers. The crossing point sets the price; the trades that matter live above and below it.",
+    sub: "The marginal trade sets the price. The inframarginal trades — buyers willing to pay more, sellers willing to accept less — are where the gains from trade actually live.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Supply and demand aren&apos;t two crossing lines. They&apos;re two
+        distributions of <em>willingness</em> — to sell, to buy — meeting at a
+        price that clears the most desperate of each. The trades that actually
+        happen are the inframarginal ones; the marginal trade just sets the price.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Re-derive supply and demand this way once and you&apos;ll never read a
+        price the same way. The static picture becomes a story about who
+        captured surplus and who paid it.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        What&apos;s actually happening at a price
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Marginal buyer</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>exactly indifferent</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Marginal seller</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>exactly indifferent</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Inframarginal trades</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>all the rest</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Total surplus</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>area between lines</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The clearing-price story, properly told">
+    <L2Grid>
+      <L2Step num="01" title="Two distributions, not two lines">
+        <p className="lede">
+          The textbook diagram hides the structure. Supply and demand are
+          distributions of willingness, and the price clears the most desperate
+          of each.
+        </p>
+        <p>
+          Imagine listing every potential buyer in order of how much
+          they&apos;d pay, and every potential seller in order of how little
+          they&apos;d accept. The market price is wherever those two lists
+          meet — the <em>marginal</em> trade. Two people exactly indifferent;
+          the price they agreed on is the market price.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The trades that happen are the inframarginal ones">
+        <p>
+          <strong>The trades that actually happen are the inframarginal
+          ones</strong>: buyers willing to pay more than the price, sellers
+          willing to take less. The difference is consumer + producer surplus.
+          Total surplus is what&apos;s at stake when policy distorts a market.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="What this changes about reading prices">
+        <p>
+          Once you see prices this way, you stop asking &quot;is the price too
+          high?&quot; as a moral question and start asking &quot;too high
+          relative to what?&quot; Usually the answer is: relative to what
+          would clear if the underlying willingness distribution shifted —
+          and that&apos;s a different conversation.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Negotiation is converting surplus from the other side to yours."
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          Your salary is a market-clearing price for one specific labor type.
+          If you&apos;re paid more than the marginal worker, you&apos;re
+          inframarginal — you have surplus. Negotiation is about converting
+          surplus from your employer&apos;s side to yours.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <SupplyDemand />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "hayek-use-of-knowledge-1945",
+            "marshall-principles-economics-1890",
+            "walras-elements-pure-economics-1874",
+            "kirzner-competition-entrepreneurship-1973",
+          ]}
+        />
+      }
+    >
+      <h3>The diagram is a teaching simplification</h3>
+      <p>
+        The crossing-curves diagram is from Marshall (1890) and was a
+        teaching simplification of Walras (1874). The distribution view is
+        how research economists actually think; the crossing-lines version
+        persists in textbooks because it&apos;s easier to draw.
+      </p>
+
+      <Debate question="Do markets converge to clearing, or are they always adjusting?">
+        <DebateSide side="mainstream" who="● Equilibrium">
+          <p>
+            Real markets approach the clearing price quickly enough that the
+            static analysis is good enough. Use it; the friction is small at
+            relevant timescales.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Disequilibrium">
+          <p>
+            Real prices are usually away from clearing; the interesting
+            dynamics are the adjustment process itself. Hayek, Kirzner,
+            modern market-microstructure work.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="What's the most honest one-line description of what a market price is?"
+        options={[
+          {
+            label: "The number where the two curves cross — supply meets demand by intersection.",
+            explain: "Textbook-friendly but misleading. 'Supply' and 'demand' aren't fixed curves you meet at — they're distributions of willingness that the price discovers, not the other way around."
+          },
+          {
+            label: "The cost of producing the marginal unit, plus a normal profit.",
+            explain: "Cost-of-production is one input into willingness-to-sell, not the whole story. Prices can deviate from cost for long periods when willingness shifts."
+          },
+          {
+            label: "The point that clears the most desperate buyer with the most desperate seller, given the distributions of willingness on each side.",
+            correct: true,
+            explain: "Right. The price isn't 'set' by anyone; it emerges from where the two distributions of willingness meet — and shifts when those distributions shift."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/B1?l=2", label: "the willingness-distributions diagram in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

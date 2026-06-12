@@ -1,0 +1,162 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { PriceDiscovery } from "@/components/widgets/price-discovery";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "A price is millions of distributed decisions compressed into one number. When the underlying decisions are well-informed, the price is sharp; when they're not, the price is confidently wrong.",
+    sub: "Prices aggregate preferences and local supply honestly. They're bad at externalities and long-tail risks — those decisions never enter the bid.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        A price compresses millions of distributed decisions into one number. That&apos;s
+        its magic. It is also why prices fail when the underlying decisions are bad —
+        bubbles, panics, externalities.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Knowing what prices are good at — and what they&apos;re bad at — is the difference
+        between trusting and over-trusting the market signal. Most market failures
+        are misuses of a useful tool.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        What prices aggregate well · and poorly
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Private preferences (do I want it?)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>well</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Local supply conditions</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>well</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Externalities (effect on others)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>poorly</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Long-tail risk (rare disasters)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>poorly</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Prices as compressed knowledge">
+    <L2Grid>
+      <L2Step num="01" title="Hayek's central insight">
+        <p className="lede">
+          A price is millions of distributed decisions compressed into one number.
+          That&apos;s its magic — and the source of every market failure.
+        </p>
+        <p>
+          Hayek&apos;s 1945 essay made the case: no central planner can possibly
+          know what every household and firm in an economy knows about its own
+          situation. Prices solve this by aggregating those private bits of
+          information into a single signal anyone can act on.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Good information in, good price out">
+        <p>
+          When the underlying decisions are well-informed, prices are wonderful.
+          When they&apos;re systematically wrong — bubbles, panics, propaganda,
+          externalities — prices are wrong by exactly the amount the underlying
+          information is wrong, and <em>confidently so</em>.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="A price is never the truth">
+        <p>
+          <strong>The price is never the truth.</strong> It is the best estimate the
+          system can produce given the information actually being used. If you
+          know the information being used is bad, the price is bad too.
+        </p>
+        <p>
+          The mistake is to read a price as an oracle. It&apos;s a poll. Polls
+          aggregate the views of their respondents. When respondents are
+          informed, careful, and varied, the poll is informative. When
+          they&apos;re panicked or under-informed, so is the poll.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Trust prices on repeat-transacted things. Distrust them where information is thin."
+        link={{ to: "/nodes/F3", text: "F3 · Bubble detection" }}
+      >
+        <p>
+          Trust prices on things people transact in repeatedly with full
+          information (groceries, gas). Distrust prices on things with rare
+          events or hidden costs (insurance, complex financial products, anything
+          with externalities). The closer a market is to the second list, the
+          more humility a price deserves.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <PriceDiscovery />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "hayek-use-of-knowledge-1945",
+            "fama-efficient-capital-markets-1970",
+            "shiller-irrational-exuberance",
+            "kahneman-thinking-fast-slow-2011",
+          ]}
+        />
+      }
+    >
+      <h3>From Hayek 1945 to behavioral economics</h3>
+      <p>
+        The &quot;use of knowledge in society&quot; (Hayek 1945) is the classical
+        statement. Behavioral economics complicated it from the 1970s; the
+        financial crisis of 2008 forced a re-examination. Prices are still the
+        best mechanism we have; we&apos;re more humble about their failure modes.
+      </p>
+
+      <Debate question="How efficient are prices, really?">
+        <DebateSide side="mainstream" who="● Efficient markets">
+          <p>
+            Prices are the best aggregators of available information; you
+            can&apos;t systematically beat them. The strong form (prices reflect
+            all information including private) is wrong; the weak form (prices
+            reflect public information) is durable. Fama.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Behavioral">
+          <p>
+            Cognitive biases, framing, narratives systematically distort prices.
+            Anomalies are real and persistent. Shiller, Kahneman. Prices reflect
+            available <em>cognition</em>, not available information.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Why is the 'price as information' framing useful even when prices are sometimes badly wrong?"
+        options={[
+          {
+            label: "Because in the long run prices always converge to fundamentals, so the information content is eventually correct.",
+            explain: "Stronger claim than the framing supports. The framing survives even if convergence is slow or partial — it explains why prices coordinate behaviour, not why they're correct."
+          },
+          {
+            label: "Because a price compresses millions of distributed decisions into one number, which is the only coordination signal that scales across an economy.",
+            correct: true,
+            explain: "Right. The framing isn't that prices are correct — it's that they're the only practical mechanism for aggregating diffuse private knowledge. The failure cases (bubbles, externalities) are real but don't replace the mechanism."
+          },
+          {
+            label: "Because a planner with enough data could replicate prices, so they're a kind of decentralised proof-of-concept for central planning.",
+            explain: "Hayek's argument runs the other way: prices work BECAUSE no planner can aggregate the necessary knowledge. The whole point is the impossibility of centralised replication."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/B2?l=2", label: "the price-signal mechanism in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

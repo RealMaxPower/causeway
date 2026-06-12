@@ -1,0 +1,185 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Modern sanctions don't reach abroad through law — they reach abroad through dollar plumbing. Every cross-border dollar payment touches a US correspondent bank, and correspondent relationships are revocable.",
+    sub: "2022 was the first time a G20 country's central-bank reserves were frozen. Every reserve manager in the world noted it.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "First G20 central-bank reserves frozen", val: "2022", sub: "Russia · ~$300B in central-bank reserves immobilised after the invasion of Ukraine." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Modern financial sanctions aren&apos;t a separate enforcement system.
+        They&apos;re a feature of the dollar-clearing infrastructure — which
+        is why they reach so far. Every cross-border dollar transaction
+        touches a US bank, which makes US sanctions globally enforceable in
+        a way no other country&apos;s are.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        You may never see a sanction directly. You will see the consequences:
+        energy prices, exchange rates, the speed at which a war ends or
+        doesn&apos;t. The sanctions architecture is invisible plumbing with
+        very loud effects.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        How dollar sanctions reach a non-US bank
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>1 · US bans US persons from dealing</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>primary</dd>
+        <dt style={{ color: "var(--ink-2)" }}>2 · US correspondents pull access</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>transmission</dd>
+        <dt style={{ color: "var(--ink-2)" }}>3 · Non-US bank chooses</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>exit sanctioned counterparty</dd>
+        <dt style={{ color: "var(--ink-2)" }}>4 · Sanctioned entity isolated</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>globally</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The architecture under the announcements">
+    <L2Grid>
+      <L2Step num="01" title="Correspondents are the chokepoint">
+        <p className="lede">
+          A non-US bank wanting to settle a dollar transaction must do so
+          through a correspondent at a US bank — there is no alternative.
+          That correspondent relationship is licensed by the Fed and Treasury,
+          and can be revoked.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The transmission step">
+        <p>
+          When the US sanctions a foreign entity, it&apos;s telling US
+          correspondents: &quot;process anything for them and you lose your
+          license.&quot; Every non-US bank then has to choose between the
+          sanctioned counterparty and access to dollar clearing. They choose
+          dollar clearing every time. The sanctioned counterparty is
+          effectively isolated globally without anyone outside the US having
+          to sign a law.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Why secondary sanctions work">
+        <p>
+          <strong>This is why secondary sanctions work.</strong> It&apos;s
+          not extraterritorial law in the legal sense; it&apos;s the
+          gravitational pull of being able to settle in the world&apos;s
+          most-used currency. A foreign bank that wants to keep doing
+          dollar business has no real choice. The 2010s Iran sanctions and
+          2022 Russia sanctions are the canonical large-scale examples.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="The 2022 reserve freeze, and what it changed">
+        <p>
+          The 2022 freeze of Russia&apos;s central bank reserves was
+          unprecedented — the first time a G20 member&apos;s sovereign
+          reserves were immobilised. Every reserve manager in the world
+          noticed; the longer-run effect on de-dollarisation incentives is
+          still being measured. The line that was crossed was not legal
+          — it was political and institutional.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Invisible plumbing with very loud effects."
+        link={{ to: "/nodes/A6", text: "A6 · Currency & the dollar" }}
+      >
+        <p>
+          You may never see a sanction directly. You will see the
+          consequences — energy prices, exchange rates, the speed at which
+          a war ends or doesn&apos;t. The sanctions architecture is invisible
+          plumbing; learning to read it is half of reading geopolitics
+          in 2026.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "zarate-treasurys-war-2013",
+            "drezner-united-states-of-sanctions-2021",
+            "ofac-sanctions-programs",
+            "bis-sanctions-monetary-system-2023",
+          ]}
+        />
+      }
+    >
+      <h3>The 9/11 inflection</h3>
+      <p>
+        Modern financial sanctions emerged after 9/11 — Treasury&apos;s
+        Office of Foreign Assets Control gained powers, and the post-2001
+        anti-terror finance framework opened the architecture. The Iran
+        sanctions of the 2010s and the Russia sanctions of 2022 are the
+        canonical large-scale uses. The 2022 freeze of Russia&apos;s central
+        bank reserves is unprecedented — first time a G20 country&apos;s
+        reserves were immobilised by sanction.
+      </p>
+
+      <Debate question="Effective tool — or strategically self-defeating?">
+        <DebateSide side="mainstream" who="● Effective">
+          <p>
+            Coercive without war. Achieves policy objectives at low cost in
+            lives. Iran behaved differently for years; Russia&apos;s economy
+            has narrowed materially. The toolkit works.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Counter-productive">
+          <p>
+            Frequent sanctioning incentivises non-dollar settlement. Long-run
+            cost: weakened reserve role. China, Russia, Iran building
+            parallel architectures — slowly, but persistently. The 2022
+            freeze accelerated that conversation.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper observation</h3>
+      <p>
+        Sanctions only work because of dollar dominance. As dollar dominance
+        erodes — slowly, partially — the sanctions tool weakens too. The two
+        questions are inseparable: every use of sanctions is a tax on future
+        dollar dominance, and every weakening of dollar dominance is a tax
+        on future sanctions efficacy.
+      </p>
+
+      <Check
+        question="Why are US sanctions globally enforceable in a way that, say, Swiss sanctions are not?"
+        options={[
+          {
+            label: "The US has the largest military, so non-compliant counterparties face real-world consequences.",
+            explain: "Military deterrence is part of the broader picture, but it's not how sanctions enforcement actually works. Banks comply with US sanctions even when no military threat exists — the mechanism is financial."
+          },
+          {
+            label: "Every cross-border dollar transaction clears through a US correspondent bank, so any participant in dollar payments is reachable by US law.",
+            correct: true,
+            explain: "Right. The plumbing is the leverage. Even a transaction between two non-US parties touches a US bank if it's in dollars, and that bank can be fined or de-licensed for non-compliance. This is what made Iran sanctions stick globally despite European opposition."
+          },
+          {
+            label: "International law treaties give US sanctions extraterritorial force.",
+            explain: "There's no treaty granting extraterritorial US sanctions authority — most allies object to it formally. The enforcement runs through banking infrastructure, not international law."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/E5?l=2", label: "the dollar-clearing diagram in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

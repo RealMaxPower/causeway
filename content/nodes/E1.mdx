@@ -1,0 +1,197 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { DebtDynamics } from "@/components/widgets/debt-dynamics";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "A country's debt path depends on three numbers: the interest rate it pays, how fast its economy grows, and whether it runs a primary surplus or deficit. When growth beats interest, debt erodes itself; when interest beats growth, debt compounds.",
+    sub: "The Great Moderation (1990s–2010s) was the first kind of regime. The post-2022 worry is that we've crossed into the second.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "US federal debt to GDP, 2024", val: "~ 121%", sub: "Gross federal debt held by the public + intragovernmental · FRED, GFDEGDQ188S." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Debt-to-GDP follows one equation: it grows by r − g (real interest rate
+        minus growth rate), plus the primary deficit. When growth beats
+        interest, debt erodes mechanically; when interest beats growth, it
+        compounds. Three knobs, thirty years, the whole drama of public finance.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Every &quot;is the US debt sustainable?&quot; argument reduces to
+        these three knobs. Once you can read the arithmetic, the policy
+        debates are about <em>which way each knob is moving</em> — not whether
+        debt is good or bad in principle.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        The three knobs
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Real interest rate (r)</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>set by markets + CB</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Real growth rate (g)</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>productivity + demographics</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Primary deficit</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>spending minus tax revenue</dd>
+        <dt style={{ color: "var(--ink-2)" }}>If r − g &lt; 0</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>debt naturally erodes</dd>
+        <dt style={{ color: "var(--ink-2)" }}>If r − g &gt; 0</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>debt compounds</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Three knobs, thirty years, the whole drama">
+    <L2Grid>
+      <L2Step num="01" title="The arithmetic">
+        <p className="lede">
+          Debt/GDP follows one equation: it grows by r − g, plus the primary
+          deficit as a share of GDP. Memorise the form; the conclusion follows
+          from arithmetic, not ideology.
+        </p>
+        <p>
+          More precisely: the change in debt/GDP each year is roughly{" "}
+          <em>(r − g) × current debt/GDP + primary deficit/GDP</em>. So a
+          country with 100% debt/GDP, real rate 2%, real growth 2%, balanced
+          primary budget — debt/GDP holds steady. Move any knob and the path
+          changes.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The Great Moderation gave us a free lunch">
+        <p>
+          From roughly 1982 to 2022, US real rates were low and growth was
+          steady, so r − g was small or negative most years. Debt could rise
+          gradually without compounding — fiscal policy felt forgiving because
+          the arithmetic was. Most of the developed world ran the same regime.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The 2022+ worry">
+        <p>
+          The post-2022 worry is r − g flipping positive and staying there.
+          If real rates settle at 2% while real growth slows to 1.5%
+          (demographics + productivity), r − g becomes +0.5% and debt
+          compounds at that rate annually — without any policy change. Combine
+          with primary deficits running 3–5% of GDP and you have an arithmetic
+          problem the textbooks can spell out exactly.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="The four resolutions">
+        <p>
+          When debt compounds and a country wants out, only four mechanisms
+          do the work: <strong>inflation</strong> (erode real value of fixed
+          nominal debt), <strong>fiscal adjustment</strong> (raise taxes
+          and/or cut spending until the primary balance flips), <strong>growth</strong>{" "}
+          (productivity push or supply-side reforms — the slowest), or{" "}
+          <strong>default/restructuring</strong> (haircut creditors,
+          explicitly or implicitly). Each has political costs; each has been
+          used historically; the policy debate is which combination is on the
+          table.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Every debt-sustainability debate is about the three knobs."
+        link={{ to: "/nodes/H8", text: "H8 · Portfolio under regime change" }}
+      >
+        <p>
+          When commentators argue about US debt, ask: which knob are they
+          moving in their head? Higher growth assumptions, lower real rates,
+          a balanced primary budget by 2030, controlled inflation? Each
+          assumption maps to a different policy posture; treat the assumption
+          as the argument.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <DebtDynamics />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "imf-fiscal-monitor",
+            "bis-annual-economic-report",
+            "reinhart-rogoff-growth-in-time-of-debt-2010",
+            "blanchard-public-debt-low-rates-2019",
+            "cbo-budget-economic-outlook",
+          ]}
+        />
+      }
+    >
+      <h3>The arithmetic is older than the textbooks</h3>
+      <p>
+        The debt-dynamics equation is several centuries old in essence;
+        modern statement is Domar (1944). The argument has cycled through
+        four eras: Bretton Woods (r ≈ g, debt eroded by growth + financial
+        repression), 1970s (g collapsed, debt compounded, inflation eroded
+        it), Great Moderation (r &lt; g, easy years), and the post-2022
+        regime (whether r &lt; g still holds is the active question).
+      </p>
+
+      <Debate question="Is high public debt a constraint on policy or a non-issue?">
+        <DebateSide side="mainstream" who="● Constraint, depending on r − g">
+          <p>
+            If r &gt; g for a sustained period, debt compounds and
+            constrains policy. The political-economic question is whether
+            adjustment happens proactively (smooth, slow) or reactively
+            (crisis, large). Reinhart-Rogoff, IMF.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Not a binding constraint for monetary sovereign">
+          <p>
+            A country that borrows in its own currency cannot be forced into
+            default; the constraint is inflation, not solvency. The
+            sustainability framework is the wrong frame for a sovereign
+            issuer. MMT-adjacent; Blanchard&apos;s 2019 paper makes a
+            mainstream version of the case at the lower bound.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>Financial repression — the historical resolution</h3>
+      <p>
+        The US after WWII held r below g by capping long-bond yields (the
+        1942–51 Fed-Treasury accord). Real bond returns were negative for
+        most of that period; debt was inflated and grown away. The same
+        playbook is contemplated quietly whenever debt levels rise — never
+        announced, often implemented through omission rather than action.
+      </p>
+
+      <Check
+        question="A country has debt/GDP of 100%, real growth of 2%, real interest of 4%, and a primary deficit of 1% of GDP. What direction is the debt path heading?"
+        options={[
+          {
+            label: "Improving — the primary deficit is small enough that growth will erode the debt ratio over time.",
+            explain: "Growth alone isn't enough when interest rates exceed growth. The (r − g) term is +2pp; you're paying 2% on the existing stock just to stand still, plus the new 1% deficit."
+          },
+          {
+            label: "Worsening — (r − g) is positive (2pp), so debt compounds at 2% × 100% = 2pp of GDP per year, plus the 1pp primary deficit, for about +3pp/year.",
+            correct: true,
+            explain: "Right. The fiscal arithmetic: Δ(debt/GDP) ≈ (r − g) × (debt/GDP) + primary deficit. When r > g and debt is already high, even a small primary deficit produces fast compounding. Reverse-engineering this on real economies (Italy, US in 2030s projections) is the whole game."
+          },
+          {
+            label: "Stable — primary deficit of 1% is below typical thresholds for sustainability concerns.",
+            explain: "There's no universal threshold; sustainability is path-dependent on (r − g) and the existing stock. The same 1% deficit can be sustainable (when g > r) or rapidly destabilising (when r > g)."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/E1?l=2", label: "the r − g + d formula in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

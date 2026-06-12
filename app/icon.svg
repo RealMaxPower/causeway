@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Causeway">
+  <style>
+    .mark { fill: oklch(0.45 0.13 55); }
+    .water { fill: oklch(0.50 0.014 64); fill-opacity: 0.3; }
+    @media (prefers-color-scheme: dark) {
+      .mark { fill: oklch(0.80 0.13 70); }
+      .water { fill: oklch(0.66 0.012 76); fill-opacity: 0.35; }
+    }
+  </style>
+  <g class="mark">
+    <rect x="1.5" y="8" width="21" height="2.25" rx="0.5"/>
+    <rect x="4" y="10.25" width="2.5" height="10" rx="0.4"/>
+    <rect x="10.75" y="10.25" width="2.5" height="10" rx="0.4"/>
+    <rect x="17.5" y="10.25" width="2.5" height="10" rx="0.4"/>
+  </g>
+  <rect class="water" x="1.5" y="21" width="21" height="0.5" rx="0.25"/>
+</svg>

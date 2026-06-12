@@ -1,0 +1,235 @@
+/* phase-clock — C2 working model. */
+
+.widget {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  margin-top: 28px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper-2);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headTitle {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  padding: 4px 10px;
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: background 120ms ease, color 120ms ease;
+}
+.btn:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.btnActive {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border-color: var(--ink);
+}
+.btnActive:hover {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+}
+
+.toggle {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+.toggle input { accent-color: var(--gold-deep); }
+
+.presets {
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: var(--paper);
+}
+.presetLabel {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-right: 6px;
+  align-self: center;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+}
+
+@media (max-width: 760px) {
+  .body { grid-template-columns: 1fr; }
+}
+
+.clockCol {
+  padding: 20px;
+  border-right: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 760px) {
+  .clockCol { border-right: 0; border-bottom: 1px solid var(--rule); }
+}
+
+.clockSvg {
+  width: 100%;
+  max-width: 340px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  display: block;
+}
+.clockSvg:active { cursor: grabbing; }
+
+.phaseDesc {
+  margin-top: 10px;
+  font-family: var(--cw-serif);
+  font-style: italic;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.scrubGroup {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scrubLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+}
+.scrubValue {
+  color: var(--ink);
+  font-weight: 500;
+}
+.scrub {
+  width: 100%;
+  accent-color: var(--gold-deep);
+}
+
+.indicatorsCol {
+  padding: 16px 20px;
+}
+
+.groupTitle {
+  font-family: var(--cw-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 4px;
+}
+.group + .group {
+  margin-top: 14px;
+}
+
+.indHeader {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 8px;
+}
+
+.indRow {
+  display: grid;
+  grid-template-columns: 1fr 110px 70px;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 0;
+  font-family: var(--cw-mono);
+  font-size: 11px;
+}
+
+@media (max-width: 520px) {
+  .indRow { grid-template-columns: 1fr 70px 60px; }
+}
+
+.indName {
+  color: var(--ink-2);
+}
+
+.indSpark {
+  width: 100%;
+  height: 22px;
+}
+
+.indValue {
+  color: var(--ink);
+  text-align: right;
+  font-weight: 500;
+}
+.indUnit {
+  color: var(--ink-3);
+  margin-left: 3px;
+  font-weight: 400;
+}
+
+.foot {
+  padding: 10px 20px;
+  border-top: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  text-align: right;
+}
+.foot em { font-style: italic; }
+
+@media (max-width: 479px) {
+  .body { grid-template-columns: 1fr; }
+  .indRow { grid-template-columns: 1fr 60px 50px; font-size: 11px; }
+  .foot { padding: 10px 16px; text-align: left; }
+}

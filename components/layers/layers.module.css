@@ -1,0 +1,530 @@
+/* Layer scaffold styles — ported from the v0 prototype layer-* prose
+   and components. Token vars come from styles/tokens.css. */
+
+.frame { padding: 8px 0 64px; }
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 24px;
+}
+.head .ltitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.head .lno {
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.head h2 {
+  font-family: var(--cw-serif);
+  font-size: 22px;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.2;
+}
+.head .ltime {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+}
+
+/* ---------- L1 — Pocket ---------- */
+.pocketGrid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .pocketGrid { grid-template-columns: 1fr; }
+}
+/* L1QA label — italic serif lead-in instead of a shouty mono small-caps chip.
+   Same component API, quieter visual weight so only one small-caps label
+   (the hero crumb) competes for the eye in the L1 viewport. */
+.pocketQ {
+  font-family: var(--cw-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+  margin-top: 18px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.pocketQ:first-child { margin-top: 0; }
+.pocketA {
+  font-family: var(--cw-serif);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 4px;
+  max-width: 52ch;
+}
+.pocketA em { color: var(--gold-deep); font-style: italic; }
+
+/* L1Pocket — wrapper for short-form prose in L1's left column. */
+.pocket {
+  max-width: 52ch;
+  font-family: var(--cw-serif);
+}
+.pocket p {
+  font-family: var(--cw-serif);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.pocket p:last-child { margin-bottom: 0; }
+.pocket em { color: var(--gold-deep); font-style: italic; }
+
+/* Scene — figure + caption block for L1's right column. */
+.scene {
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 16px;
+  background: var(--paper-2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+.sceneImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: calc(var(--r-md) - 4px);
+}
+.sceneCap {
+  font-family: var(--cw-serif);
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+/* Comparator — promoted from the inline <dl> tables in early MDX. */
+.comparator {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 18px;
+  background: var(--paper-2);
+}
+.comparatorTitle {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.comparatorDl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 16px;
+  font-family: var(--cw-serif);
+}
+.comparatorRow {
+  display: contents;
+}
+.comparatorRow dt {
+  color: var(--ink-2);
+}
+.comparatorRow dd {
+  margin: 0;
+  font-family: var(--cw-mono);
+}
+.comparatorRow dd[data-tone="good"]    { color: var(--cw-green); }
+.comparatorRow dd[data-tone="bad"]     { color: var(--cw-red); }
+.comparatorRow dd[data-tone="muted"]   { color: var(--ink-3); }
+.comparatorRow dd[data-tone="neutral"] { color: var(--ink); }
+
+/* MicroAnimate — CSS-only motion for L1. */
+.microAnimate {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 0;
+}
+.maRow {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+.maLbl {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.maBar {
+  display: block;
+  height: 10px;
+  background: var(--gold-deep);
+  border-radius: 2px;
+  transform-origin: left center;
+  animation: cw-ma-grow 1.8s ease-out infinite alternate;
+}
+@keyframes cw-ma-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .maBar { animation: none; }
+}
+
+/* Term — inline glossary <abbr>. */
+.term {
+  border-bottom: 1px dotted var(--ink-3);
+  cursor: help;
+  text-decoration: none;
+}
+/* Plain-mode reader preference: power users who don't need glossary hints
+   can toggle a body class that drops the dotted underline (and the cursor
+   affordance). The title= tooltip still works on hover for the rare lookup. */
+:global(body.cw-plain) .term {
+  border-bottom-style: none;
+  cursor: inherit;
+}
+
+/* ---------- L2 — Working Model ---------- */
+.l2Grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+@media (max-width: 1100px) {
+  .l2Grid { grid-template-columns: 1fr; }
+}
+
+.l2Prose {
+  max-width: 64ch;
+}
+
+.step { padding: 22px 0; border-bottom: 1px dashed var(--rule); }
+.step:first-child { padding-top: 0; }
+.step:last-child { border-bottom: 0; }
+
+.stepNum {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.step p {
+  font-family: var(--cw-serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 8px 0;
+}
+
+.step .lede {
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.step em { color: var(--gold-deep); font-style: italic; }
+.step strong { color: var(--ink); font-weight: 600; }
+.step .footnote {
+  border-bottom: 1px dotted var(--ink-3);
+  cursor: help;
+}
+
+/* ---------- Side rail (key terms / sources) ---------- */
+.rail {
+  position: sticky;
+  top: 84px;
+  align-self: start;
+  border-top: 2px solid var(--ink);
+  padding-top: 12px;
+}
+
+.railTitle {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+
+.railItem {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.railItem:last-child { border-bottom: 0; }
+
+.railItem dt {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.railItem dd {
+  font-family: var(--cw-serif);
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.45;
+  margin: 2px 0 0;
+}
+
+/* ---------- Callout ---------- */
+.callout {
+  background: var(--gold-wash);
+  border: 1px solid var(--gold-soft);
+  border-left: 4px solid var(--gold-deep);
+  border-radius: var(--r-md);
+  padding: 18px 22px;
+  margin: 28px 0;
+}
+.callout .lbl {
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.compass {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--gold-deep);
+  border-radius: 50%;
+  position: relative;
+}
+.compass::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: var(--gold-deep);
+  border-radius: 50%;
+}
+.callout h4 {
+  font-family: var(--cw-serif);
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.callout p {
+  font-family: var(--cw-serif);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 4px 0;
+}
+.callout .link {
+  font-family: var(--cw-mono);
+  font-size: 11.5px;
+  color: var(--gold-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.calloutLink {
+  margin: 12px 0 0;
+  font-family: var(--cw-mono);
+  font-size: 11.5px;
+}
+.calloutLink a {
+  color: var(--gold-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.calloutLink a:hover {
+  color: var(--ink);
+}
+
+/* ---------- L3 — Full Picture ---------- */
+.l3Grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .l3Grid { grid-template-columns: 1fr; }
+}
+
+.l3Prose { max-width: 68ch; }
+
+.l3Prose h3 {
+  font-family: var(--cw-serif);
+  font-size: 22px;
+  color: var(--ink);
+  margin: 32px 0 12px;
+}
+.l3Prose h3:first-child { margin-top: 0; }
+
+.l3Prose p {
+  font-family: var(--cw-serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 12px 0;
+}
+
+.l3Prose strong { font-weight: 600; }
+.l3Prose em { color: var(--gold-deep); font-style: italic; }
+
+.l3Prose blockquote {
+  border-left: 3px solid var(--gold-deep);
+  margin: 24px 0;
+  padding: 8px 18px;
+  font-family: var(--cw-serif);
+  font-style: italic;
+  color: var(--ink);
+  background: var(--gold-wash);
+}
+.l3Prose blockquote cite {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  font-style: normal;
+}
+
+/* timeline */
+.timeline {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px 18px;
+  margin: 22px 0;
+  padding: 18px;
+  background: var(--paper-2);
+  border-radius: var(--r-md);
+  border: 1px solid var(--rule);
+}
+.timelineYear {
+  font-family: var(--cw-mono);
+  font-weight: 600;
+  color: var(--gold-deep);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+.timelineEvent {
+  font-family: var(--cw-serif);
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* debate */
+.debate {
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-md);
+  margin: 24px 0;
+  overflow: hidden;
+}
+.debateHead {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  padding: 12px 18px;
+}
+.debateHead .h {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: 4px;
+}
+.debateHead .q {
+  font-family: var(--cw-serif);
+  font-style: italic;
+  font-size: 17px;
+}
+.debateSides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media (max-width: 720px) {
+  .debateSides { grid-template-columns: 1fr; }
+}
+.debateSide {
+  padding: 16px 18px;
+  border-right: 1px dashed var(--rule);
+}
+.debateSide:last-child { border-right: 0; }
+.debateSideWho {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.debateSide[data-side="mainstream"] .debateSideWho { color: var(--cw-blue); }
+.debateSide[data-side="heterodox"]  .debateSideWho { color: var(--cw-red); }
+.debateSide p {
+  font-family: var(--cw-serif);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* sources side rail */
+.sources {
+  border-top: 2px solid var(--ink);
+  padding-top: 12px;
+}
+.sources h4 {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 14px;
+  font-weight: 500;
+}
+.src {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.src:last-child { border-bottom: 0; }
+.srcWho {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.srcTitle {
+  font-family: var(--cw-serif);
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.4;
+  margin: 2px 0;
+}
+.srcYear {
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-4);
+}

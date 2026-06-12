@@ -1,0 +1,209 @@
+/* Rent-vs-own widget. Tokens from styles/tokens.css. */
+
+.widget {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  margin-top: 28px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--paper-2);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headTitle {
+  font-family: var(--cw-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.preset {
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  padding: 4px 10px;
+  font-family: var(--cw-mono);
+  font-size: 10.5px;
+  color: var(--ink-2);
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: background 120ms ease, color 120ms ease;
+}
+.preset:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.presetActive {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+  border-color: var(--ink);
+}
+.presetActive:hover {
+  background: var(--ink-surface);
+  color: var(--ink-surface-fg);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+}
+
+@media (max-width: 880px) {
+  .body { grid-template-columns: 1fr; }
+}
+
+.chartCol {
+  padding: 16px 20px;
+  border-right: 1px solid var(--rule);
+}
+
+@media (max-width: 880px) {
+  .chartCol { border-right: 0; border-bottom: 1px solid var(--rule); }
+}
+
+.chartCol svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  font-family: var(--cw-serif);
+  overflow: hidden;
+}
+.legendCell {
+  padding: 10px 14px;
+}
+.legendCell + .legendCell { border-left: 1px solid var(--rule); }
+
+.legendLabelOwn {
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cw-green);
+  margin-bottom: 4px;
+}
+.legendLabelRent {
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cw-red);
+  margin-bottom: 4px;
+}
+.legendText {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+
+.verdict {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--paper-2);
+  border-left: 3px solid var(--ink);
+  font-family: var(--cw-serif);
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  border-radius: var(--r-sm);
+}
+.verdictOwnWins {
+  border-left-color: var(--cw-green);
+}
+.verdictRentWins {
+  border-left-color: var(--cw-red);
+}
+.verdictAmt {
+  font-family: var(--cw-mono);
+}
+
+.controls {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sliderGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.sliderLabel {
+  font-family: var(--cw-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.sliderValue {
+  font-family: var(--cw-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--gold-deep);
+}
+.sliderValueOwn { color: var(--cw-green); }
+.sliderValueMkt { color: var(--cw-blue); }
+.sliderValueRent { color: var(--cw-red); }
+
+.range {
+  width: 100%;
+  accent-color: var(--gold-deep);
+}
+.rangeOwn { accent-color: var(--cw-green); }
+.rangeMkt { accent-color: var(--cw-blue); }
+.rangeRent { accent-color: var(--cw-red); }
+
+.foot {
+  padding: 10px 20px;
+  border-top: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  font-family: var(--cw-serif);
+  font-size: 12px;
+  color: var(--ink-2);
+  font-style: italic;
+}
+
+@media (max-width: 479px) {
+  .head { padding: 12px 16px; gap: 10px; }
+  .presets { width: 100%; }
+  .preset { flex: 1 1 auto; min-height: 44px; padding: 10px 8px; font-size: 11px; }
+  .chartCol { padding: 12px 16px; }
+  .legend { grid-template-columns: 1fr; }
+  .legendCell + .legendCell { border-left: 0; border-top: 1px solid var(--rule); }
+  .legendCell { padding: 10px 12px; }
+  .controls { padding: 14px 16px; gap: 14px; }
+  .foot { padding: 10px 16px; }
+}

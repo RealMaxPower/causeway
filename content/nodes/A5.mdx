@@ -1,0 +1,193 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { InflationTracker } from "@/components/widgets/inflation-tracker";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Inflation is not prices going up — it's the dollar losing purchasing power against a basket of things.",
+    sub: "Two honest economists disagreeing about inflation are usually disagreeing about the basket, not the math.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Fed's inflation target", val: "2.0%", sub: "Annual change in Core PCE; the Fed's chosen yardstick." },
+    { lbl: "US inflation peak, 2022", val: "9.1%", sub: "Year-over-year CPI, June 2022; the post-pandemic spike that ended the low-inflation era." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Inflation is the unit of account losing purchasing power against a basket.
+        Deflation is the same arrow reversed — and historically more dangerous, because
+        debt burdens grow against falling nominal income.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Two honest economists can disagree about whether inflation is happening because
+        they&apos;re disagreeing about the basket. The math isn&apos;t the argument; the
+        choice of weights is.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Inflation measures · same month, different baskets
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Headline CPI</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>3.0%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Core CPI</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>3.4%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Core PCE</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>2.6%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Trimmed mean PCE</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>2.7%</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="What inflation is, what it isn't, and why economists disagree about it">
+    <L2Grid>
+      <L2Step num="01" title="A single price moving isn't inflation">
+        <p className="lede">
+          Inflation is the unit of account losing purchasing power against a basket.
+          Deflation is the same arrow reversed — and historically more dangerous.
+        </p>
+        <p>
+          Prices rise for many reasons. A single product getting more expensive
+          (because of a hurricane, a tariff, a fad) is not inflation. Inflation
+          is a <strong>generalised</strong> loss of purchasing power — your dollar
+          buys less of nearly everything.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The basket is the argument">
+        <p>
+          Measuring inflation requires choosing a basket. Different baskets — CPI,
+          core CPI, PCE, core PCE, GDP deflator, trimmed mean — give different
+          numbers, and reasonable people disagree about which is the &quot;real&quot;
+          inflation rate. <strong>The disagreement is about the basket, not the math.</strong>
+        </p>
+        <p>
+          Headline CPI includes food and energy; core strips them out because
+          they&apos;re volatile. PCE re-weights to actual household spending shares,
+          which the Fed prefers because it tracks behaviour. Trimmed mean drops the
+          highest- and lowest-moving items in each period. None of these is
+          &quot;right&quot;; each answers a different question.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The central bank's filter problem">
+        <p>
+          The central bank&apos;s job is harder than it looks: it has to filter
+          signal (money is debasing) from noise (a one-off shock), in real time,
+          with two-year lags before its tools take effect. Get the filter wrong
+          and you&apos;ll either kill demand for a transitory shock or let an
+          embedded shock entrench.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Deflation is the dangerous one">
+        <p>
+          Falling prices sound like a gift. They aren&apos;t — debts are fixed in
+          nominal terms, so falling nominal income means rising real debt burdens.
+          Borrowers cut spending to service debt, sellers cut prices to move
+          inventory, the cycle reinforces itself. Japan after 1991 and the US
+          1929–33 are the canonical cases.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Your personal inflation rate is not the headline."
+        link={{ to: "/nodes/H2", text: "H2 · Saving in this regime" }}
+      >
+        <p>
+          Your inflation is the rate you experience, weighted by what you actually
+          buy. If your spending is heavy in healthcare, education, and rent,
+          you&apos;ve lived in a higher-inflation regime than headlines suggest for
+          two decades. The basket the BLS uses isn&apos;t yours.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <InflationTracker />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "bls-cpi",
+            "dallas-fed-trimmed-pce",
+            "reinhart-rogoff-this-time-different-2009",
+            "bea-pce-price-index",
+          ]}
+        />
+      }
+    >
+      <h3>Persistent inflation is a 20th-century phenomenon</h3>
+      <p>
+        Pre-1914 price levels could go up and down for decades and net to roughly
+        zero. The post-war shift to fiat and active monetary management produced a
+        steady, low-positive trend with periodic breakouts: the late-1970s
+        stagflation, the early-1990s emerging-market hyperinflations, the
+        post-COVID spike.
+      </p>
+
+      <Debate question="When inflation rises, is the cause demand or supply?">
+        <DebateSide side="mainstream" who="● Demand-pull">
+          <p>
+            Aggregate spending exceeds productive capacity; the difference clears
+            as price increases. Cure: tighten money or fiscal. Mainstream Phillips-curve
+            framing.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Cost-push">
+          <p>
+            Energy, commodity, or wage shocks raise costs and propagate. Cure: ride
+            it out; tightening into a supply shock causes recession <em>without</em>
+            solving inflation. The 1970s lesson runs both ways.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The 2022 episode in light of the debate</h3>
+      <p>
+        Most credible decompositions of the 2021–2023 inflation found roughly half
+        the spike was supply (energy, shipping, semiconductors) and half was
+        demand (fiscal transfers + accumulated household savings). That mixed
+        causation is what made the call so politically charged: tighteners and
+        spenders could each point to the half that vindicated their priors.
+      </p>
+
+      <blockquote>
+        &quot;Inflation is always and everywhere a monetary phenomenon.&quot;
+        <cite>Friedman, 1963 — the most-cited sentence in monetary economics, and the most-contested.</cite>
+      </blockquote>
+
+      <Check
+        question="Why is deflation generally considered more dangerous than inflation?"
+        options={[
+          {
+            label: "Real debt burdens rise as nominal incomes fall, so households and firms get crushed by debts that don't shrink with their pay.",
+            correct: true,
+            explain: "Right. The Irving Fisher / debt-deflation story: nominal debt is fixed in dollar terms, but the dollars get more valuable, so the real burden grows. Defaults spread, demand collapses, prices fall further. A feedback loop policy struggles to stop."
+          },
+          {
+            label: "Deflation is harder to detect than inflation, so it usually runs for years before anyone notices.",
+            explain: "Not the reason. Deflation shows up cleanly in CPI; the danger is what it does to balance sheets once it appears."
+          },
+          {
+            label: "Deflation is rare; the rarity makes any episode harder to learn from.",
+            explain: "Rare in the post-war US, but not rare historically — Japan 1990s, 1930s US, multiple gold-standard periods. Rarity isn't the danger; the mechanism is."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/A5?l=2", label: "the inflation tracker in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

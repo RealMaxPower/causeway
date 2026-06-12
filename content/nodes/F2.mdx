@@ -1,0 +1,273 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { CrisisScrubber } from "@/components/widgets/crisis-scrubber";
+import { Counterfactual2008 } from "@/components/widgets/counterfactual-2008";
+
+export const meta = {
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Time from first crack to peak rescue", val: "19 months", sub: "Aug 2007 (BNP Paribas freezes funds) → March 2009 (Fed swap-line peak)." },
+    { lbl: "Other episodes the widget replays", val: "2", sub: "1997 Asian crisis · 1929 crash. Same six-stage template, different costumes." },
+    { lbl: "Counterfactuals you can run below", val: "5", sub: "Cut rates earlier, cut deeper, hold ZIRP, no rescue, baseline — see what bends." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Aug 2007 → Mar 2009, month by month. Compare what was visible to a
+        normal observer to what was happening underneath that almost
+        nobody could see. The scrubber walks the six canonical stages of
+        a crisis (build-up → complacency → trigger → panic → contagion →
+        intervention) and shows the tells in the right-hand column.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Crises feel obvious in retrospect and incomprehensible in the
+        moment. Walking through one slowly, with both columns visible,
+        builds the muscle to read the next one while it&apos;s happening.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Stages · what to watch for
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>01 Build-up</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>quiet leverage</dd>
+        <dt style={{ color: "var(--ink-2)" }}>02 Complacency</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>contained</dd>
+        <dt style={{ color: "var(--ink-2)" }}>03 Trigger</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>specific event</dd>
+        <dt style={{ color: "var(--ink-2)" }}>04 Panic</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>funding seizes</dd>
+        <dt style={{ color: "var(--ink-2)" }}>05 Contagion</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>cross-border</dd>
+        <dt style={{ color: "var(--ink-2)" }}>06 Intervention</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>decisive at scale</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Replay 2008 — and two other episodes for the rhyme">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Repo">
+            Repurchase agreement. Overnight collateralized lending. The
+            plumbing for funding bank balance sheets — and the choke
+            point in 2008.
+          </KeyTerm>
+          <KeyTerm term="LIBOR-OIS spread">
+            Price of unsecured interbank lending over the secured rate.
+            A measure of how much banks distrust each other&apos;s
+            solvency. Sat near zero pre-2008; spiked to 360bps in October.
+          </KeyTerm>
+          <KeyTerm term="Securitization">
+            Pooling loans into tranches sold to different investors.
+            Magic in normal times; meltdown when the underlying loans
+            all sour at once.
+          </KeyTerm>
+          <KeyTerm term="Fed swap lines">
+            Fed agreements to lend dollars to foreign central banks.
+            Peaked at $580B in 2008. The instrument that made the Fed
+            the lender of last resort to the world.
+          </KeyTerm>
+          <KeyTerm term="Money-market 'break the buck'">
+            When a money-market fund&apos;s NAV falls below $1.00.
+            Triggers panic redemptions across all such funds. Reserve
+            Primary Fund broke the buck Sep 16, 2008 — the moment
+            commercial paper froze.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="The six-stage template">
+        <p className="lede">
+          Every modern financial crisis has six stages. Build-up,
+          complacency, trigger, panic, contagion, intervention. Names
+          change; structure doesn&apos;t.
+        </p>
+        <p>
+          The widget below applies the template to three episodes.
+          Default view is 2008; click the buttons to swap in 1997 Asian
+          Crisis or 1929 Great Depression and see the same shape.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Read the two columns">
+        <p>
+          For every stage, the widget shows{" "}
+          <strong>what was visible to a normal observer</strong> on the
+          left and <strong>what was happening underneath</strong> on the
+          right. The gap between the two is the alpha. Reading
+          newspapers tells you the left column; reading the plumbing
+          tells you the right.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Watch the tells">
+        <p>
+          Each stage has a single &quot;tell&quot; — the one line in
+          period reporting that, if you knew what it meant, told you
+          everything. For 2008: <em>&quot;BNP Paribas freezes three
+          funds because we can&apos;t price them&quot;</em> (Aug 2007).
+          That sentence is the whole crisis in one line.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Scrub through, then compare">
+        <p>
+          Use the stage buttons or the arrow keys to walk through 2008.
+          When you&apos;re done, swap to 1997 and walk it. The
+          underneath columns will feel uncannily similar. The 1929
+          episode is the deep cut — same structure, but the
+          intervention is missing the modern toolkit, so the
+          consequences are catastrophic in a way 2008 was not.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If you've heard 'this time is different,' you are likely in Phase 1."
+        link={{ to: "/nodes/F1", text: "F1 · Anatomy of a crisis" }}
+      >
+        <p>
+          The phases are recognisable in real time. Calling the exact
+          turn is harder, but the structural read is doable. Pair this
+          replay with F1&apos;s anatomy framework and F3&apos;s bubble-
+          sizing tools, and you have the working toolkit for reading the
+          next one as it builds.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <CrisisScrubber defaultEpisode="2008 · Global Financial Crisis" />
+
+    <L2Step num="04" title="Now try a different policy path">
+      <p>
+        The replay above is the official record. The widget below lets
+        you run the alternative — what if the Fed had cut earlier, or
+        deeper, or held ZIRP through 2014? The transmission lags come
+        from the same rate-transmission model used in <em>C5</em>; we
+        convolve your deviation path against the C5 kernel and surface
+        the response in unemployment, inflation, and growth.
+      </p>
+      <p>
+        The point is not to predict. The point is to make the
+        counterfactual <em>legible</em>. Small assumptions about lags
+        and elasticities produce large differences in the headline
+        numbers — and that uncertainty is the whole reason the
+        debate around 2008 policy remains live.
+      </p>
+    </L2Step>
+
+    <Counterfactual2008 />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "tooze-crashed-2018",
+            "mehrling-new-lombard-street-2011",
+            "gorton-slapped-invisible-hand-2010",
+            "lewis-big-short-2010",
+            "bernanke-geithner-paulson-firefighting-2019",
+            "fcic-financial-crisis-report-2011",
+            "adrian-shin-liquidity-leverage-2010",
+          ]}
+        />
+      }
+    >
+      <h3>The shape, and the people who saw it</h3>
+      <p>
+        A handful of investors (Michael Burry, Steve Eisman, John
+        Paulson) saw the shape in 2006-07 because they were reading the
+        right column — credit performance data, ABX index moves, repo
+        haircut trends — while the left column still said
+        &quot;contained.&quot; The work wasn&apos;t glamorous; it was
+        spreadsheet attention to subprime delinquency rates and tranche
+        loss models. The premium for that work was historic.
+      </p>
+
+      <Timeline
+        entries={[
+          { year: "Aug 2007", event: "BNP Paribas freezes three funds. The phrase 'we can't price them' marks the structural pivot — repo markets begin to require uniform pricing or stop functioning." },
+          { year: "Mar 2008", event: "Bear Stearns fails over a weekend. Fed-engineered rescue at $2/share. JPMorgan ends up paying $10. The principle: a major broker-dealer can fail; do not let it." },
+          { year: "Sep 15, 2008", event: "Lehman bankruptcy. Different principle: a major broker-dealer can fail; let it. The day that broke the system." },
+          { year: "Sep 16, 2008", event: "Reserve Primary Fund 'breaks the buck.' Money-market industry starts unraveling. Treasury and Fed scramble to backstop the entire MMF universe." },
+          { year: "Oct 3, 2008", event: "TARP passes second vote ($700B). The political dimension of the crisis becomes its defining feature — and the political residue lasts a decade." },
+          { year: "Mar 2009", event: "Fed announces QE1. Equity market bottoms within weeks. The intervention works mechanically; the politics never fully recover." },
+          { year: "Jul 2010", event: "Dodd-Frank signed. Volcker Rule, FSOC, OLA, derivatives clearing. The post-2008 regulatory architecture starts compiling." },
+          { year: "2015–2019", event: "Macroprudential framework matures: stress tests, capital buffers, liquidity coverage ratios. The 2020 COVID stress test on the same system shows it now works — capital holds, dollar swap lines fire, no Lehman-style failures." },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+
+      <Debate question="Was letting Lehman fail the right call?">
+        <DebateSide side="mainstream" who="● Defenders">
+          <p>
+            The legal authority to rescue Lehman didn&apos;t exist; the
+            ad-hoc rescue would have undermined the eventual TARP vote.
+            Paulson, Bernanke, Geithner all argue this in their
+            post-crisis books. The system had to break before Congress
+            would act.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Critics">
+          <p>
+            The cost-benefit obviously favored rescue. Tooze argues
+            Lehman was rescuable through a less direct mechanism. The
+            decision to let it fail was political, not legal. The
+            counterfactual price (a few hundred billion of Fed lending)
+            was tiny against the realized cost.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The institutional legacy</h3>
+      <p>
+        The post-2008 architecture — Dodd-Frank, Basel III, FSOC,
+        macroprudential stress testing, expanded Fed swap lines — is
+        still the operational substrate of global finance in 2026. The
+        2020 COVID episode showed it works: the same shocks that broke
+        the 2008 system were absorbed without bank failures or money-
+        market freezes. The intervention from a 2008 retrospective view
+        succeeded. The political residue — &quot;bailout&quot; as
+        permanent epithet, populist re-shaping of both major US parties
+        — succeeded at a different cost.
+      </p>
+
+      <blockquote>
+        &quot;The market for these instruments has lost all liquidity. We
+        are unable to determine a fair valuation for them.&quot;
+        <cite>BNP Paribas press release, August 9 2007 — the sentence that started the crisis</cite>
+      </blockquote>
+
+      <Check
+        question="Why is the LIBOR-OIS spread blowout in Sep-Oct 2008 a 'tell' rather than just a symptom?"
+        options={[
+          {
+            label: "Because it's a market-implied measure that quantifies a specific thing — banks' willingness to lend to each other unsecured — that they don't disclose directly.",
+            correct: true,
+            explain: "Right. Banks aren't going to publish 'I don't trust my counterparties anymore' on Bloomberg. The LIBOR-OIS spread is the price they pay for that distrust, made visible. From 10bp to 360bp meant the interbank market had functionally seized."
+          },
+          {
+            label: "Because LIBOR was the benchmark for trillions of dollars of derivatives, so its dysfunction had massive direct economic impact.",
+            explain: "The downstream impact mattered, but that's the consequence, not the tell. A tell is a diagnostic — something that reveals the structural truth before headlines catch up."
+          },
+          {
+            label: "Because the spread's blowout coincided exactly with Lehman's collapse, so it functions as a chronological marker for the worst week of the crisis.",
+            explain: "It did coincide, but coincidence isn't the point. The spread had begun moving in August 2007 and accelerated through 2008 — it was telling you the story for fourteen months before Lehman."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/F2?l=2", label: "the crisis-scrubber 'tells' column in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

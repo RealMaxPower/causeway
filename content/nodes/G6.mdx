@@ -1,0 +1,267 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "We are not deglobalizing — we are restructuring. Trade isn't shrinking; it's rerouting along political lines. Friend-shoring, decoupling, and FDI redirection are real, and bipartisan US policy continuity (Section 301, IRA, CHIPS, export controls) makes it durable.",
+    sub: "Trump-era tools that Biden kept and extended are now Trump-era tools again. The bloc reorganisation is the story, not the tariff number itself.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "US average effective tariff rate", val: "~3% → ~10%+", sub: "2017 baseline → post-2024 trajectory. A band, not a clean step · USITC, Peterson Institute estimates." },
+  ],
+  relatedNodes: ["D5", "G3", "F1"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Tariffs aren&apos;t a step change — they&apos;re a continuous band. A
+        10% MFN is rounding error; a 60% MFN is a different regime. Read with
+        supply-chain reshoring and the bipartisan continuity of the tool kit
+        (Section 301, IRA, CHIPS, export controls), trade policy is a durable
+        macro variable, not an episode.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        The headline story (&quot;tariffs are political theatre&quot;) is half
+        right and half misleading. The dial moves CPI, capex, and bloc
+        alignment in ways the &quot;average effective rate&quot; number hides.
+        Treating each headline as a one-off misses the structural shift; the
+        shift is in the tools both parties now use as a matter of course.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Trade policy · sorted by intensity
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>0–10% tariff band</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>noise</dd>
+        <dt style={{ color: "var(--ink-2)" }}>10–25% tariff band</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>signal</dd>
+        <dt style={{ color: "var(--ink-2)" }}>25–60% tariff band</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>regime change</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Industrial-policy subsidy</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>capex floor</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Export controls</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>bloc-defining</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Trade policy as a macro variable">
+    <L2Grid>
+      <L2Step num="01" title="The headline story is wrong in levels">
+        <p className="lede">
+          Trade-to-GDP ratios have plateaued, not collapsed. The composition
+          is shifting — services up, goods flat, blocs reorganising.
+          &quot;Deglobalization&quot; is the wrong word for a real phenomenon;
+          the right word is <em>reconfiguration</em>, and the steering wheel
+          is policy.
+        </p>
+        <p>
+          The world&apos;s trade-to-GDP ratio peaked at ~60% around 2008 and
+          has held in a 55–60% band since. That&apos;s a plateau, not a
+          retreat. But inside the plateau, the policy regime has shifted
+          decisively.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The composition has changed">
+        <p>
+          <strong>Services trade is rising</strong> (cross-border software,
+          finance, consulting, remote work). <strong>Goods trade is
+          flat</strong>. <strong>Within-bloc FDI is rising while cross-bloc
+          FDI is falling</strong> — capital reorganising along strategic
+          lines, not retreating in total.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Reshoring is real but expensive">
+        <p>
+          Friend-shoring, near-shoring, ally-shoring — the vocabulary is
+          newer than the phenomenon. Cross-bloc supply chains in
+          semiconductors, batteries, and AI hardware are being deliberately
+          reshaped to align with strategic blocs. New plants, new supplier
+          relationships, redundant capacity, higher inventories. That cost
+          shows up as <em>structurally higher producer prices</em> — a floor
+          under inflation, not the dominant source, but persistent.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Tariff bands as a continuous lever">
+        <p>
+          Tariffs are not a binary. A 10% MFN is rounding error against
+          normal exchange-rate vol; importers eat it or pass it through
+          gradually. A 25% sectoral tariff is a real signal — pass-through
+          to CPI is partial but visible, and substitution starts within
+          1–2 quarters. A 60% blanket tariff is a different regime entirely:
+          pass-through approaches full, substitution elasticity dominates,
+          and the cost shows up in headline inflation within months.
+        </p>
+        <p>
+          The right framing is a <strong>tariff band</strong>, not an
+          &quot;effective rate.&quot; The same 8% economy-wide average can
+          hide either uniform 8% tariffs (small effect) or 60% tariffs on a
+          narrow 13% of imports (large local effect, distributional
+          consequences, sectoral capex shocks). Read the distribution, not
+          the headline number.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="The continuity question">
+        <p>
+          The most overlooked fact in trade policy commentary: <strong>the
+          tools are now bipartisan</strong>. Section 301 tariffs introduced
+          in 2018 were retained and extended under Biden. The CHIPS Act and
+          IRA are 2022 Democratic industrial policy that reproduced the
+          Trump-era logic of subsidising domestic capacity. BIS export
+          controls on semiconductors started under Trump, expanded under
+          Biden, expanded again under Trump 2. Five years of headlines
+          treating each move as an episode have missed the regime: both
+          parties now use trade policy as a continuous macro lever.
+        </p>
+        <p>
+          That continuity is what makes it a macro variable rather than a
+          news cycle. The dial setting changes; the dial itself is here.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Read the tariff distribution, not the average. Watch the policy stack, not the headlines."
+        link={{ to: "/nodes/D5", text: "D5 · Tariffs and industrial policy" }}
+      >
+        <p>
+          When you read &quot;tariffs are up,&quot; ask which band, which
+          goods, and which administration introduced the underlying authority.
+          Most of what looks like a swing in policy is the same toolkit being
+          re-aimed. The structural shift was the toolkit&apos;s normalisation
+          across both parties — not any one headline rate.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "piie-bown-tariff-tracker",
+            "crs-section-301",
+            "imf-weo",
+            "wto-world-trade-report",
+            "antras-deglobalisation-2020",
+          ]}
+        />
+      }
+    >
+      <h3>The 1870s rhyme, not the 1930s repeat</h3>
+      <p>
+        Globalisation has plateaued before — the pre-WWI era of free flows
+        ran from roughly 1870 to 1914, then collapsed dramatically through
+        the interwar years. The 1990s–2008 wave reproduced much of the
+        pre-1914 integration. The post-2008 plateau and post-2018
+        reorganisation look more like a managed reconfiguration than the
+        1930s collapse — driven by deliberate policy (CHIPS Act, IRA,
+        export controls, Russia sanctions, Section 301 tariffs) rather than
+        disorderly retreat. Whether the parallel holds depends on whether
+        the policy stays managed.
+      </p>
+
+      <h3>The policy stack</h3>
+      <p>
+        The current toolkit and its bipartisan history:
+      </p>
+      <ul>
+        <li>
+          <strong>Section 301 tariffs</strong> · Trade Act of 1974. Trump
+          imposed in 2018 on ~$370B of Chinese imports; Biden retained, then
+          expanded to EVs, batteries, semiconductors in 2024.
+        </li>
+        <li>
+          <strong>IEEPA (emergency tariffs)</strong> · 1977 statute, Trump
+          invoked in 2025 for blanket reciprocal tariffs. Authority is
+          broad; legal challenges are live.
+        </li>
+        <li>
+          <strong>CHIPS Act</strong> · 2022 bipartisan industrial policy
+          ($52B) for domestic semiconductor capacity. Largely retained
+          across administrations.
+        </li>
+        <li>
+          <strong>IRA</strong> · 2022 climate-and-industrial-policy package
+          with domestic-content requirements for EV and battery credits.
+          Some provisions targeted for rollback under Trump 2, but the
+          domestic-capex effect is already in plants under construction.
+        </li>
+        <li>
+          <strong>BIS export controls</strong> · Bureau of Industry and
+          Security, semiconductor and AI-hardware export licensing. Trump
+          expanded, Biden expanded, Trump 2 expanded again — the most
+          continuous policy of the four administrations.
+        </li>
+      </ul>
+
+      <Debate question="Is the tariff regime a durable macro variable, or an episode?">
+        <DebateSide side="mainstream" who="● Durable — bipartisan tools, structural floor">
+          <p>
+            Trade policy is a macro variable now. Both parties use it; the
+            tools have been built up and won&apos;t be dismantled. The
+            structural cost — reshoring capex, redundant supply chains,
+            higher producer prices — is a floor under inflation and a tailwind
+            to domestic industrial output. The dial moves; the dial itself
+            is here.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Episode — political winds can unwind it">
+          <p>
+            The toolkit looks bipartisan because it&apos;s only been ten
+            years. A future administration facing high inflation could
+            unwind tariffs as an anti-inflation move; allies could push
+            back on export controls as economic damage exceeds strategic
+            benefit. The current consensus reflects a particular geopolitical
+            moment — not a permanent regime.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>What to actually watch</h3>
+      <p>
+        Three signals: (1) the <em>distribution</em> of tariff rates across
+        HS codes, not the trade-weighted average — that&apos;s where the
+        regime change shows up; (2) BIS Federal Register notices, which
+        leak the export-controls dial before it makes the front page;
+        (3) plant-level capex announcements under CHIPS/IRA, which tell
+        you whether the industrial-policy money is actually building
+        capacity or just deferring decisions. None of these are currently
+        flashing crisis, but all are worth tracking.
+      </p>
+
+      <Check
+        question="A new administration leaves the Section 301 tariffs intact but adds a 25% sectoral tariff on EVs and batteries. What does that move tell you about trade policy as a macro variable?"
+        options={[
+          {
+            label: "Policy continuity over administrations — the tariff regime has become bipartisan, so the toolkit is durable even if the specific rates change at the margin.",
+            correct: true,
+            explain: "Right. The interesting fact is that the prior administration's tools were retained, not undone — that's what makes trade policy a durable macro variable rather than an episode. The 25% addition is the dial moving; the dial's existence is the regime change."
+          },
+          {
+            label: "An aggressive break with prior policy — adding a 25% tariff is a structural escalation that shifts the entire trade regime.",
+            explain: "Partly right but reads the headline number, not the structure. 25% on a single sector is a real signal but not a regime change; the regime change was the moment Section 301 stopped being controversial. Watch the distribution and the tools, not the marginal rate."
+          },
+          {
+            label: "A retreat from globalisation — tariffs of this size move the average effective rate above the durable plateau and signal a 1930s-style decoupling.",
+            explain: "Overstates the magnitude. Trade-to-GDP hasn't broken its plateau and a sectoral 25% doesn't move the average effective rate enough to threaten the level. The shift is in composition and tools, not in the trade-to-GDP level."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/G6?l=2", label: "the tariff-band framework in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

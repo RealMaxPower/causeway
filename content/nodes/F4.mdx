@@ -1,0 +1,180 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { Deleveraging } from "@/components/widgets/deleveraging";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Two cycles run at once: a short credit cycle of 5–8 years (what people mean by \"business cycle\") and a long debt cycle of 50–75 years. Each short cycle leaves net debt higher than before — until the long cycle peaks.",
+    sub: "Across major developed economies, public + private debt is at historical highs. The math of how that resolves is the live macro question of the next decade.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "How long a short credit cycle runs", val: "5–8 yrs", sub: "Range across postwar US cycles; what people usually mean by \"the business cycle.\"" },
+    { lbl: "How long a long debt cycle runs", val: "50–75 yrs", sub: "Approximate range from one debt peak to the next, observed across centuries · Dalio, Reinhart-Rogoff." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Two cycles run on top of each other. The short one (5–8 years, credit-driven)
+        drives recessions. The long one (50–75 years, debt-level-driven) decides
+        whether the next thirty years feel like the 1950s or the 1930s.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        We are late in a long cycle. Most major economies have aggregate
+        debt levels (public + private) at historical peaks. The next decade
+        is about which mechanism does the resolving — and your housing,
+        savings, currency, and career decisions all bend on the answer.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Long-cycle resolution mechanisms
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Inflation</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>real burden falls</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Restructuring</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>creditors take haircut</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Austerity</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>growth pays slowly</dd>
+        <dt style={{ color: "var(--ink-2)" }}>War / disorder</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>bad option, picks itself</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Two cycles, two clocks">
+    <L2Grid>
+      <L2Step num="01" title="The short cycle — credit">
+        <p className="lede">
+          Two cycles run on top of each other. The short one drives
+          recessions; the long one decides whether the next thirty years
+          feel like the 1950s or the 1930s.
+        </p>
+        <p>
+          <strong>The short cycle</strong> is what people mean by
+          &quot;business cycle.&quot; Credit expands, debt-service-to-income
+          rises, the marginal borrower drops out, recession, debt is
+          reduced, cycle restarts. Five to eight years. This is what
+          monetary policy is built around.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The long cycle — debt levels">
+        <p>
+          <strong>The long cycle</strong> is harder to see. Each short
+          cycle ends with slightly more debt than it started with. After
+          several short cycles, total debt-to-GDP is at a level that
+          constrains every subsequent recovery. Eventually the long cycle
+          reaches a peak and resolves: through inflation, restructuring,
+          or austerity.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Where we are now">
+        <p>
+          We are late in a long cycle. Most major economies have
+          aggregate debt levels (public + private) at historical peaks.
+          <strong> The next decade is about which mechanism does the
+          resolving</strong>. None of them are pleasant; the question is
+          which is least bad and who absorbs the cost.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="The resolution mechanism shapes every household decision."
+        link={{ to: "/nodes/H8", text: "H8 · Portfolio under regime change" }}
+      >
+        <p>
+          Your decisions on housing, savings, currency, and career all
+          change depending on which resolution mechanism is in play. You
+          don&apos;t get to choose; you get to read the clues. Inflation
+          favors borrowers and real assets; restructuring favors cash and
+          short duration; austerity rewards patience and disciplined
+          saving.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <Deleveraging />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "reinhart-rogoff-this-time-different-2009",
+            "schularick-taylor-credit-booms-2012",
+            "bis-borio-financial-cycle-2014",
+            "dalio-changing-world-order-2021",
+          ]}
+        />
+      }
+    >
+      <h3>The empirical record</h3>
+      <p>
+        Long cycles are debated; the empirical record over 200+ years
+        (Reinhart-Rogoff, Schularick-Taylor) shows clear waves of debt
+        build-up, peak, and resolution. Dalio&apos;s &quot;Big Cycle&quot;
+        framework popularises the idea; the academic literature is more
+        cautious about how precisely the periodicity should be read.
+      </p>
+
+      <Debate question="Are long debt cycles a useful framework or pattern-matching?">
+        <DebateSide side="mainstream" who="● Real">
+          <p>
+            Debt cycles are clear in the 200-year data; we are near a peak.
+            Dalio, Reinhart-Rogoff. The shape is robust even if the timing
+            isn&apos;t — and the implications for policy and positioning
+            are large.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Overstated">
+          <p>
+            Aggregating heterogeneous events misleads. Each cycle is
+            unique. Trust the macro fundamentals, not pattern-matching
+            across centuries with very different institutions.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The honest synthesis</h3>
+      <p>
+        The long-cycle framework is most useful as a <em>checklist of
+        possibilities</em>, not a calendar. The four resolutions
+        (inflation, restructuring, austerity, disorder) are the
+        possibilities; reading which combination is in play is the skill.
+        Most of the policy debates of the late 2020s map to a fight over
+        which mechanism is acceptable.
+      </p>
+
+      <Check
+        question="Per Track F, why does monetary policy respond to short debt cycles but not to long ones?"
+        options={[
+          {
+            label: "Monetary policy can only operate on flows (credit growth), and long cycles are about stocks (accumulated debt levels) — different objects, different tools.",
+            correct: true,
+            explain: "Right. The Fed can ease credit conditions or tighten them, which moves the short cycle (5-8y). But it can't restructure the existing $50T debt stock; that requires inflation, default, or austerity. The long cycle resolves via one of those four mechanisms regardless of who's at the Fed."
+          },
+          {
+            label: "Long cycles take decades, longer than the average central banker's career, so the institution doesn't accumulate the experience to respond.",
+            explain: "Cute but not the mechanism. Even with perfect institutional memory the central bank still couldn't fix a debt stock with a rate decision; the tools don't reach that variable."
+          },
+          {
+            label: "Central banks legally cannot intervene in long cycles — their mandates restrict them to short-term price-stability concerns.",
+            explain: "Mandates do constrain action, but the constraint here is mechanical, not legal. Even an unconstrained central bank can't restructure debt with monetary policy alone."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/F4?l=2", label: "the four resolutions in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

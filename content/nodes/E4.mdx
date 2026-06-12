@@ -1,0 +1,183 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Reserve-currency status requires four things at once: liquidity, rule of law, deep capital markets, and willingness to run external deficits so the rest of the world can hold your currency. Only one currency today clears all four.",
+    sub: "Reserve transitions are slow — sterling-to-dollar took 70 years. Talking about one happening \"by 2030\" is talking about something history doesn't do.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "How long the last reserve-currency transition took", val: "~ 70 yrs", sub: "Sterling to dollar, ~1870s to 1945. The transition began before WWI; the formal recognition followed." },
+    { lbl: "Currencies passing all four tests today", val: "1", sub: "USD passes all four. EUR passes three; CHF and JPY pass two. CNY currently passes one." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Reserve-currency status requires four things: liquidity, rule of law,
+        deep capital markets, and willingness to run external deficits. Few
+        currencies meet all four; the dollar meets all four overwhelmingly.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Reserve-currency status sounds abstract. It&apos;s the reason your
+        government can borrow at low rates, your imports are slightly cheaper,
+        and US sanctions can reach foreign banks halfway around the world.
+        Whoever holds the reserve currency holds the rules of global finance.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Reserve-currency requirements · grades
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>USD</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>all 4 ✓</dd>
+        <dt style={{ color: "var(--ink-2)" }}>EUR</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>3 of 4</dd>
+        <dt style={{ color: "var(--ink-2)" }}>JPY</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>2 of 4</dd>
+        <dt style={{ color: "var(--ink-2)" }}>GBP</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>2 of 4</dd>
+        <dt style={{ color: "var(--ink-2)" }}>CNY</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>1 of 4</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The four tests, scored honestly">
+    <L2Grid>
+      <L2Step num="01" title="Liquidity">
+        <p className="lede">
+          Liquidity, rule of law, deep capital markets, and willingness to
+          run external deficits. Few currencies meet all four; the dollar
+          meets all four overwhelmingly.
+        </p>
+        <p>
+          <strong>Liquidity</strong>: you can buy and sell large amounts
+          without moving the price. Only US Treasuries are liquid in the
+          relevant size — multi-billion-dollar transactions clear daily
+          without slippage. The EUR sovereign market is fragmented across
+          20 issuers; the JGB market is dominated by domestic holders.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Rule of law">
+        <p>
+          <strong>Rule of law</strong>: contracts are enforced predictably.
+          The euro has it; the renminbi doesn&apos;t yet at scale. This is
+          a long-run institutional fact, not something you can build in a
+          decade by decree. The frequency with which a country&apos;s courts
+          actually rule against its government is a useful proxy.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Deep capital markets">
+        <p>
+          <strong>Deep capital markets</strong>: a place to <em>invest</em>{" "}
+          reserves, not just hold them. The US capital market is bigger than
+          the next several combined. Reserve holders don&apos;t want to sit
+          on cash; they want yield. Without deep capital markets, the
+          currency can only be hoarded, not deployed.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Willingness to run external deficits">
+        <p>
+          <strong>Willingness to run external deficits</strong>: the issuer
+          must let the world hold its currency, which by accounting requires
+          running deficits. The US accepts this; surplus economies (China,
+          Germany) can&apos;t be reserve issuers without changing posture
+          fundamentally. This is the Triffin dilemma — the obligation that
+          most challengers don&apos;t want to accept.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Reserve status sounds abstract. The consequences aren't."
+        link={{ to: "/nodes/A6", text: "A6 · Currency & the dollar" }}
+      >
+        <p>
+          Reserve-currency status is the reason your government can borrow
+          at low rates, your imports are slightly cheaper, and US sanctions
+          can reach foreign banks halfway around the world. Sterling held
+          it for ~70 years; the dollar has held it for ~80. The transitions
+          are generational, not annual.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "eichengreen-exorbitant-privilege-2011",
+            "bis-triennial-fx-survey",
+            "imf-cofer",
+            "prasad-future-of-money-2021",
+          ]}
+        />
+      }
+    >
+      <h3>Sterling for 70 years; dollar for 80 and counting</h3>
+      <p>
+        Sterling held this role for roughly 1860–1930; the dollar took over
+        after WWII, formalized at Bretton Woods (1944) and resilient
+        through the end of gold convertibility (1971). The transitions are
+        slow. Most premature predictions of the dollar&apos;s demise have
+        been wrong; the structural advantages are sticky precisely because
+        they&apos;re institutional, not policy choices.
+      </p>
+
+      <Debate question="Is dollar dominance durable, or eroding?">
+        <DebateSide side="mainstream" who="● Durable">
+          <p>
+            Network effects, rule of law, no credible competitor. 50+ years
+            more. The dollar&apos;s share of FX reserves has drifted from
+            71% to 59% over 25 years — gradual, not collapsing. Eichengreen.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Eroding">
+          <p>
+            Multipolar slowly emerging. China + Russia + sanctions politics
+            push trade out of dollar invoicing. Slow, real. The 2022 freeze
+            of Russian central bank reserves crossed a line; every reserve
+            manager noted it.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Which of these is NOT one of the four properties that make a currency a reserve currency?"
+        options={[
+          {
+            label: "Deep, liquid capital markets that other countries can park reserves in without moving prices.",
+            explain: "This IS one of the four. The depth of US Treasury markets is the single biggest practical reason the dollar dominates."
+          },
+          {
+            label: "Rule of law and judicial independence in the issuing country.",
+            explain: "This IS one of the four. Reserve managers need to trust that property rights survive political changes; the 2022 sanctions episode is shifting this calculation."
+          },
+          {
+            label: "Persistently low inflation across cycles.",
+            correct: true,
+            explain: "Surprisingly NOT in the canonical four. The dollar has tolerated periods of high inflation (1970s, 2021-2023) without losing reserve status — because the alternatives are even less attractive on the other three properties. Inflation matters at the margin but isn't structural."
+          },
+          {
+            label: "Willingness of the issuer to run external deficits, supplying the currency to the world.",
+            explain: "This IS one of the four — and probably the most under-appreciated. Reserve currencies need to leak out; persistently surplus countries (Switzerland, Norway) can't supply the world."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/E4?l=2", label: "the four-property checklist in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

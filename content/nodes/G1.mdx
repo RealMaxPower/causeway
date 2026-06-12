@@ -1,0 +1,218 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { Lorenz } from "@/components/widgets/lorenz";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Inequality isn't a number, it's a shape — a whole distribution of who has how much. The Gini coefficient compresses that shape into a single digit, which is convenient and also exactly the problem.",
+    sub: "Two countries with identical Gini coefficients can have completely different distributions — and need opposite policies to address them.",
+  },
+  relatedNodes: ["C3", "G3", "G4"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Inequality is a shape, not a number. The Lorenz curve sketches the
+        shape — how much of the income the bottom 50% earn, the top 10%, the
+        top 1%. The Gini compresses it into one digit and hides which slice
+        is doing the inequality.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Two countries can share a Gini and need opposite policies. Brazil
+        and South Africa both have Ginis around 0.50 but different shapes
+        — Brazil&apos;s top 10% is wide-but-not-extreme; South Africa&apos;s
+        bottom 50% is missing. The right intervention follows the shape,
+        not the number.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Gini ranges · what they mean
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Nordic + Northern Europe</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>~ 0.25–0.32</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Most developed</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>0.30–0.40</dd>
+        <dt style={{ color: "var(--ink-2)" }}>US, China</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>0.39–0.42</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Latin America, parts of Asia</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>0.45–0.55</dd>
+        <dt style={{ color: "var(--ink-2)" }}>South Africa</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>~ 0.63</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The shape behind the number">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Lorenz curve">
+            Cumulative income share against cumulative population share.
+            Diagonal = perfect equality; bowed-out = inequality.
+          </KeyTerm>
+          <KeyTerm term="Gini coefficient">
+            Area between the equality line and the Lorenz curve, divided
+            by the triangle. 0 = perfect equality; 1 = one person has it
+            all. Single number, lossy summary.
+          </KeyTerm>
+          <KeyTerm term="Decile share">
+            Share of total income going to each 10% slice of the
+            population. D1 = bottom 10%; D10 = top 10%.
+          </KeyTerm>
+          <KeyTerm term="Top 1% share">
+            What the top 1% of earners take. Often the most politically
+            salient number; not what Gini emphasises.
+          </KeyTerm>
+          <KeyTerm term="Median / mean ratio">
+            Median income ÷ mean. 1 = symmetric distribution. Lower =
+            right-skewed (a few very-rich pull the mean above the typical).
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="Inequality is a shape">
+        <p className="lede">
+          Inequality is a shape, not a number. The Lorenz curve sketches
+          the shape — how much of the income the bottom 50% earn, the top
+          10%, the top 1%.
+        </p>
+        <p>
+          The X-axis is cumulative population (poorest to richest). The
+          Y-axis is cumulative income. The diagonal would be perfect
+          equality: 10% of people earn 10% of income, 50% earn 50%, etc.
+          Real distributions bow downward — the poorer slices earn less
+          than their share of the population would imply.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Gini is the bow, compressed">
+        <p>
+          The <strong>Gini coefficient</strong> is the area between the
+          equality diagonal and the Lorenz curve, divided by the triangle.
+          0 = perfect equality; 1 = one person has everything. It&apos;s
+          a useful single number — but it loses information about{" "}
+          <em>where</em> the bow is.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Two countries, same Gini, different problems">
+        <p>
+          <strong>Two countries can share a Gini and need opposite
+          policies.</strong> One country&apos;s Gini might be driven by a
+          missing bottom 50% (poverty alleviation is the lever). Another
+          country&apos;s same Gini might be driven by a runaway top 1%
+          (tax / antitrust is the lever). Same coefficient, different
+          cures.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="What to read instead">
+        <p>
+          Read the curve, plus three numbers: <strong>top 1% share</strong>{" "}
+          (where wealth concentrates), <strong>bottom 50% share</strong>{" "}
+          (where deprivation lives), and the <strong>median / mean
+          ratio</strong> (how skewed the distribution is). The Gini is a
+          headline; these are the diagnosis.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Read the curve, not just the coefficient."
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          Every inequality argument is a fight about which slice of the
+          curve matters. People arguing past each other usually disagree
+          about the slice, not the math. Knowing the shape lets you
+          identify what someone actually thinks the problem is.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <Lorenz />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "piketty-capital-21st-century-2013",
+            "milanovic-global-inequality-2016",
+            "wid-database",
+            "lorenz-concentration-of-wealth-1905",
+            "gini-variability-mutability-1912",
+          ]}
+        />
+      }
+    >
+      <h3>From Lorenz 1905 to live data</h3>
+      <p>
+        Max Lorenz proposed the cumulative-share curve in 1905; Corrado
+        Gini formalised the coefficient in 1912. The framework has
+        survived a century because it&apos;s simple, robust, and
+        flexible — and because the inequality questions it answers keep
+        becoming politically urgent.
+      </p>
+
+      <Debate question="Is global inequality rising or falling?">
+        <DebateSide side="mainstream" who="● Both — between-country falling, within-country rising">
+          <p>
+            Between-country inequality has fallen since 1990 (China and
+            India rising). Within-country inequality has risen in most
+            developed economies. The aggregate picture depends on which
+            measure you weight more. Milanovic&apos;s &quot;elephant
+            curve&quot; is the canonical visualisation.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Definitions hide more than they show">
+          <p>
+            Income vs wealth tell different stories; pre-tax vs post-tax
+            tell different stories; household vs individual tell different
+            stories. The framing choice does most of the political work
+            before the data does any.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper observation</h3>
+      <p>
+        Inequality measurement is one of the most contested areas of
+        applied economics — not because the math is hard, but because the
+        definitions are political. What counts as &quot;income&quot;
+        (earnings, capital gains, imputed rent, transfers, in-kind
+        benefits, household scaling)? At what level
+        (individual / household / family)? Pre- or post-tax? In which
+        currency, at which PPP? Each choice shifts the curve.
+      </p>
+
+      <Check
+        question="Two countries report identical Gini coefficients of 0.40. Can we conclude their inequality stories are the same?"
+        options={[
+          {
+            label: "Yes — Gini is the standardised inequality measure for precisely this reason.",
+            explain: "The Gini compresses the entire distribution into one number, which means very different distributions can produce the same Gini. One country might have a fat top-1% problem; another might have a hollowed-out middle. The policy responses are different."
+          },
+          {
+            label: "No — Gini hides which slice of the distribution is doing the inequality. Two countries with the same Gini can need opposite policies depending on whether the gap is at the top, the middle, or the bottom.",
+            correct: true,
+            explain: "Right. The Lorenz curve preserves the shape; the Gini summarises it into a single number. Always look at the curve before recommending policy."
+          },
+          {
+            label: "Only if you also know their GDPs are similar; otherwise Gini values aren't comparable.",
+            explain: "GDP affects what level of inequality is sustainable politically, but doesn't make Gini values incommensurable. The actual incomparability is about the shape, not the scale."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/G1?l=2", label: "the Lorenz-curve widget in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

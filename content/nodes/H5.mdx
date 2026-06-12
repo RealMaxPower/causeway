@@ -1,0 +1,172 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { PurchaseCalc } from "@/components/widgets/purchase-calc";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Big-purchase prices move in a layer most buyers never see: dealer incentives, financing APR, lease residuals. Sticker price is the headline; the invisible layer is where the actual decision happens.",
+    sub: "Across the cycle, six months of patience on a non-urgent big-ticket item is usually worth 5–15%. Twelve months rarely beats six — diminishing returns kick in fast.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Typical savings from waiting six months on a non-urgent big purchase", val: "5–15%", sub: "Approximate, across the cycle · authoritative band, not a guarantee." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Big-ticket purchases (autos, appliances, furniture) operate on two price
+        layers. List prices are sticky — manufacturers don&apos;t like changing
+        them. Dealer incentives, financing APR, and lease subsidies are the real
+        adjustment mechanism, and they move with inventory and credit conditions.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Watch the invisible layer, not the headline list. That&apos;s where 80%
+        of the variation in what you actually pay lives. For non-urgent purchases,
+        six months of patience usually beats today&apos;s transaction by 5–15%.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Big-ticket buying · by cycle phase
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Late expansion</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>expensive · wait if possible</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Early recession</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>good incentives · still high APR</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Mid-recovery</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>best window</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Watch the invisible price layer">
+    <L2Grid>
+      <L2Step num="01" title="Two price layers">
+        <p className="lede">
+          Big-ticket purchases operate on visible and invisible price layers.
+          Watch the invisible layer.
+        </p>
+        <p>
+          List prices are sticky — manufacturers don&apos;t like changing them
+          frequently (the canonical &quot;menu cost&quot; example in New
+          Keynesian macro). Dealer incentives — cash back, low APR financing,
+          lease subsidies — are the real adjustment mechanism, and they move
+          with inventory and credit conditions.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The cycle determines the gap">
+        <p>
+          <strong>In late expansions</strong>: low incentives, high financing
+          rates, full pricing power for dealers. <strong>In early recessions</strong>:
+          incentives blow out, dealers desperate, financing rates still
+          elevated but dealers absorb some.{" "}
+          <strong>Mid-recovery</strong>: the best balance — incentives still
+          real, financing rates falling. This is the window.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Patience math">
+        <p>
+          For a non-urgent big purchase, six months of patience usually beats
+          today&apos;s transaction by 5–15% all-in. Twelve months is rarely
+          better than six — diminishing returns on waiting, and the personal
+          cost of using your old car/fridge/sofa for another half year starts
+          to add up.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If you can wait six months, you usually should."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          Watch the invisible price layer (financing APR, dealer incentives,
+          lease residuals) — not the headline list. That&apos;s where 80% of
+          the variation in what you actually pay lives. The cycle phase tells
+          you which way the layer is moving.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <PurchaseCalc />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "mankiw-small-menu-costs-1985",
+            "manheim-used-vehicle-index",
+            "bea-consumer-spending",
+            "edmunds-true-cost-to-own",
+          ]}
+        />
+      }
+    >
+      <h3>Sticky prices, fast incentives</h3>
+      <p>
+        Sticky list prices are the canonical example in New Keynesian macro
+        (Mankiw 1985). The empirical literature on auto incentives shows
+        large, fast adjustment around recessions: list prices barely budge,
+        but cash-back-equivalent value swings 5–15% within a few quarters of
+        a cycle turn.
+      </p>
+
+      <Debate question="Should households actively time big purchases?">
+        <DebateSide side="mainstream" who="● Wait">
+          <p>
+            Patience is rewarded. If non-urgent, wait. The transaction window
+            is long; the price gap is real. The savings exceed most household
+            hedging in absolute dollars.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Don't time">
+          <p>
+            Decision frictions cost more than rate gaps for most households.
+            Don&apos;t over-engineer. The mental energy spent reading
+            incentive cycles is worth more than the savings for most people.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The honest middle ground</h3>
+      <p>
+        For one or two big purchases over a decade, timing is worth it. For
+        frequent transactions, the overhead dominates the benefit. The skill
+        is to know which of your big purchases are non-urgent enough to time
+        and to set a six-month watch window on those — without making it a
+        hobby.
+      </p>
+
+      <Check
+        question="You're shopping for a new car. The list price has barely moved in six months. What should you actually be watching?"
+        options={[
+          {
+            label: "MSRP and competitor MSRP — the headline numbers tell you when discounts have arrived.",
+            explain: "List price moves slowly and lags the actual negotiating environment by months. By the time MSRP cuts are announced, the dealer-incentive window is usually closing."
+          },
+          {
+            label: "Dealer incentives, manufacturer rebates, and financing rates (APR) — they move fast and they're what determines the all-in cost. List price is the slow signal; the second pair is the live one.",
+            correct: true,
+            explain: "Right. A 1pp APR cut on a $40K six-year auto loan saves $1,200; a manufacturer rebate runs another $1,500-3,000. Together they easily exceed any list-price negotiation. Watch the second pair."
+          },
+          {
+            label: "Used-car prices — they're the leading indicator for new-car incentives.",
+            explain: "Used-car prices DO correlate with new-car inventory pressure, but they're a leading indicator for dealers, not for you as buyer. You still need to watch the incentives + APR pair directly."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H5?l=2", label: "the financing-cost breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

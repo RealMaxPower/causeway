@@ -1,0 +1,174 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { CurrencyPlanner } from "@/components/widgets/currency-planner";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Most households have more currency exposure than they realize — sabbaticals, school abroad, foreign dividends, remote pay. The trick is that hedging is cheapest when your currency is strong, which is exactly when nobody feels they need it.",
+    sub: "The common household mistake is the opposite: panic-hedging after the currency has already moved. Most people do this backwards.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        If you have foreign-currency liabilities, foreign assets, or upcoming
+        foreign spending, you are running an FX position — whether or not you
+        thought of it that way. Currency exposures hide in plain sight: a
+        foreign sabbatical, a child studying abroad, dividend-paying foreign
+        stocks, a holiday home, a remote employer paying in another currency.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Counter-intuitive rule: hedging is cheapest when your home currency
+        is strong (the hedge buys at a high spot rate). It&apos;s most
+        tempting when your home currency is weak — which is exactly when
+        hedging is most expensive. Most households do it backwards.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        FX hedging · intuitive vs correct
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Home currency strong</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>HEDGE · cheap</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Home currency weak</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>wait if possible</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Big foreign spend known</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>pre-buy gradually</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The exposures hiding in your life">
+    <L2Grid>
+      <L2Step num="01" title="You are already running a position">
+        <p className="lede">
+          If you have foreign-currency liabilities, foreign assets, or
+          upcoming foreign spending, you are running an FX position. The
+          question is whether you&apos;re running it consciously.
+        </p>
+        <p>
+          Currency exposures hide in plain sight: a foreign sabbatical, a
+          child studying abroad, dividend-paying foreign stocks, a holiday
+          home, a remote employer paying in another currency. Each carries
+          an implicit position — and the implicit ones bite hardest because
+          you didn&apos;t see them coming.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The counter-intuitive rule">
+        <p>
+          <strong>Hedging is cheapest when your home currency is strong.</strong>{" "}
+          Because the hedge buys foreign currency at a high spot rate (you
+          get more units per dollar). It&apos;s most tempting when your home
+          currency is weak — which is exactly when hedging is most expensive.
+        </p>
+        <p>
+          Most households do this backwards: panic-hedge after the move, then
+          let the move reverse and unwind. Conscious hedging during strength
+          and patience during weakness saves significant money over decades.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Pre-buy gradually for known spending">
+        <p>
+          If you know you have a big foreign spend in the next 12 months —
+          a wedding abroad, semester tuition, an extended trip — don&apos;t
+          convert all at once. Pre-buy gradually over weeks, scaling up as
+          your home currency strengthens and tapering as it weakens. This is
+          the only retail-accessible &quot;hedge&quot; that doesn&apos;t
+          require a brokerage account.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="The dollar is at the high end of its 5-year range. Use that."
+        link={{ to: "/nodes/A6", text: "A6 · Currency & the dollar" }}
+      >
+        <p>
+          USD is at the high end of its 5-year range as of 2026. If you have
+          known foreign spending in the next 12 months, this is a reasonable
+          time to pre-buy. Same logic in reverse if your home currency is
+          the weak one.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <CurrencyPlanner />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "bis-triennial-fx-survey",
+            "froot-thaler-anomalies-fx-1990",
+            "fred-dtwexbgs",
+            "bogle-international-equities-vanguard",
+          ]}
+        />
+      }
+    >
+      <h3>An underserved topic in retail finance</h3>
+      <p>
+        Household FX hedging is a niche topic; most retail finance literature
+        treats it incidentally. The behavioral pattern (panic-hedge after
+        moves) is well-documented in trader surveys and consumer behavior
+        studies — and it costs households real money decade after decade.
+      </p>
+
+      <Debate question="Should retail investors hedge their foreign equity exposure?">
+        <DebateSide side="mainstream" who="● Hedge known exposures">
+          <p>
+            Households are not in the business of taking FX risk. Hedge known
+            future spending; hold foreign equities unhedged only if your
+            horizon exceeds 10 years and you&apos;ve thought about the
+            variance budget.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Don't bother">
+          <p>
+            Over decades, FX returns are noise. Hedging costs money in fees
+            and bid-ask. Just hold long horizons. The complexity tax of
+            household hedging usually exceeds the variance reduction.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The synthesis</h3>
+      <p>
+        Hedge <em>known</em> short-term exposures; don&apos;t hedge open-ended
+        long-horizon equity exposures. The trap is doing it the other way
+        around — panic-hedging long-horizon equities after a bad year, and
+        ignoring the explicit, dated foreign spend you have coming.
+      </p>
+
+      <Check
+        question="The dollar has just fallen 15% against the euro. You have €50,000 of spending planned for a sabbatical six months from now. Per Track H, what's the move?"
+        options={[
+          {
+            label: "Hedge now — lock in the current rate before it gets worse.",
+            explain: "This is the panic-hedge that most households actually do. The dollar is weak; hedging at this rate is expensive. You're locking in the bad point."
+          },
+          {
+            label: "Wait. Hedging is cheapest when the home currency is strong, most expensive when it's weak. Buy the minimum you need short-term in euros and hold the rest in dollars; accelerate purchases only if USD strengthens.",
+            correct: true,
+            explain: "Right. The counter-intuitive rule: weakness is the wrong time to hedge. Hold dry powder, monitor the rate, and pre-buy in chunks as USD recovers. Mean-reversion doesn't always happen on your timeline, but the expected cost is lower."
+          },
+          {
+            label: "Convert everything immediately to avoid further losses.",
+            explain: "Same panic-hedge framing. Converting at a weak point locks in the loss; you're treating the current rate as a new permanent baseline rather than a moment in a distribution."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H6?l=2", label: "the currency-planner widget in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

@@ -1,0 +1,304 @@
+import Link from "next/link";
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { RegimeAssets } from "@/components/widgets/regime-assets";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "No asset wins in every regime. Stocks lag in stagflation, bonds lag when rates are rising, cash loses real value to inflation. The job isn't picking winners — it's diversifying across the regimes you might be entering.",
+    sub: "The classic 60/40 portfolio broke twice in living memory: 1970s stagflation and 2022. Both times, stocks and bonds fell together.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Different savings vehicles win in different macro regimes — and there is no
+        asset that always wins. Stocks dominate in disinflationary booms. Long bonds
+        dominate in disinflationary recessions. Gold and commodities dominate in
+        inflationary booms and stagflation. Cash never dominates; it just survives.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Because the last forty years taught a generation that stocks-and-bonds is
+        the universal answer. It is the answer in the regime that defined those
+        forty years — disinflation from 1980 onwards — but it is the <em>wrong</em>
+        answer in stagflation or persistent inflation. Reading the regime{" "}
+        (<Link href="/nodes/H1" style={{ color: "var(--gold-deep)" }}>H1</Link>) is
+        upstream of every savings decision; H2 is what to do once you&apos;ve read it.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 14, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 10, textAlign: "center" }}>
+        Four quadrants · what wins in each
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, fontFamily: "var(--cw-serif)", fontSize: 12 }}>
+        <div style={{ padding: 10, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 4 }}>
+          <div style={{ fontFamily: "var(--cw-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--cw-blue)", marginBottom: 4 }}>Disinflation · Boom</div>
+          <div style={{ color: "var(--ink-2)" }}>Stocks <span style={{ color: "var(--cw-green)" }}>+13%</span>, bonds <span style={{ color: "var(--cw-green)" }}>+6%</span></div>
+        </div>
+        <div style={{ padding: 10, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 4 }}>
+          <div style={{ fontFamily: "var(--cw-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--gold-deep)", marginBottom: 4 }}>Inflation · Boom</div>
+          <div style={{ color: "var(--ink-2)" }}>Commodities <span style={{ color: "var(--cw-green)" }}>+12%</span>, gold <span style={{ color: "var(--cw-green)" }}>+8%</span></div>
+        </div>
+        <div style={{ padding: 10, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 4 }}>
+          <div style={{ fontFamily: "var(--cw-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--cw-blue)", marginBottom: 4 }}>Disinflation · Downturn</div>
+          <div style={{ color: "var(--ink-2)" }}>Long bonds <span style={{ color: "var(--cw-green)" }}>+11%</span>, TIPS, gold</div>
+        </div>
+        <div style={{ padding: 10, background: "var(--paper)", border: "1px solid var(--rule)", borderRadius: 4 }}>
+          <div style={{ fontFamily: "var(--cw-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--cw-red)", marginBottom: 4 }}>Stagflation (nightmare)</div>
+          <div style={{ color: "var(--ink-2)" }}>Gold <span style={{ color: "var(--cw-green)" }}>+14%</span>, commodities <span style={{ color: "var(--cw-green)" }}>+11%</span></div>
+        </div>
+      </div>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Position for what's happening, not what won last decade">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Real return">
+            Nominal return minus inflation. The only return that matters for
+            purchasing power.
+          </KeyTerm>
+          <KeyTerm term="Regime">
+            Joint state of growth + inflation. Persistent enough to position
+            around, not so brief that it reverses by month-end.
+          </KeyTerm>
+          <KeyTerm term="60/40">
+            60% stocks, 40% bonds. The default US balanced portfolio. Works in
+            disinflationary regimes; fails in stagflation.
+          </KeyTerm>
+          <KeyTerm term="TIPS">
+            Treasury Inflation-Protected Securities. Principal indexed to CPI.
+            The only US bond that survives inflation surprises.
+          </KeyTerm>
+          <KeyTerm term="Duration">
+            Bond price sensitivity to rate changes. Long-duration bonds gain
+            most when rates fall and lose most when they rise.
+          </KeyTerm>
+          <KeyTerm term="Real assets">
+            Commodities, real estate, infrastructure, gold. Assets whose value
+            tends to rise with the price level.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="Two axes, four quadrants">
+        <p className="lede">
+          Everything else in macro is downstream of two questions: is real
+          growth firm or weak, and is inflation rising or falling? Two axes,
+          four quadrants. Most asset returns are explained by which quadrant
+          you&apos;re in — far more than by skill, sector, or stock-picking.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Disinflationary boom (top-left)">
+        <p>
+          This is the regime of 1995–99 and 2017–19. Growth firm, inflation
+          cooling. The Fed can keep rates low or cut, multiples expand, and
+          risk assets win. <strong>Stocks +13% real, long bonds +6% real.</strong>
+          {" "}60/40 is born for this regime. Most of the period 1982–2020 sat
+          here. It is also the regime everyone now treats as &quot;normal&quot;
+          — which is a category error.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Inflationary boom (top-right)">
+        <p>
+          Late-cycle. Growth firm but prices accelerating. 1972–73, 2021. The
+          economy is strong, but the central bank is starting to tighten and
+          bonds are getting punished. <strong>Commodities +12% real, gold +8%,
+          stocks barely positive.</strong> Bonds lose. This is when
+          &quot;everything is going up&quot; feels good but the regime is
+          already turning.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Disinflationary downturn (bottom-left)">
+        <p>
+          Recession. 2008–09, 2020. Growth weak, inflation falling. The Fed
+          cuts hard. <strong>Long bonds +11% real, TIPS +4%, gold +4%.</strong>
+          {" "}Stocks fall during the contraction but recover quickly once
+          policy turns. Defensive bonds are the dominant call here — the
+          opposite of stagflation.
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="Stagflation (bottom-right) — the nightmare">
+        <p>
+          Growth weak, inflation high. 1974–82. This is the regime that breaks
+          60/40. <strong>Stocks −8% real, long bonds −10% real.</strong> Both
+          halves of the conventional portfolio lose simultaneously. Only{" "}
+          <strong>gold (+14%), commodities (+11%), and TIPS (+1%)</strong>{" "}
+          hold real value. There has not been a sustained stagflation in the US
+          since 1982; this is why most retail investors and even most advisors
+          are unprepared for it.
+        </p>
+      </L2Step>
+
+      <L2Step num="06" title="The 2022 lesson">
+        <p>
+          2022 was a brief inflationary-downturn — inflation rising sharply,
+          growth weakening. Both stocks AND long bonds fell at the same time,
+          the worst year for 60/40 since 1969. A −16% real year. The lesson is
+          not &quot;60/40 is dead&quot; — it&apos;s that 60/40 is
+          regime-conditional, and 2020–22 was the wrong regime for it. This is
+          the case for diversifying across regime-orthogonal assets (TIPS,
+          gold, commodities, real assets) as ballast.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Read the regime first. Position second."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          If H1&apos;s regime dashboard says &quot;disinflating, post-restrictive&quot;
+          (current read), you are in transit between regimes — the top-left
+          and bottom-left are both live possibilities. The right move is
+          barbell: keep both stock exposure (for soft landing) and long-bond
+          exposure (for hard landing), and trim only when one path resolves.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <RegimeAssets />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="A century of asset returns, and the regimes that produced them">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "ilmanen-expected-returns-2011",
+            "dalio-big-debt-crises-2018",
+            "shiller-long-run-data",
+            "bridgewater-all-weather",
+            "damodaran-asset-returns",
+          ]}
+          entries={[
+            { who: "FRED", title: "Inflation, rates, growth series", year: "live" },
+          ]}
+        />
+      }
+    >
+      <h3>The recency illusion</h3>
+      <p>
+        Most people&apos;s intuition about &quot;what works&quot; comes from the
+        period they personally invested through. For anyone whose career
+        started after 1982, that is one regime: disinflation. For anyone whose
+        career started after 2009, that is one sub-regime: disinflation with
+        quantitative easing and near-zero rates. The 1970s feel like ancient
+        history. They are not — they are the most recent example of the regime
+        most likely to recur if central banks lose anchor.
+      </p>
+
+      <Timeline
+        entries={[
+          {
+            year: "1929–33",
+            event:
+              "Deflationary depression. Stocks lose 80%+. Long Treasury bonds gain. Gold is fixed by law. The first lesson that 'stocks for the long run' depends on which long run.",
+          },
+          {
+            year: "1946–49",
+            event:
+              "Post-war inflation. Bonds repressed by Fed-Treasury accord (rate cap). Real bond returns negative for a decade. The same playbook some now suggest for managing US debt.",
+          },
+          {
+            year: "1972–82",
+            event:
+              "The classic stagflation. Oil shocks, Vietnam fiscal expansion, breakdown of Bretton Woods. Stocks −1.4%/yr real for the decade. Bonds worse. Gold +30%/yr. The regime everyone built their portfolio to ignore.",
+          },
+          {
+            year: "1982–2000",
+            event:
+              "The Great Moderation begins. Volcker breaks inflation; rates fall steadily for 40 years. Stocks compound at 14% real. Bonds compound at 8% real. The portfolio everyone built to capture this.",
+          },
+          {
+            year: "2008–09",
+            event:
+              "Disinflationary downturn writ large. Stocks −37%, long bonds +20%. The textbook 60/40 response. Reinforces the post-1982 intuition.",
+          },
+          {
+            year: "2022",
+            event:
+              "A 12-month inflationary downturn. Stocks −19%, long bonds −29%. Worst 60/40 year since 1969. The regime broke the playbook. Started new conversations about asset allocation.",
+          },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+
+      <Debate question="Is 60/40 dead, or just badly named?">
+        <DebateSide side="mainstream" who="● No">
+          <p>
+            Stock-bond correlation has been positive before (1970s, 1990s) and
+            returned to negative. 2022 was a regime accident, not a structural
+            break. Long-run case for 60/40 unchanged. Vanguard, much of academic
+            finance.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Yes">
+          <p>
+            Stock-bond correlation has flipped from negative (their key
+            diversification property) to positive. In a world where inflation
+            matters again, stocks and bonds move together. Need real assets,
+            TIPS, alternatives. AQR, Bridgewater, etc.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deepest move</h3>
+      <p>
+        The optimal portfolio is not a fixed allocation — it is a function from
+        regime to allocation. Most retail advice ignores this and treats
+        &quot;60/40&quot; or &quot;100% S&amp;P&quot; as universally correct.
+        The advice industry&apos;s preference for fixed allocations is partly
+        principled (you can&apos;t time regimes perfectly) and partly
+        self-interested (fixed-allocation advice scales; regime-conditional
+        advice doesn&apos;t). The honest middle ground is to hold a strategic
+        mix biased toward the dominant regime and tilt at the margins as it
+        shifts.
+      </p>
+
+      <blockquote>
+        &quot;There is no &apos;safe&apos; asset. There are only assets that
+        are safe in the regime you&apos;re currently in. Cash is safe until
+        inflation. Bonds are safe until rates rise. Stocks are safe until
+        they&apos;re not. The job is to be diversified across regimes, not
+        across tickers.&quot;
+        <cite>Paraphrased from Bridgewater&apos;s All-Weather framework, Ray Dalio</cite>
+      </blockquote>
+
+      <Check
+        question="Which asset class dominates in a disinflationary downturn (growth falling, inflation falling)?"
+        options={[
+          {
+            label: "Stocks — falling rates support multiples.",
+            explain: "Disinflationary booms favour stocks, not disinflationary downturns. In the downturn case, earnings expectations are also falling, which offsets the multiple-expansion benefit."
+          },
+          {
+            label: "Long bonds — falling growth and falling inflation both pull rates down, lifting bond prices.",
+            correct: true,
+            explain: "Right. Long bonds rally hardest when both growth AND inflation are falling — duration is the asset that benefits most. This is why long Treasuries were the standout asset in 2008-2009 and in early 2020."
+          },
+          {
+            label: "Gold and commodities — they hedge against the regime change.",
+            explain: "Gold and commodities favour stagflation (growth down, inflation up), not disinflationary downturns. The cure for a disinflationary downturn typically suppresses commodity prices too."
+          },
+          {
+            label: "Cash — when uncertain, hold cash.",
+            explain: "Cash survives but doesn't dominate. In a disinflationary downturn rates are falling, so cash earns less even in nominal terms while long bonds earn capital gains."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/H2?l=2", label: "the regime-by-asset matrix in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

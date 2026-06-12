@@ -1,0 +1,156 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "A modern supply chain isn't just trucks and containers — it's a financial structure made of working capital, trade credit, and insurance. Most \"supply chain\" problems are credit problems wearing physical clothes.",
+    sub: "Sanctions work fast because the credit layer breaks before the physical layer does. The container can still sail; the letter of credit can't.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Goods don&apos;t move on their own. They move on letters of credit,
+        trade insurance, and 60-day payment terms. Most &quot;supply chain&quot;
+        problems are actually credit problems wearing physical clothes.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        When you read &quot;supply chain crisis,&quot; read it as &quot;credit
+        crisis in trade finance.&quot; The physical bottleneck is real but
+        secondary; the financial pullback is what makes it stick — and
+        determines when it ends.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        What&apos;s actually moving in a &quot;supply chain&quot;
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Goods</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>obvious</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Working capital</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>huge</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Trade credit</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>huge</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Trade insurance</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>decisive at the margin</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Goods don't move on their own — credit moves them">
+    <L2Grid>
+      <L2Step num="01" title="A container ship is a credit structure">
+        <p className="lede">
+          A container ship leaving Shanghai for LA is financed: the cargo is
+          collateral for letters of credit, trade insurance, and inventory
+          loans. Each handoff (port, broker, distributor) involves another
+          financing step.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The pullback, not the disruption">
+        <p>
+          <strong>When a supply chain &quot;breaks,&quot; the physical
+          disruption is usually small relative to the credit pull-back that
+          follows.</strong> Insurers raise premiums, banks tighten letters of
+          credit, suppliers demand cash up-front. The next ship doesn&apos;t
+          sail because the financing for it has been re-priced or withdrawn —
+          not because the port is shut.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Why sanctions reach so far so fast">
+        <p>
+          This is why sanctions work so quickly even when the physical
+          infrastructure is intact, and why the post-2020 supply-chain
+          recovery happened in finance and inventory before it happened in
+          shipping. Cargoes can&apos;t move without trade credit; pulling
+          the credit pulls the goods.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Read 'supply chain crisis' as 'credit crisis in trade finance.'"
+        link={{ to: "/nodes/E5", text: "E5 · Sanctions architecture" }}
+      >
+        <p>
+          When you see headlines about supply-chain disruption, watch the
+          credit indicators (trade-finance availability, letter-of-credit
+          spreads, marine insurance premiums) — not just the port-throughput
+          numbers. The credit indicators lead and predict; the throughput
+          numbers describe the consequence.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "sheffi-resilient-enterprise-2005",
+            "bis-trade-finance-collapse-2009",
+            "wto-auboin-restoring-trade-finance",
+            "pisani-ferry-geoeconomic-2022",
+          ]}
+        />
+      }
+    >
+      <h3>Trade finance is older than banking</h3>
+      <p>
+        Bills of exchange routed Genoese and Venetian commerce in the 12th
+        century; modern trade finance is a refinement of the same idea.
+        The 2008 crisis showed how fragile the modern version is: trade
+        volumes collapsed faster than physical demand because letter-of-credit
+        markets froze. The aggregate dollar value of frozen trade finance
+        was small relative to the entire credit shock; the relative impact
+        on cross-border goods flow was outsized.
+      </p>
+
+      <Debate question="Build resilience by diversifying suppliers — or accept efficiency?">
+        <DebateSide side="mainstream" who="● Resilience">
+          <p>
+            Just-in-time was too lean; we need just-in-case. Add buffer
+            stocks, second sources. The 2020–22 disruption made the case for
+            redundancy that academic discussion couldn&apos;t.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Efficiency">
+          <p>
+            Costs of redundancy are real and continuous; benefits are
+            episodic. Don&apos;t over-react to one cycle. The post-2020
+            inventory build was probably overshoot, not signal.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="A semiconductor shortage halts auto production. What's the more accurate diagnosis?"
+        options={[
+          {
+            label: "A physical shortage — fabs can't produce enough chips fast enough; the constraint is manufacturing capacity.",
+            explain: "Physical capacity matters, but the immediate freeze usually comes from credit and inventory decisions, not from fabs running flat-out. Capacity adjusts over years; the freeze happens in weeks."
+          },
+          {
+            label: "A credit event dressed up as a physical event — trade credit terms tighten, inventory finance pulls back, suppliers demand cash up-front, and the chain seizes on financial terms before any physical bottleneck binds.",
+            correct: true,
+            explain: "Right. Modern supply chains are working-capital structures. A disruption that looks like 'we ran out of chips' is usually 'someone stopped extending credit to the chip buyer.' The credit story precedes and amplifies the physical one."
+          },
+          {
+            label: "A political event — geopolitical actions deliberately strangled the flow.",
+            explain: "Political events can trigger disruptions, but the propagation mechanism is still financial — letters of credit, trade finance, inventory loans. Politics is the spark; finance is the kindling."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/D3?l=2", label: "the working-capital view in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

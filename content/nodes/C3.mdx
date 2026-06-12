@@ -1,0 +1,179 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Unemployment isn't one thing — it's three. People between jobs (frictional), people whose old jobs no longer exist (structural), and people laid off in a downturn (cyclical).",
+    sub: "Only the cyclical kind responds to demand stimulus. Misdiagnosing which kind you're looking at is how recessions get prolonged.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Kinds of unemployment", val: "3", sub: "Frictional · structural · cyclical." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Frictional, structural, cyclical. All three look the same on the headline chart.
+        Only the third one responds to demand stimulus. Mistaking one for another is
+        how policy makes recessions worse and recoveries shallower.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Whether your unemployment is &quot;temporary&quot; or &quot;structural&quot;
+        determines what would help. Reading the same number three different ways gets
+        you three different decisions — about retraining, mobility, or just waiting.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Diagnosis · what each calls for
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Frictional</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>labor market plumbing</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Structural</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>retraining, mobility</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Cyclical</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>demand stimulus</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Same chart, three causes, three cures">
+    <L2Grid>
+      <L2Step num="01" title="Frictional — the healthy kind">
+        <p className="lede">
+          All three look the same on the headline chart. Treating them as the same
+          thing is how policy makes recessions worse.
+        </p>
+        <p>
+          <strong>Frictional</strong> unemployment is people between jobs —
+          searching, moving, retraining. It&apos;s healthy; even a perfectly
+          running labor market has it. You don&apos;t want frictional unemployment
+          at zero; you want it short.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Structural — the mismatch kind">
+        <p>
+          <strong>Structural</strong> unemployment is a mismatch between worker
+          skills and available jobs. A coal-miner in West Virginia and a software
+          job in Seattle don&apos;t connect through demand stimulus. Structural
+          unemployment needs retraining, mobility, or industrial policy — not
+          lower interest rates.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Cyclical — the one rates can fix">
+        <p>
+          <strong>Cyclical</strong> unemployment is the people who&apos;d be
+          working in a healthy economy and aren&apos;t. This is what monetary and
+          fiscal policy can fix — at least when slack actually exists. Policy
+          that stimulates demand into a structural shortage just produces
+          inflation, not jobs.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="The NAIRU caveat">
+        <p>
+          The natural rate of unemployment — the level below which inflation
+          accelerates — is theoretical and famously hard to measure in real
+          time. The Fed&apos;s estimate of NAIRU drifts by a percentage point or
+          more across cycles. This is why a 4% unemployment rate can be
+          &quot;tight&quot; in one decade and &quot;loose&quot; in another.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If headlines say 'tight labor market' and you can't find work, your problem isn't cyclical."
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          If you&apos;re unemployed and the headlines say &quot;tight labor
+          market,&quot; your problem is either frictional (will pass) or
+          structural (your skills don&apos;t match what&apos;s hiring). Demand
+          stimulus won&apos;t help; figuring out which one will.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "friedman-role-of-monetary-policy-1968",
+            "bls-cps",
+            "phelps-money-wage-dynamics-1968",
+            "beveridge-full-employment-1944",
+          ]}
+        />
+      }
+    >
+      <h3>The trichotomy is mid-20th century</h3>
+      <p>
+        The frictional/structural/cyclical split was formalised in mid-20th
+        century labor economics. The post-1970s &quot;natural rate&quot; framework
+        (Friedman, Phelps) added the idea that there&apos;s a non-cyclical
+        unemployment rate (NAIRU) below which inflation accelerates. NAIRU
+        estimates are notoriously unstable in real time — they drift with
+        every cycle.
+      </p>
+
+      <Debate question="Should policy aim for 'full employment' or for NAIRU?">
+        <DebateSide side="mainstream" who="● Slack-based">
+          <p>
+            Push demand until inflation actually rises, not when models say it
+            should. Modern Fed approach since 2020 (the framework review explicitly
+            said: don&apos;t pre-empt phantom inflation that the data isn&apos;t
+            showing).
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Structuralist">
+          <p>
+            Most unemployment is structural; skills mismatches dominate; demand
+            stimulus mainly produces inflation. Implies tight policy and
+            supply-side investment — retraining, mobility, infrastructure.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>Why diagnosis matters</h3>
+      <p>
+        In a recession, almost all extra unemployment is cyclical — the cure is
+        easy in principle (demand stimulus) and hard in practice (politics,
+        lags). In a recovery, the last percentage point of unemployment is often
+        a mix of frictional and structural — at which point demand stimulus
+        produces wage and price pressure rather than jobs. Getting this wrong in
+        either direction is how recessions become long.
+      </p>
+
+      <Check
+        question="Which of the three kinds of unemployment responds to ordinary demand stimulus?"
+        options={[
+          {
+            label: "Frictional unemployment — people between jobs.",
+            explain: "Frictional unemployment is the friction of matching workers to jobs; demand stimulus doesn't help much. Better job-search infrastructure does."
+          },
+          {
+            label: "Structural unemployment — workers' skills mismatched to available jobs.",
+            explain: "Structural unemployment needs retraining or labor mobility — not more demand. Stimulus into a structural shortfall produces wage and price pressure instead of jobs."
+          },
+          {
+            label: "Cyclical unemployment — the deficit caused by below-trend aggregate demand.",
+            correct: true,
+            explain: "Right. Only cyclical unemployment is a pure aggregate-demand problem. The policy error in either direction (treating cyclical as structural or vice versa) is exactly what makes recoveries slow or recessions deep."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/C3?l=2", label: "the three-types breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

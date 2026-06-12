@@ -1,0 +1,148 @@
+import { L1, L1Pocket, Comparator, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The pattern",
+    text: "Crises follow a recognisable five-phase script: build-up, trigger, panic, contagion, intervention. The names change every cycle; the structure doesn't.",
+    sub: "Recognisable in real time if you know what to watch for — even when every commentator is calling this one different.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "How long the build-up usually runs", val: "5–10 yrs", sub: "Years of quiet credit growth before the trigger — per Kindleberger's case studies and Borio's BIS work." },
+    { lbl: "Typical drop in the leveraged asset, peak to trough", val: "40–80%", sub: "1929 equities, 2008 US housing, 2000 dot-coms — order of magnitude, not a guarantee." },
+  ],
+  relatedNodes: ["F2", "F3", "F4"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <L1Pocket>
+      <p>
+        Every financial crisis runs the same script. Years of quiet
+        borrowing build up. Something specific finally breaks the spell.
+        Then a few panicked weeks, a few panicked months, and a rescue
+        large enough to stop the bleeding.
+      </p>
+      <p>
+        If you&apos;re hearing <em>&ldquo;this time is different&rdquo;</em>,
+        you&apos;re in Phase 1. If you&apos;re hearing <em>&ldquo;no one
+        could have seen this coming&rdquo;</em>, you&apos;re in Phase 3.
+      </p>
+    </L1Pocket>
+    <Comparator
+      title="The crisis script · five phases"
+      rows={[
+        { lbl: "1 · Build-up", v: "years", tone: "neutral" },
+        { lbl: "2 · Trigger", v: "a moment", tone: "neutral" },
+        { lbl: "3 · Panic", v: "weeks", tone: "bad" },
+        { lbl: "4 · Contagion", v: "months", tone: "bad" },
+        { lbl: "5 · Intervention", v: "decisive, when large enough", tone: "good" },
+      ]}
+    />
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The script, phase by phase">
+    <L2Grid>
+      <L2Step num="01" title="Build-up">
+        <p>
+          Years of quiet credit expansion. Asset prices rising. Conservative lending
+          standards eroding because the loans keep performing. Pension funds chasing
+          yield into instruments they don&apos;t fully understand.
+        </p>
+      </L2Step>
+      <L2Step num="02" title="Trigger">
+        <p>
+          A specific event punctures the assumption underwriting the whole
+          structure. The trigger is rarely the cause; it&apos;s the moment the cause
+          becomes undeniable.
+        </p>
+      </L2Step>
+      <L2Step num="03" title="Panic">
+        <p>
+          Funding markets seize. Selling pressure overwhelms specific players;
+          their failure raises questions about everyone else.
+        </p>
+      </L2Step>
+      <L2Step num="04" title="Contagion + intervention">
+        <p>
+          The state and central bank step in — usually too late and too small at
+          first, then large enough. The terms set in this phase shape the next
+          decade of regulation and politics.
+        </p>
+      </L2Step>
+      <Callout
+        title="The phases are recognisable in real time; calling them is harder."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          If you&apos;ve heard &quot;this time is different,&quot; you are likely
+          in Phase 1. If you&apos;ve heard &quot;no one could have seen this coming,&quot;
+          you are in Phase 3. The reflexes that get you through one cycle are not
+          the same as the ones that get you through the next.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "minsky-stabilizing-unstable-economy",
+            "reinhart-rogoff-this-time-different-2009",
+            "tooze-crashed-2018",
+            "kindleberger-aliber-manias-panics-crashes-2015",
+          ]}
+        />
+      }
+    >
+      <h3>The script was written down</h3>
+      <p>
+        Kindleberger&apos;s <em>Manias, Panics, and Crashes</em> systematized the
+        script in 1978. Minsky provided the mechanism — the financial-instability
+        hypothesis. 2008 was the largest test; 2020&apos;s COVID financial
+        dislocation followed the same template at compressed speed.
+      </p>
+
+      <Debate question="Is the crisis pattern predictable or post-hoc?">
+        <DebateSide side="mainstream" who="● Predictable">
+          <p>
+            Pattern is robust; we should be better at calling them. Kindleberger,
+            Minsky. The phases are visible if you know what to look for.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Unpredictable">
+          <p>
+            Triggers and contagion paths vary; pattern is post-hoc. Don&apos;t
+            pretend foresight.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="Per Track F's six-stage template, what's the difference between the 'trigger' and the 'panic' phases?"
+        options={[
+          {
+            label: "The trigger is the political event (war, election); the panic is the financial reaction.",
+            explain: "Triggers can be financial — Bear Stearns, Lehman, BNP Paribas were not political events. The trigger/panic distinction is about scope, not domain."
+          },
+          {
+            label: "The trigger is the initial failure that exposes the underlying fragility; the panic is the run that follows as everyone realises the fragility is widespread.",
+            correct: true,
+            explain: "Right. Trigger = the specific event that ends the complacency phase. Panic = the broader run as participants reprice the system, not just the triggering instrument. BNP Paribas in 2007 was the trigger; the LIBOR-OIS blowout in 2008 was the panic."
+          },
+          {
+            label: "The trigger is short-term; the panic is the multi-quarter contagion that spreads to other countries.",
+            explain: "Contagion is its own (fifth) stage in the template — distinct from panic. Panic is concentrated; contagion is the spread that follows."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/F1?l=2", label: "the six-stage template in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

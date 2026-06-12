@@ -1,0 +1,165 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { ComparativeAdvantage } from "@/components/widgets/comparative-advantage";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "Ricardo's math on the gains from trade is still correct — under its assumptions. Real economies violate those assumptions in ways that matter: sector-specific capital, learning curves, agglomeration, politics.",
+    sub: "The textbook is right about aggregate gains. It's silent about who loses, and where, and for how long.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Ricardo&apos;s comparative-advantage argument is a theorem. Like all
+        theorems, it&apos;s true if its assumptions hold. The modern critiques
+        are about the assumptions, not the math.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Free trade raises total income; whether it raises <em>your</em> income
+        depends on whether you can move into the export sectors and how fast
+        they hire. The textbook is right about gains-from-trade and silent
+        about distribution — which is why most trade debate is incoherent.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        When the textbook fails · why
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Capital is sector-specific</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>transition costs</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Learning-by-doing</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>first-mover wins</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Agglomeration</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>winner-take-all</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Political adjustment</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>losers get nothing</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The theorem and the assumptions">
+    <L2Grid>
+      <L2Step num="01" title="What Ricardo's argument actually says">
+        <p className="lede">
+          Ricardo&apos;s argument is a theorem. Like all theorems, it&apos;s
+          true if its assumptions hold; the modern critiques are about the
+          assumptions, not the math.
+        </p>
+        <p>
+          The textbook claim: even if one country is worse at producing
+          everything, both gain from trade by specialising in what
+          they&apos;re <em>relatively</em> least bad at. The math is
+          unimpeachable in 2-good, 2-country, full-employment, frictionless
+          models.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The assumptions real economies violate">
+        <p>
+          Real economies have unemployment, capital-specific industries,
+          learning-by-doing, agglomeration effects, and political economy.
+          Each of these can mean: one side captures the gains, the other side
+          absorbs the losses, and the aggregate looks good while the
+          distribution is dire.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The honest summary">
+        <p>
+          <strong>Free trade raises total income; whether it raises{" "}
+          <em>your</em> income depends on whether you can move into the
+          export sectors and how fast they hire.</strong> The textbook is
+          right about gains-from-trade and silent about distribution. Most
+          trade debate fails because both sides claim the textbook says
+          something it doesn&apos;t.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If your job lost the comparative-advantage fight…"
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          If your job is in an industry that lost the comparative-advantage
+          fight (textiles, electronics assembly, basic manufacturing in the
+          US), the textbook tells you the country gained — and is silent
+          about you. That silence is the political problem, not the math.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <ComparativeAdvantage />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "autor-dorn-hanson-china-syndrome-2013",
+            "rodrik-globalization-paradox-2011",
+            "ricardo-principles-political-economy-1817",
+            "krugman-increasing-returns-trade-1979",
+          ]}
+        />
+      }
+    >
+      <h3>Ricardo, then the China shock</h3>
+      <p>
+        Ricardo&apos;s 1817 example used English cloth and Portuguese wine.
+        Two centuries later, the China shock literature (Autor-Dorn-Hanson)
+        showed empirically that the textbook model massively understated the
+        local-labor-market damage of trade with China between 2001 and 2010
+        in the US. The losses were geographically concentrated and persisted
+        for over a decade — exactly what the standard model promised
+        wouldn&apos;t happen at scale.
+      </p>
+
+      <Debate question="Free trade with compensation, or strategic protection?">
+        <DebateSide side="mainstream" who="● Free trade">
+          <p>
+            Gains exceed losses. Use redistribution to compensate losers;
+            don&apos;t restrict trade. Standard economist position; the
+            failure mode is that the redistribution never actually happens.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Strategic">
+          <p>
+            Some industries you keep. National security, learning curves,
+            supply-chain resilience. Industrial policy isn&apos;t a
+            four-letter word; the question is which industries warrant it
+            and at what cost.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Check
+        question="What does Causeway argue is the right way to evaluate Ricardo's comparative-advantage argument?"
+        options={[
+          {
+            label: "Discard it — the assumptions are so unrealistic that it has no policy relevance in a modern globalised economy.",
+            explain: "Overcorrection. The mechanism is real and operates in many sectors; the textbook conclusion holds when the assumptions hold."
+          },
+          {
+            label: "Accept it as universally true — comparative advantage is a mathematical theorem; questioning it is innumeracy.",
+            explain: "Also wrong. Theorems are only as good as their assumptions. Capital mobility, externalities, learning curves, scale economies — all violate Ricardo's setup in real economies."
+          },
+          {
+            label: "The mechanism is correct under specific assumptions (immobile capital, no externalities, full employment, etc.); modern debates are about whether those assumptions hold in the specific sector under discussion.",
+            correct: true,
+            explain: "Right. The textbook isn't wrong; it's incomplete. The policy debates that actually matter are arguments about which assumptions to relax for which goods."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/D1?l=2", label: "the assumption-by-assumption breakdown in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

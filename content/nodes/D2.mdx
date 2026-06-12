@@ -1,0 +1,197 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { TradeBalance } from "@/components/widgets/trade-balance";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The identity",
+    text: "Every dollar a country spends on imports comes back as foreign investment in its assets. Trade deficit and capital surplus are the same balance, written from two sides.",
+    sub: "Treating them as separate problems — \"close the trade gap, attract investment\" — is a contradiction politicians make constantly.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Sum of the external accounts", val: "= 0", sub: "Current account + capital account = 0 · accounting identity, not coincidence." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Every country&apos;s external accounts must balance to zero, by accounting
+        identity. Trade deficits are matched by capital surpluses. &quot;We are running
+        a trade deficit&quot; and &quot;we are receiving foreign investment&quot;
+        are the same sentence in different words.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        It makes most popular trade-deficit commentary incoherent. &quot;The trade
+        deficit is bad and we should stop foreign investment to fix it&quot; is
+        self-contradictory by definition. The interesting questions are about
+        the <em>kinds</em> of inflow and trade, not the levels.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Balance of payments · everything sums to zero
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Current account (trade-ish)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>−$X</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Capital account (investment)</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>+$X</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Errors / reserves</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>≈ 0</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The accounting identity nobody wants to teach">
+    <L2Grid>
+      <L2Step num="01" title="The arithmetic of the identity">
+        <p className="lede">
+          Every country&apos;s external accounts balance to zero. Trade deficits
+          are matched by capital surpluses. They are the same sentence in
+          different words.
+        </p>
+        <p>
+          If the US imports $100 of goods and exports $80, it owes $20 to
+          foreigners. Foreigners can hold that $20 as US Treasuries, equities,
+          real estate, or dollar deposits. <strong>That is the capital account
+          inflow.</strong> It is not a separate phenomenon happening alongside
+          the trade deficit — it is the trade deficit, seen from the other side
+          of the table.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The political incoherence">
+        <p>
+          Saying &quot;America runs a trade deficit&quot; and &quot;America
+          receives net foreign investment&quot; is the same sentence said two
+          ways. You can&apos;t have one without the other.
+        </p>
+        <p>
+          This makes most popular trade-deficit commentary incoherent.
+          &quot;The trade deficit is bad and we should stop foreign investment
+          to fix it&quot; is self-contradictory by accounting identity. The
+          interesting questions are about <em>what kind</em> of capital inflows
+          (productive vs speculative) and <em>what kind</em> of trade (final
+          goods vs intermediate inputs) — not their levels.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="What this means in practice">
+        <p>
+          A country can change its trade balance only by changing its capital
+          balance, or vice versa. Stop being attractive to foreign investors —
+          via lower returns, higher risk, or capital controls — and the trade
+          deficit will shrink, mechanically. Stay attractive and the trade
+          deficit will persist. Neither outcome is &quot;good&quot; or
+          &quot;bad&quot; without context.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="When a politician promises to 'eliminate the trade deficit'…"
+        link={{ to: "/nodes/D4", text: "D4 · Capital flows & sudden stops" }}
+      >
+        <p>
+          …they are also promising to eliminate net foreign investment in the
+          country. They almost never say the second half. The shorthand
+          &quot;trade deficit = bad&quot; only works if you believe the
+          corresponding capital inflow is also bad. Most economic arguments
+          about trade are arguments about <em>that</em>.
+        </p>
+      </Callout>
+
+      <Callout
+        title="See the imbalances in real data"
+        link={{ to: "/compare?c=USA,CHN,DEU&i=BN.CAB.XOKA.GD.ZS,NE.EXP.GNFS.ZS,NE.IMP.GNFS.ZS", text: "Compare · current account, exports, imports" }}
+      >
+        <p>
+          The US, China and Germany side-by-side on current account, exports
+          and imports tells the entire post-2003 macro story in three lines.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <TradeBalance />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "pettis-klein-trade-wars-class-wars-2020",
+            "bea-international-transactions",
+            "imf-external-sector-report",
+            "hume-essays-1752",
+          ]}
+        />
+      }
+    >
+      <h3>Hume saw it in 1752</h3>
+      <p>
+        The accounting identity has been understood since Hume&apos;s essay
+        &quot;Of the Balance of Trade&quot; (1752). Modern political economy
+        keeps re-discovering it badly. Pettis &amp; Klein (<em>Trade Wars Are
+        Class Wars</em>) is the recent sharp version — which classes within
+        each country bear the costs and gain from the imbalances.
+      </p>
+
+      <Debate question="Persistent imbalances — benign, or destabilising?">
+        <DebateSide side="mainstream" who="● Benign">
+          <p>
+            If foreigners want to invest in the US, the US should let them. The
+            trade deficit is a sign of attractiveness. Capital flows to its
+            highest-return use; that&apos;s how comparative advantage works.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Destabilising">
+          <p>
+            Persistent surpluses + deficits build leverage; eventually unwinds
+            disorderly. 1997 Asian crisis, 2008 global crisis. The Pettis
+            argument: the imbalance is downstream of distributional choices
+            inside each country — surplus countries are suppressing their own
+            consumption; deficit countries are financing it on debt.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The class-war reading</h3>
+      <p>
+        Pettis &amp; Klein flip the standard story: a country&apos;s trade
+        balance isn&apos;t primarily set by its competitiveness, it&apos;s set
+        by how it splits income between capital and labour. Countries that
+        suppress labour&apos;s share (China&apos;s household-savings squeeze;
+        Germany&apos;s wage moderation) end up with chronic surpluses because
+        their workers can&apos;t consume what they produce. The surplus has
+        to go somewhere — into a deficit country, financed by debt. The trade
+        imbalance is a class-distribution problem dressed in goods-flow clothes.
+      </p>
+
+      <Check
+        question="A politician promises to 'eliminate the trade deficit while continuing to attract foreign investment.' What's wrong with this promise?"
+        options={[
+          {
+            label: "Nothing — trade and capital are separate domains; you can run a balanced trade ledger while still being an attractive investment destination.",
+            explain: "Wrong. Trade and capital aren't separate domains; they're two views of the same external balance. If the current account is zero, the capital account is zero too."
+          },
+          {
+            label: "It's self-contradictory by accounting identity. Trade deficits and net foreign investment are the same number with opposite signs — eliminating one eliminates the other.",
+            correct: true,
+            explain: "Right. CA + KA ≡ 0. The trade deficit IS the capital surplus, expressed differently. You can't have one without the other."
+          },
+          {
+            label: "Foreign investment is mostly portfolio (bonds), so eliminating the trade deficit wouldn't actually shrink it much.",
+            explain: "Composition of inflows matters for stability but not for the identity. Whatever the composition, the totals sum to zero by definition."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/D2?l=2", label: "the trade-balance simulator in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

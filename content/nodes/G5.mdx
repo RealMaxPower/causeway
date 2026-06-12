@@ -1,0 +1,173 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The framing",
+    text: "A central bank digital currency is technically a small thing — just a database run by the central bank instead of by commercial banks. Politically it's enormous: programmability, visibility into every transaction, and the option to freeze a balance with a keystroke.",
+    sub: "The technical work is racing ahead of the political reckoning. Most CBDC commentary debates the wrong question.",
+  },
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        The technical debate about CBDCs, stablecoins, and other digital
+        money is small. The political debate — who can program your money,
+        who can see your transactions, who can confiscate them — is
+        enormous and largely under-discussed.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Different design choices produce profoundly different societies.
+        China&apos;s e-CNY answers very differently than a hypothetical
+        privacy-preserving Fed digital dollar. The technical work is
+        largely done; the political choices are not — and you live in
+        whatever they decide.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        What CBDC design actually decides
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Programmability</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>expiration · restrictions</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Visibility</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>to issuer · to state</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Reversibility</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>by court · by issuer</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Anonymity</dt>
+        <dd style={{ margin: 0, color: "var(--ink)", fontFamily: "var(--cw-mono)" }}>tiered · or none</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The technical bit is small; the political bit is everything">
+    <L2Grid>
+      <L2Step num="01" title="Technical: a CBDC is just a database">
+        <p className="lede">
+          CBDCs, stablecoins, the rest. The crypto-vs-fiat fight is mostly
+          a feint. The real questions are political.
+        </p>
+        <p>
+          Technically: a central-bank digital currency is just a database
+          with central-bank-money entries. A stablecoin is a private
+          money-market fund with a 1:1 peg. Neither is technically
+          remarkable. The infrastructure is straightforward; the design
+          decisions are not.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Political: who can do what with your money">
+        <p>
+          Politically: who can <strong>program</strong> your money (interest,
+          expiration, restricted spending)? Who can <strong>see</strong>{" "}
+          your transactions (the central bank, the state, no one)? Who can{" "}
+          <strong>confiscate</strong> them (sanctions, court orders, tax
+          enforcement)?
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Different answers, different societies">
+        <p>
+          Different answers produce profoundly different societies.
+          China&apos;s e-CNY answers very differently than a hypothetical
+          privacy-preserving Fed digital dollar. The technical work is
+          largely done; the political choices are not. And the political
+          choices in the foundational rollout are very hard to walk back.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="A CBDC's design is a political artifact, not a technical inevitability."
+        link={{ to: "/nodes/E5", text: "E5 · Sanctions architecture" }}
+      >
+        <p>
+          If a CBDC arrives with full transaction visibility and
+          programmability, your daily transactions become legible to the
+          state in a way they have not been in modern economies. That is a
+          political choice, not a technical inevitability. The default
+          should not be set by the engineers.
+        </p>
+      </Callout>
+    </L2Grid>
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "bis-cbdc-hub",
+            "prasad-future-of-money-2021",
+            "fed-money-and-payments-2022",
+            "garratt-privacy-digital-money-2022",
+          ]}
+        />
+      }
+    >
+      <h3>Where it stands in 2026</h3>
+      <p>
+        China launched the e-CNY in 2020. The ECB is well into design;
+        the Fed is studying. Stablecoins (USDC, USDT) are at $200B+ in
+        circulation as of 2025. The 2008 origin of bitcoin was
+        specifically about removing trust in central issuers; the dominant
+        outcome has been to reinforce the role of dollar issuers via
+        stablecoins, not to displace them.
+      </p>
+
+      <Debate question="Should digital money be public or private?">
+        <DebateSide side="mainstream" who="● Public CBDC">
+          <p>
+            Issuer should be the state. Don&apos;t outsource money issuance
+            to private firms. The Bank for International Settlements view:
+            money is a public good, and a CBDC keeps it that way in the
+            digital era.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Private competition">
+          <p>
+            Many issuers, regulated. Market discipline, innovation, choice.
+            Let stablecoins be a regulated alternative; let competition
+            discipline issuers. The historical pattern of private banking
+            argues for plurality, not monopoly.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The deeper observation</h3>
+      <p>
+        Every prior major change in money form (coins to notes, notes to
+        deposits, deposits to digital) carried political choices that
+        shaped subsequent decades. The current transition is no different
+        — and the choices being made are mostly invisible to the citizens
+        who&apos;ll live with them. Track G&apos;s job is to make those
+        choices visible while they&apos;re still choices.
+      </p>
+
+      <Check
+        question="Per Track G, what's the most important debate about CBDCs?"
+        options={[
+          {
+            label: "Whether the technology is mature enough — distributed ledgers, settlement throughput, key-management infrastructure.",
+            explain: "The technical questions are real but largely solved; CBDC implementations are technically straightforward. Track G is explicit that the technical debate is small."
+          },
+          {
+            label: "The political design — who can program your money, who can see your transactions, whose authority can freeze or confiscate them. The technical issues are largely settled; the political ones are enormous and under-discussed.",
+            correct: true,
+            explain: "Right. CBDCs raise governance questions that today's cash and bank deposits answer informally. The design choices being made now (programmability, surveillance, default behaviour during sanctions) will be load-bearing for decades."
+          },
+          {
+            label: "Whether CBDCs will replace stablecoins — the two are competitors for the same market segment.",
+            explain: "Competition between CBDC and stablecoin designs is real, but it's a sub-question. The bigger frame is about who controls the rails — that question is upstream of which specific design wins."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/G5?l=2", label: "the political-design checklist in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

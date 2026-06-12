@@ -1,0 +1,392 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { PhaseClock } from "@/components/widgets/phase-clock";
+
+export const meta = {
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "How long a US business cycle lasts (typically)", val: "~ 5.5 yrs", sub: "Median, postwar · NBER cycle dating. Expansions are getting longer; recessions still last ~10 months." },
+    { lbl: "Warning time the bond market gives", val: "~ 14 mo", sub: "Median lead from yield-curve inversion to recession start, postwar US. Range: 6–24 months." },
+    { lbl: "How long unemployment keeps rising after output bottoms", val: "~ 8 mo", sub: "Why the 'jobless recovery' is a structural feature, not an anomaly · BLS, NBER." },
+  ],
+  relatedNodes: ["C5", "D4", "F1"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Economies oscillate. They expand, run hot, slow, contract, recover, then
+        expand again. The cycle is <em>endogenous</em> — it doesn&apos;t need an
+        external shock to turn. A boom exhausts its own preconditions (cheap
+        labour, cheap credit, slack capacity). Once those are gone, the same
+        forces that powered the expansion start working in reverse.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Because <em>different indicators peak at different times</em>. The yield
+        curve inverts ~14 months before recession. Equities top ~6 months before.
+        Unemployment rises last — months <em>after</em> the recession is officially
+        over. Knowing the order of the dance is the difference between fighting
+        the last cycle and positioning for the next one.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12, textAlign: "center" }}>
+        The cycle is a clock, not a line
+      </div>
+      <svg viewBox="0 0 280 220" style={{ width: "100%", display: "block" }} aria-hidden>
+        <circle cx="140" cy="110" r="78" fill="none" stroke="var(--rule-strong)" strokeWidth="1" />
+        {[
+          { lbl: "Recovery", a: 0.25 * Math.PI },
+          { lbl: "Heat", a: 0.75 * Math.PI },
+          { lbl: "Peak", a: 1.25 * Math.PI },
+          { lbl: "Contraction", a: 1.75 * Math.PI },
+        ].map(({ lbl, a }, i) => {
+          const x = 140 + 78 * Math.sin(a);
+          const y = 110 - 78 * Math.cos(a);
+          return (
+            <text key={i} x={x} y={y} textAnchor="middle" fontSize="10" fontFamily="var(--cw-serif)" fontStyle="italic" fill="var(--ink-2)" dy="3">
+              {lbl}
+            </text>
+          );
+        })}
+        <g transform="rotate(125 140 110)">
+          <line x1="140" y1="110" x2="140" y2="42" stroke="var(--ink)" strokeWidth="2" />
+          <polygon points="134,52 146,52 140,38" fill="var(--gold-deep)" stroke="var(--ink)" />
+        </g>
+        <circle cx="140" cy="110" r="5" fill="var(--ink)" />
+        <text x="140" y="200" textAnchor="middle" fontSize="11" fontFamily="var(--cw-serif)" fontStyle="italic" fill="var(--gold-deep)">
+          One mechanism. Four phases. Eight readings.
+        </text>
+      </svg>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Drive the cycle, watch the indicators peel apart">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Leading indicator">
+            Turns before the cycle does. Examples: yield curve, building permits,
+            credit spreads.
+          </KeyTerm>
+          <KeyTerm term="Coincident">
+            Turns with the cycle. Examples: industrial production, real retail
+            sales, GDP itself.
+          </KeyTerm>
+          <KeyTerm term="Lagging">
+            Turns after the cycle. Examples: unemployment, core inflation, wage
+            growth.
+          </KeyTerm>
+          <KeyTerm term="Output gap">
+            Actual GDP minus potential. Positive in late cycle, negative in
+            contraction.
+          </KeyTerm>
+          <KeyTerm term="Phillips curve">
+            The empirical link between unemployment and inflation. Reliable
+            across phases, unstable across decades.
+          </KeyTerm>
+          <KeyTerm term="NBER dating">
+            US recessions called retrospectively by an academic committee. Median
+            announcement lag from the actual peak: 8 months.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="Read the dial">
+        <p className="lede">
+          Four phases run clockwise. <strong>Early expansion</strong> (top-right):
+          output rising off a trough, slack everywhere, inflation low, central
+          bank still easy. <strong>Mid expansion</strong> (bottom-right): growth
+          at trend, hiring strong, inflation drifting up, policy approaching
+          neutral. <strong>Late / peak</strong> (bottom-left): capacity
+          constrained, wages accelerating, policy tight, curve flattening.
+          <strong> Contraction</strong> (top-left): output falling, unemployment
+          climbing, inflation rolling over, policy pivoting back to ease.
+        </p>
+        <p>
+          Drag the hand. The phase description below the dial updates. So do the
+          eight indicators on the right.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Three indicator groups">
+        <p>
+          The right column is grouped by <strong>leading</strong>,
+          <strong> coincident</strong>, <strong>lagging</strong>. Each indicator&apos;s
+          sparkline shows its profile across the full cycle; the gold dot marks
+          where it sits right now.
+        </p>
+        <p>
+          The point: indicators don&apos;t peak at the same angle.
+          {" "}<em>Yield-curve slope</em> peaks early — it&apos;s already flattening
+          by mid-expansion. <em>Unemployment</em> peaks last — it&apos;s still
+          rising during early recovery. This phase-offset is the
+          <strong> entire reason</strong> watching one indicator is dangerous and
+          watching a dashboard is sane.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="The classic mistake">
+        <p>
+          Park the hand near the boundary between mid-expansion and late
+          expansion — about <em>two-thirds of the way around</em>. Look at the
+          indicators. <strong>Yield-curve slope</strong> is already near zero.
+          <strong> Building permits</strong> have rolled over.
+          <strong> Credit spreads</strong> are starting to widen. But: industrial
+          production is fine, retail sales are strong, unemployment is at a
+          multi-decade low.
+        </p>
+        <p>
+          This is the moment commentators say <em>&quot;the economy is incredibly
+          strong, recession fears are overblown.&quot;</em> They are watching the
+          coincident indicators. The leading indicators have already turned. By
+          the time the coincident indicators turn, the leading indicators have
+          inverted hard.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Press play">
+        <p>
+          Hit <strong>▶ Play</strong>. Watch one full revolution. Notice the
+          wave structure: leading indicators sweep their high and low first,
+          then coincident, then lagging. The same rotation produces a different
+          reading from each gauge depending on where you check it.
+          {" "}<em>The cycle is one thing measured eight ways.</em>
+        </p>
+      </L2Step>
+
+      <L2Step num="05" title="Why the cycle isn't dead">
+        <p>
+          Pundits regularly declare the business cycle obsolete. The Great
+          Moderation (1985–2007), then COVID-as-transitory, then the
+          soft-landing narrative of 2024–25. The cycle keeps coming back
+          because the mechanism that creates it — agents extrapolating recent
+          conditions and over-investing in capacity that takes years to come
+          online — is human, not technological.
+          <strong> Bigger central banks and better data shrink the amplitude. They don&apos;t remove the wave.</strong>
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Different decisions belong to different parts of the cycle."
+        link={{ to: "/nodes/H4", text: "H4 · Career, by sector cyclicality" }}
+      >
+        <p>
+          Buying a house when the labour market is at its tightest is buying at
+          peak affordability illusion. Negotiating a raise in early recovery is
+          impossible; doing it in mid-expansion is easy. Refinancing decisions
+          cluster around late-cycle peaks in rates. The phase you&apos;re in is
+          more informative than the absolute level of any one variable.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <PhaseClock />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="From Juglar to Friedman to today — and why the cycle won't die">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "minsky-stabilizing-unstable-economy",
+            "bis-borio-financial-cycle-2014",
+            "bis-annual-economic-report",
+            "friedman-schwartz-monetary-history-1963",
+            "kydland-prescott-time-to-build-1982",
+            "nber-business-cycle-dating",
+            "juglar-crises-commerciales-1862",
+            "kitchin-cycles-trends-1923",
+            "keynes-general-theory-1936",
+            "fred-usslind",
+          ]}
+        />
+      }
+    >
+      <h3>The cycle has been studied for 200 years</h3>
+      <p>
+        Long enough that the canon contains four roughly-orthogonal explanations
+        of why economies oscillate. Each captures part of the truth. Modern
+        empirical work suggests all four mechanisms operate simultaneously, with
+        different ones dominant in different cycles.
+      </p>
+
+      <Timeline
+        entries={[
+          {
+            year: "1862",
+            event:
+              "Clément Juglar identifies a 7–11 year cycle in French banking data — the first quantitative documentation of cyclical regularity. He attributes it to credit overextension and contraction. The mechanism is still recognisable.",
+          },
+          {
+            year: "1923",
+            event:
+              "Joseph Kitchin separates a shorter 3–5 year inventory cycle. Then come Kondratiev (50-yr tech waves) and Kuznets (15–25 yr building cycles). Cycles within cycles within cycles.",
+          },
+          {
+            year: "1936",
+            event:
+              "Keynes's General Theory reframes the cycle as fluctuations in aggregate demand driven by 'animal spirits' of investment. Fiscal policy becomes the prescribed lever.",
+          },
+          {
+            year: "1963",
+            event:
+              "Friedman & Schwartz's A Monetary History of the United States argues recessions are monetary in origin — the Fed's 1929–33 contraction turned a downturn into a depression. Monetarism is born.",
+          },
+          {
+            year: "1982",
+            event:
+              "Kydland & Prescott win attention for 'real business cycle' theory: cycles are optimal responses to technology shocks. Recessions aren't market failures; they're efficient. Highly contested but durable.",
+          },
+          {
+            year: "1986",
+            event:
+              "Minsky publishes Stabilizing an Unstable Economy. The financial-instability hypothesis: long expansions breed leverage, leverage breeds fragility, fragility breeds crashes. Mostly ignored until 2008 demanded it.",
+          },
+          {
+            year: "2008",
+            event:
+              "The crisis discredits the more extreme versions of both monetarism and RBC. The post-2008 consensus integrates financial frictions, credit cycles, and behavioural elements. Borio and the BIS lead the rebuild.",
+          },
+          {
+            year: "2020–22",
+            event:
+              "COVID compresses a full cycle into 24 months. Soft-landing pundits declare cycles dead in mid-2021. By mid-2022 inflation is at 9% and the Fed is hiking 75bps a meeting. The wave still has amplitude.",
+          },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+
+      <Debate question="Are cycles driven by demand, money, technology, or credit?" label="Live debate · Cause">
+        <DebateSide side="mainstream" who="● Demand-driven (New Keynesian)">
+          <p>
+            Animal spirits and sticky prices mean aggregate-demand shifts cause
+            output to fluctuate around potential. Recessions are demand
+            shortfalls; fiscal and monetary stimulus is the appropriate response.
+            This is the operating model inside most central banks.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Credit-driven (Minsky / BIS)">
+          <p>
+            Cycles are intrinsic to financial systems. Stability breeds
+            risk-taking; risk-taking builds fragility; fragility produces
+            crashes. Monetary stimulus can prolong but not abolish the cycle.
+            Macroprudential tools are the right tier. Borio and Drehmann&apos;s
+            financial-cycle work is the modern statement.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Debate question="How well can we call the next turn?" label="Live debate · Predictability">
+        <DebateSide side="mainstream" who="● Late cycle is readable">
+          <p>
+            We know what late-cycle looks like: curve flat, spreads widening,
+            labour tight, equity multiples extended. We can identify it in real
+            time with ~75% accuracy. The Conference Board&apos;s Leading Economic
+            Index has a respectable track record.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Timing is the unsolvable bit">
+          <p>
+            Turns are easier than timing. The gap between &quot;late cycle&quot;
+            and &quot;turn&quot; ranges from 6 months to 3 years. So you can
+            position; you can&apos;t time. The famous quote, often attributed to
+            Keynes: <em>markets can remain irrational longer than you can remain
+            solvent.</em>
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <Debate question="Was the Great Moderation policy, luck, or hidden risk?" label="Live debate · Have we tamed it?">
+        <DebateSide side="mainstream" who="● Better policy">
+          <p>
+            Taylor-rule monetary policy + flexible fiscal response really did
+            damp the cycle from 1985–2007. The framework worked. 2008 was a
+            once-in-a-generation financial accident, not a refutation.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Luck plus suppressed risk">
+          <p>
+            Globalisation, demographics, and disinflation were all pushing the
+            same way. Low realised volatility hid building leverage. 2008 was
+            the catch-up; the 2020s — pandemic, energy shock, inflation surge —
+            have re-introduced amplitude. The moderation was never structural.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>The international synchronisation puzzle</h3>
+      <p>
+        Cycles across countries used to be modestly correlated. Since the 1990s
+        they&apos;ve become highly correlated — the same expansion, the same
+        recession, in the same year, across most advanced economies. The
+        mechanism: shared monetary cycle (Fed → world), shared financial system
+        (cross-border banking), shared supply chains (one factory closes,
+        downstream ones do too). Decoupling has been declared every decade for
+        forty years; it has never happened.
+      </p>
+
+      <h3>What the phase clock leaves out</h3>
+      <p>Three things the toy model can&apos;t show:</p>
+      <p>
+        <strong>Asymmetry.</strong> Real cycles are not sinusoidal. Expansions
+        are long and gentle; contractions are short and violent. The asymmetry
+        is built into how leverage cycles work — slow accumulation, fast
+        deleveraging. A sine wave is a polite fiction.
+      </p>
+      <p>
+        <strong>Regime change.</strong> Sometimes a recession isn&apos;t
+        followed by the same cycle structure. 2008 produced a decade of low
+        rates and low growth; COVID produced an inflationary post-recovery
+        unlike any in living memory. The clock&apos;s hand can transit to a
+        different clock face entirely.
+      </p>
+      <p>
+        <strong>Policy feedback.</strong> Central banks <em>respond</em> to the
+        cycle. That response changes the cycle. The phase clock is a passive
+        thermometer; the real economy is a thermostat fighting itself.
+      </p>
+
+      <blockquote>
+        &quot;The expansion does not die of old age. It is murdered.&quot;
+        <cite>Rudi Dornbusch · 1997 — verified by every Fed-hike-led recession since</cite>
+      </blockquote>
+
+      <h3>If you want to go further</h3>
+      <p>
+        Friedman &amp; Schwartz, <em>A Monetary History of the United States</em>,
+        is the foundational text even for non-monetarists. For modern empirical
+        work, the BIS Annual Economic Report each summer is the best free
+        synthesis. Borio &amp; Drehmann&apos;s papers on the financial cycle.
+        Reinhart &amp; Rogoff for the recession-aftermath comparative work.
+        Tooze&apos;s <em>Shutdown</em> on the COVID cycle — instructive precisely
+        because it is anomalous.
+      </p>
+
+      <Check
+        question="Per Track C, what causes a boom to end?"
+        options={[
+          {
+            label: "An external shock — wars, oil-price spikes, or pandemics — that arrives unpredictably and halts the expansion.",
+            explain: "Shocks can trigger turns, but most cycles end without one. The exhaustion mechanism doesn't need an external shock."
+          },
+          {
+            label: "Booms exhaust their own preconditions — credit becomes overextended, labor becomes too tight, asset prices stretch too far — and the system reverts to a sustainable state, painfully.",
+            correct: true,
+            explain: "Right. This is the endogenous-cycle view: booms contain the seeds of their reversal. The recession is the system reasserting balance the easy way (slow), or the hard way (crisis)."
+          },
+          {
+            label: "Central banks deliberately end booms by hiking rates whenever growth is too strong.",
+            explain: "Central banks can trigger turns by tightening, but booms also end without policy action. The mechanism is endogenous; policy is one possible accelerant."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/C2?l=2", label: "the phase-clock widget in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

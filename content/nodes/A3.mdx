@@ -1,0 +1,333 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Timeline, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { BankSandbox } from "@/components/widgets/bank-sandbox";
+import { LoanMiniVis } from "@/components/widgets/loan-mini-vis";
+
+export const meta = {
+  deck: "A modern commercial bank does not lend out savers' deposits. It writes a loan and a matching deposit into existence in the same keystroke. Most of the money in the economy was made this way. Drive the books yourself, then decide what you think.",
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Money created by banks, not government", val: "~ 92%", sub: "Share of US M2 (broad money supply); FRED, 2025 monthly avg." },
+    { lbl: "Cash banks must park at the Fed", val: "0.0%", sub: "US reserve requirement, since March 2020 · Federal Reserve." },
+    { lbl: "Bank's own money cushion (minimum)", val: "4.5% + buffers", sub: "Basel III Common-Equity Tier 1; the constraint that actually binds." },
+  ],
+  relatedNodes: ["A4", "C5", "F2"],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        When a commercial bank issues a loan, it does not lend out someone
+        else&apos;s savings. It writes a number into <em>two</em> ledgers at once
+        — and that act <em>creates new money</em>.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        Most of the money in the modern economy is bank-created, not
+        government-printed. Whether it expands or contracts is what mortgage
+        rates, asset prices, and your job market are tracking — even when no
+        headline mentions it.
+      </L1QA>
+    </div>
+    <LoanMiniVis />
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="Drive the bank yourself">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Reserves">
+            Bank&apos;s account at the central bank. The only thing other
+            banks accept for settlement.
+          </KeyTerm>
+          <KeyTerm term="Deposit">
+            What the bank owes a customer. From the bank&apos;s view, a
+            liability — not its money.
+          </KeyTerm>
+          <KeyTerm term="Money supply">
+            The broad total — coins, notes, plus deposits at commercial
+            banks. Bank-created money is the bulk of it.
+          </KeyTerm>
+          <KeyTerm term="Reserve ratio">
+            Reserves as a share of deposits. A buffer against withdrawals,
+            not a binding lending limit in modern systems.
+          </KeyTerm>
+          <KeyTerm term="Equity">
+            The bank&apos;s own capital. Absorbs loan losses before
+            depositors do.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="The setup">
+        <p>
+          Below is a real (if simplified) commercial bank. On the left:{" "}
+          <strong>assets</strong> — what the bank owns or is owed. On the
+          right: <strong>liabilities + equity</strong> — what the bank owes.
+          The two sides must always balance.
+        </p>
+        <p>
+          Right now the bank has $200 in reserves at the central bank, an
+          existing $1,000 loan book, deposits of $1,000 from existing
+          customers, and $200 in equity. <em>Tidy.</em>
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="Issue a loan to Alice">
+        <p>
+          Click <strong>Issue loan → Alice</strong>. Watch what does{" "}
+          <em>not</em> happen: the reserves don&apos;t move. No money is
+          taken from anywhere else. Two new lines appear simultaneously — a
+          loan asset (Alice owes the bank) and a deposit liability (the bank
+          owes Alice). The money supply just grew.
+        </p>
+        <p>
+          This is the entire mechanism. There is no vault to draw from, no
+          saver who is now $500 lighter. The bank typed two numbers,
+          balanced its books, and the economy has more money than it did a
+          moment ago.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="So what stops them?">
+        <p>If banks can conjure money, why aren&apos;t they infinite? Three constraints:</p>
+        <p>
+          <strong>Reserves.</strong> When Alice spends her new deposit, the
+          recipient&apos;s bank wants real reserves. Try the{" "}
+          <em>withdraw cash</em> button — reserves drain. Run a bank dry and
+          it has to borrow from another bank or from the central bank, at a
+          price.
+        </p>
+        <p>
+          <strong>Equity.</strong> Loans go bad. Try <em>defaults</em> — the
+          loan vanishes from assets but the deposit it created is still owed
+          to someone. The shortfall hits equity. Enough defaults and the
+          bank is insolvent.
+        </p>
+        <p>
+          <strong>Profitable demand.</strong> A loan is only made if the
+          bank thinks it&apos;ll be repaid with interest. Recessions,
+          falling collateral, or rising rates kill that calculation; new
+          lending stalls; money supply contracts even with rates near zero.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="The central bank's lever">
+        <p>
+          The central bank doesn&apos;t print most of &quot;money.&quot; It
+          sets the <em>price</em> of reserves — the policy rate — and the
+          system of rules and buffers banks must hold against their lending.
+          Cheaper reserves and looser rules → more bank lending → more
+          bank-created money. The opposite squeezes it.
+        </p>
+        <p>
+          This is why rate decisions cascade. The Fed isn&apos;t pushing
+          money out; it&apos;s adjusting the cost of the input every
+          commercial bank uses to make money.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="Your savings rate is not the country's lending capacity."
+        link={{ to: "/nodes/H1", text: "H1 · Reading the regime" }}
+      >
+        <p>
+          When you read &quot;Americans aren&apos;t saving enough so banks
+          can&apos;t lend,&quot; be skeptical. Banks aren&apos;t
+          reserve-constrained the way the metaphor implies; they&apos;re{" "}
+          <em>capital-constrained</em> and <em>demand-constrained</em>. The
+          variable to watch for whether credit is loosening or tightening is
+          bank lending standards (the SLOOS survey) — not deposit growth.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <BankSandbox />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="Where it came from, what's contested, where to read more">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "boe-money-creation-2014",
+            "mehrling-new-lombard-street-2011",
+            "pistor-code-of-capital-2019",
+            "fed-reserve-requirements",
+            "bis-bank-capital-shocks-2018",
+            "imf-chicago-plan-revisited-2012",
+            "fred-totbkcr",
+            "fred-totresns",
+          ]}
+          entries={[
+            { who: "Werner, R.", title: "A lost century in economics: Three theories of banking and the conclusive evidence", year: "2016" },
+          ]}
+        />
+      }
+    >
+      <h3>A short history of the loan-creates-deposit insight</h3>
+      <p>
+        For most of the twentieth century, introductory textbooks taught a
+        tidy story: people deposit money in banks, banks lend a fraction of
+        those deposits out, the central bank multiplies the base. It is
+        intuitive. It is also, at the level the modern banking system
+        actually operates, wrong.
+      </p>
+      <p>
+        The &quot;money multiplier&quot; story persists because it is simple
+        and because, for a long time, reserve requirements were binding enough
+        that the description was a useful approximation. Once central banks
+        moved to setting an interest rate target rather than a reserve
+        quantity — which is most of the developed world after the late 1980s
+        — the description stopped describing.
+      </p>
+
+      <Timeline
+        entries={[
+          {
+            year: "1797",
+            event:
+              "Henry Thornton, watching the Bank of England suspend convertibility, writes the first credible account of how bank credit creates purchasing power independent of metal.",
+          },
+          {
+            year: "1844",
+            event:
+              "UK Bank Charter Act tries to constrain note issuance to gold. Fails to constrain bank deposits, which were not yet recognised as money. Deposits keep growing anyway.",
+          },
+          {
+            year: "1930s",
+            event:
+              "Wicksell, Hawtrey, and later Keynes formalise the idea that bank credit, not the monetary base, is the operative variable for the cycle.",
+          },
+          {
+            year: "1971",
+            event:
+              "Final break with gold convertibility. The whole monetary system is now explicitly bank-credit based.",
+          },
+          {
+            year: "2014",
+            event: (
+              <>
+                The Bank of England publishes <em>Money creation in the modern economy</em>
+                {" "}— a quarterly bulletin that explicitly contradicts the textbook
+                multiplier and describes the loan-creates-deposit mechanic in plain
+                English.
+              </>
+            ),
+          },
+          {
+            year: "2020",
+            event:
+              "In the COVID response, the Federal Reserve drops the reserve requirement to zero — making concrete what was already true: reserves are not the binding constraint on bank lending.",
+          },
+        ]}
+      />
+
+      <h3>What&apos;s actually contested</h3>
+      <p>
+        Almost no working central banker disputes the mechanic above. Where
+        economists genuinely disagree is on what it implies — and what to do
+        about it.
+      </p>
+
+      <Debate question="If banks can create money, what should constrain them?">
+        <DebateSide side="mainstream" who="● Mainstream">
+          <p>
+            Capital requirements (Basel III/IV), liquidity rules, supervisory
+            stress tests, and an inflation-targeting central bank with a
+            credibly counter-cyclical rate policy. Imperfect, but the system
+            is more resilient post-2008 than at any prior point.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Heterodox">
+          <p>
+            The constraints are pro-cyclical: capital looks abundant in
+            booms and scarce in busts. Some (Kotlikoff, Cochrane, the
+            &quot;narrow banking&quot; camp) argue deposits should be backed
+            1:1 by reserves and lending separated entirely. Others (Werner,
+            MMT-adjacent) argue credit allocation, not just price, should be
+            steered.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>Why the textbook story is so sticky</h3>
+      <p>
+        If the loan-creates-deposit mechanic is well-understood at central
+        banks, why is the multiplier still in textbooks? Three reasons.
+        First, it is genuinely simpler to explain. Second, in the era of
+        binding reserve requirements (US pre-1990s, much of EM still) it was
+        a defensible approximation. Third — and this matters — the policy
+        debate becomes politically harder once you accept that money
+        creation is a private decision made by commercial banks responding
+        to <em>perceived profitable demand</em>. That reframes a lot of
+        arguments.
+      </p>
+
+      <blockquote>
+        &quot;Whenever a bank makes a loan, it simultaneously creates a
+        matching deposit in the borrower&apos;s bank account, thereby
+        creating new money.&quot;
+        <cite>Bank of England · Quarterly Bulletin · Q1 2014</cite>
+      </blockquote>
+
+      <h3>Edge cases the simple story hides</h3>
+      <p>
+        <strong>Interbank settlement.</strong> When Alice spends her new
+        deposit at a vendor banked elsewhere, the issuing bank loses
+        reserves to the receiving bank. Aggregated across the system, no
+        reserves are lost — but for any single bank, profligate lending
+        without a deposit base draws down reserves and gets expensive fast.
+      </p>
+      <p>
+        <strong>Shadow banking.</strong> Money-market funds, repo,
+        securitisation. These create <em>money-like</em> claims outside the
+        bank balance sheet. The 2008 crisis was, mechanically, a run on
+        shadow money — instruments treated as deposits by their holders
+        without any of the regulatory scaffolding.
+      </p>
+      <p>
+        <strong>Reserve abundance.</strong> Post-QE, US banks hold vastly
+        more reserves than any reserve requirement would demand. The policy
+        rate now works through the rate the Fed pays on reserves, not
+        through reserve scarcity. The plumbing has changed; the textbook
+        hasn&apos;t caught up.
+      </p>
+
+      <h3>If you want to go further</h3>
+      <p>
+        The right next moves depend on appetite. For mechanism: the BoE 2014
+        paper is short and authoritative. For history: Mehrling&apos;s{" "}
+        <em>The New Lombard Street</em>. For political-economy stakes:
+        Pistor&apos;s <em>The Code of Capital</em>. For a contrarian angle:
+        Werner&apos;s empirical work on credit allocation.
+      </p>
+
+      <Check
+        question="A bank issues a $200,000 mortgage. What happens to the money supply, mechanically?"
+        options={[
+          {
+            label: "It rises by $200,000 — the bank credits a new deposit into the borrower's account.",
+            correct: true,
+            explain:
+              "The bank doesn't transfer money from a saver — it writes a new deposit into existence. Money supply (M1/M2) rises by the loan amount the moment the bank books the loan.",
+          },
+          {
+            label: "It stays the same — the bank lent out an existing depositor's funds.",
+            explain:
+              "This is the textbook intermediation story, and it's wrong as mechanism. The BoE 2014 paper says so explicitly. Banks don't need a prior deposit to lend.",
+          },
+          {
+            label: "It falls by $200,000 — money is destroyed when loans are issued.",
+            explain:
+              "Money is destroyed when loans are *repaid*, not when they're issued. The deposit credited at origination is new money; the principal repayment unwrites it.",
+          },
+        ]}
+        seeAlso={{ href: "/nodes/A3?l=2", label: "the sandbox in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);

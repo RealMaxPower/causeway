@@ -1,0 +1,234 @@
+import { L1, L1QA, L2, L2Grid, L2Step, Callout, SideRail, KeyTerm, L3, L3Grid, Debate, DebateSide, Sources, Check } from "@/components/layers";
+import { SuddenStop } from "@/components/widgets/sudden-stop";
+
+export const meta = {
+  heroClaim: {
+    lbl: "The pattern",
+    text: "Emerging-market crises follow a canonical shape: hot foreign money flows in for years, sentiment flips, money flees in weeks. Mexico 1994, Asia 1997, Russia 1998, Turkey 2018 — same script, different cast.",
+    sub: "The early-warning indicators are well-known: current-account deficit, short-term foreign-currency debt, and reserve cover. Knowing them doesn't prevent the crisis; it gives you a few months' lead.",
+  },
+  heroStatsLabel: "By the numbers",
+  heroStats: [
+    { lbl: "Three numbers the alarm watches", val: "3", sub: "Current-account deficit · short-term foreign-currency debt · central-bank reserves vs short-term obligations." },
+  ],
+};
+
+export const L1Body = (
+  <L1 title="The thirty-second answer">
+    <div>
+      <L1QA question="What is this?">
+        Foreign money rushes in for years, then flips. The reversal — the
+        &quot;sudden stop&quot; — is the canonical script of emerging-market
+        crises since 1994. Recognising the diagnostics (CA deficit, short-term
+        FX debt, reserve cover) is the entire alarm system.
+      </L1QA>
+      <L1QA question="Why should I care?">
+        If you live in an emerging market, your local currency mortgage is
+        denominated in something that can lose 30% in a quarter. Hard-currency
+        debt looks cheaper until the swing — and then it doesn&apos;t. If
+        you&apos;re investing in EM assets, the smile of the dollar tells
+        you which way the wind is about to blow.
+      </L1QA>
+    </div>
+    <div style={{ border: "1px solid var(--rule)", borderRadius: "var(--r-md)", padding: 18, background: "var(--paper-2)" }}>
+      <div style={{ fontFamily: "var(--cw-mono)", fontSize: 10.5, letterSpacing: "0.14em", color: "var(--ink-3)", textTransform: "uppercase", marginBottom: 12 }}>
+        Sudden-stop signature
+      </div>
+      <dl style={{ margin: 0, display: "grid", gridTemplateColumns: "1fr auto", gap: "10px 16px", fontFamily: "var(--cw-serif)" }}>
+        <dt style={{ color: "var(--ink-2)" }}>Pre-crisis: net inflows</dt>
+        <dd style={{ margin: 0, color: "var(--cw-green)", fontFamily: "var(--cw-mono)" }}>+5% of GDP</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Crisis: net outflows</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>−5%</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Swing in months</dt>
+        <dd style={{ margin: 0, color: "var(--gold-deep)", fontFamily: "var(--cw-mono)" }}>10% of GDP</dd>
+        <dt style={{ color: "var(--ink-2)" }}>Currency depreciation</dt>
+        <dd style={{ margin: 0, color: "var(--cw-red)", fontFamily: "var(--cw-mono)" }}>30–60%</dd>
+      </dl>
+    </div>
+  </L1>
+);
+
+export const L2Body = (
+  <L2 title="The same script, different countries">
+    <L2Grid
+      rail={
+        <SideRail title="Key terms">
+          <KeyTerm term="Sudden stop">
+            A rapid reversal of capital inflows. Calvo (1998) named the
+            pattern; the empirical regularity precedes the term by
+            centuries.
+          </KeyTerm>
+          <KeyTerm term="Original sin">
+            EM borrowers can&apos;t borrow long-term in their own currency.
+            Forces them to take FX risk; the FX risk explodes during
+            sudden stops.
+          </KeyTerm>
+          <KeyTerm term="Reserve cover">
+            FX reserves ÷ short-term external debt. Below 1× is a flashing
+            warning; below 0.5× and a crisis is usually within months.
+          </KeyTerm>
+          <KeyTerm term="Currency mismatch">
+            Liabilities in foreign currency, assets in local currency. The
+            instability multiplier when FX moves.
+          </KeyTerm>
+          <KeyTerm term="Trilemma">
+            Open capital account + fixed exchange rate + independent
+            monetary policy. Pick two. Sudden stops are usually trilemma
+            failures.
+          </KeyTerm>
+        </SideRail>
+      }
+    >
+      <L2Step num="01" title="Same flow, different sign">
+        <p className="lede">
+          Capital crossing borders is the lubricant of global growth and
+          the accelerant of every emerging-market crisis. Same flows;
+          different signs.
+        </p>
+        <p>
+          When a country looks attractive — high growth, stable politics,
+          cheap factor costs — capital floods in. Local currency
+          strengthens, asset prices rise, lending booms.
+        </p>
+      </L2Step>
+
+      <L2Step num="02" title="The flip">
+        <p>
+          When perceptions flip — a weak data point, a contagion from
+          elsewhere, a regime change — capital reverses. The{" "}
+          <strong>same flow</strong> that was investment is now flight.
+          Currency collapses, asset prices fall, lending freezes. The
+          historical record shows this isn&apos;t gradual erosion — it&apos;s
+          a cliff.
+        </p>
+      </L2Step>
+
+      <L2Step num="03" title="Calvo's pattern">
+        <p>
+          Calvo&apos;s &quot;sudden stops&quot; research showed this is
+          the dominant pattern in EM crises: not gradual erosion, but a
+          cliff. The 1997 Asian crisis, 1998 Russia, 2001 Argentina,
+          2018 Turkey, 2022 Sri Lanka all share this shape.
+        </p>
+      </L2Step>
+
+      <L2Step num="04" title="Defense vs float">
+        <p>
+          When the cliff arrives, central banks have two options: defend
+          the exchange rate (sell reserves, hike rates aggressively) or
+          let the currency float. <strong>Reserves are finite</strong>;
+          you can&apos;t defend forever. Successful defenses are rare
+          (Hong Kong 1997 is the canonical case, and it took an extreme
+          rate posture). Most attempted defenses end with the currency
+          breaking anyway plus the reserves being gone.
+        </p>
+      </L2Step>
+
+      <Callout
+        title="If your debt is in dollars and your income is in pesos, you are the FX position."
+        link={{ to: "/nodes/H6", text: "H6 · Currency exposure you didn't know you had" }}
+      >
+        <p>
+          If you live in an emerging market, your local currency mortgage
+          is denominated in something that can lose 30% in a quarter.
+          Hard-currency debt looks cheaper until the swing — and then it
+          doesn&apos;t. The widget below shows you the cascade.
+        </p>
+      </Callout>
+
+      <Callout
+        title="See three EMs side-by-side"
+        link={{ to: "/compare?c=ARG,TUR,BRA&i=FP.CPI.TOTL.ZG,BN.CAB.XOKA.GD.ZS,GC.DOD.TOTL.GD.ZS", text: "Compare · Argentina, Türkiye, Brazil" }}
+      >
+        <p>
+          The fingerprints of a sudden-stop-prone country show up early on
+          the routine indicators — high inflation, negative current account,
+          rising debt. Put three EMs side-by-side and the divergence is
+          loud.
+        </p>
+      </Callout>
+    </L2Grid>
+
+    <SuddenStop />
+  </L2>
+);
+
+export const L3Body = (
+  <L3 title="History, debate, sources">
+    <L3Grid
+      sources={
+        <Sources
+          ids={[
+            "reinhart-rogoff-this-time-different-2009",
+            "rey-dilemma-not-trilemma-2015",
+            "calvo-capital-market-crises-1998",
+            "imf-institutional-view-capital-flows-2012",
+            "eichengreen-capital-flows-crises-2003",
+          ]}
+        />
+      }
+    >
+      <h3>Identifiable since the 19th century</h3>
+      <p>
+        The pattern was identifiable in the 19th century (Latin American
+        defaults of the 1820s, 1870s). Modern theoretical framing is
+        Calvo (1998); empirical work spans Reinhart-Rogoff and the IMF
+        crisis literature. The 1997 Asian crisis brought it into modern
+        policy debate; every EM crisis since has been read against the
+        same script.
+      </p>
+
+      <Debate question="Should countries use capital controls — or fix fundamentals?">
+        <DebateSide side="mainstream" who="● Free flows + fundamentals">
+          <p>
+            Capital flees because the country is mismanaged. Treat the
+            disease, not the symptom. Maintain credible institutions,
+            reasonable deficits, and adequate reserve cover; flows will
+            stay attached.
+          </p>
+        </DebateSide>
+        <DebateSide side="heterodox" who="● Capital controls">
+          <p>
+            Slow the flows. Tobin tax, reserve requirements on inflows.
+            Smooth out the boom-bust cycle. Rey&apos;s &quot;Dilemma not
+            Trilemma&quot; argues capital flows are driven by global
+            financial conditions independent of domestic fundamentals —
+            so controls are necessary for any country smaller than the US.
+          </p>
+        </DebateSide>
+      </Debate>
+
+      <h3>Why dollar cycles drive the script</h3>
+      <p>
+        EM crises cluster around strong-dollar episodes (1982, 1997-98,
+        2018, 2022). The dollar smile (
+        <a href="/nodes/A6" style={{ color: "var(--gold-deep)" }}>A6</a>)
+        and the sudden-stop cliff are two views of the same phenomenon:
+        when the dollar rallies, dollar-denominated EM debt becomes
+        more burdensome in local-currency terms; investors flee; the
+        local currency falls; the dollar rallies more; repeat. The
+        gravitational pull is uneven.
+      </p>
+
+      <Check
+        question="Which combination is the canonical sudden-stop fingerprint?"
+        options={[
+          {
+            label: "Persistent current-account surplus + reserves accumulating + low foreign-denominated debt — the country is financing the rest of the world.",
+            explain: "That's a surplus country (China 2005-style). It doesn't have a sudden-stop problem; the rest of the world has a recycling problem."
+          },
+          {
+            label: "Persistent current-account deficit + heavy short-term FX-denominated debt + thin reserve cover relative to that debt — the alarm bell of EM crises since 1994.",
+            correct: true,
+            explain: "Right. Three diagnostics: deficit-financed (depends on inflows), foreign-currency debt (FX move kills you), short maturity (rollover risk). When all three are present, the reversal is mechanical once foreign creditors stop rolling."
+          },
+          {
+            label: "Heavy fiscal deficit + high inflation + currency controls — the classic emerging-market policy failure.",
+            explain: "These can coexist with the sudden-stop fingerprint but they're not what defines it. A sudden stop is specifically a capital-flow reversal driven by foreign-creditor behaviour, not domestic policy errors."
+          }
+        ]}
+        seeAlso={{ href: "/nodes/D4?l=2", label: "the sudden-stop widget in L2" }}
+      />
+    </L3Grid>
+  </L3>
+);
