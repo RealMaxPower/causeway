@@ -14,8 +14,8 @@
 
 import { Anthropic } from "@anthropic-ai/sdk";
 import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
 import { z } from "zod";
+import { redisFromEnv } from "@/lib/redis";
 import { buildSystemPrompt } from "@/lib/tutor/prompt";
 import { recordTutorCall, isWithinDailyBudget } from "@/lib/tutor/cost";
 
@@ -38,13 +38,10 @@ const allowedOrigins = (process.env.TUTOR_ALLOWED_ORIGINS ?? "")
 // Per-IP rate limit backed by Upstash Redis. Two sliding windows: a tight
 // per-minute cap blocks bursts and a per-day cap blocks slow drains. Both
 // must pass; either tripping returns 429 with Retry-After. Disabled when
-// UPSTASH_REDIS_REST_{URL,TOKEN} are missing so local dev and unconfigured
-// previews still work — the in-memory daily budget remains as defense in
-// depth in that case.
-const redis =
-  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-    ? Redis.fromEnv()
-    : null;
+// the Redis credentials are missing so local dev and unconfigured previews
+// still work — the in-memory daily budget remains as defense in depth in
+// that case. Accepts both UPSTASH_* and KV_* env names (see lib/redis).
+const redis = redisFromEnv();
 
 const minuteLimiter = redis
   ? new Ratelimit({
