@@ -20,9 +20,9 @@ describe("tracks module", () => {
       }
     });
 
-    it("totals 43 nodes", () => {
-      expect(TOTAL_NODES).toBe(43);
-      expect(allNodeIds()).toHaveLength(43);
+    it("totals 44 nodes", () => {
+      expect(TOTAL_NODES).toBe(44);
+      expect(allNodeIds()).toHaveLength(44);
     });
   });
 
@@ -75,8 +75,8 @@ describe("tracks module", () => {
       expect(readyCount).toBeGreaterThanOrEqual(40);
     });
 
-    it("G4 and G5 are ready but flagged as topicContested", () => {
-      for (const id of ["G4", "G5"]) {
+    it("G4, G5 and H9 are ready but flagged as topicContested", () => {
+      for (const id of ["G4", "G5", "H9"]) {
         const n = findNode(id)!.node;
         expect(n.status).toBe("ready");
         expect(n.topicContested).toBe(true);
@@ -87,7 +87,7 @@ describe("tracks module", () => {
       const flagged = allNodeIds()
         .filter((id) => findNode(id)!.node.topicContested === true)
         .sort();
-      expect(flagged).toEqual(["G4", "G5"]);
+      expect(flagged).toEqual(["G4", "G5", "H9"]);
     });
   });
 
