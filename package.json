@@ -65,7 +65,7 @@
     "shadcn": "^4.7.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.11"
   },
   "pnpm": {
     "overrides": {
