@@ -1,0 +1,13 @@
+# Exceptions for the OSV vulnerability scan in CI. Each entry must explain
+# why the finding is not reachable and expire, so it gets re-checked.
+
+[[IgnoredVulns]]
+# braces: stack exhaustion on deeply nested brace patterns (CVE-2026-93687).
+# No patched release exists; 3.0.3 is both the latest and last affected
+# version. braces is not in the production graph: it reaches this repo only
+# through dev tooling (eslint-config-next and shadcn, via fast-glob ->
+# micromatch), which expands glob patterns written in this repo, never user
+# input. Drop this entry as soon as a fixed braces release ships.
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2027-01-06
+reason = "No fix released; dev-only path (eslint-config-next, shadcn) over repo-authored globs. Re-check by expiry."
