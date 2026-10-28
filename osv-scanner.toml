@@ -1,12 +1,2 @@
 # Exceptions for the OSV vulnerability scan in CI. Each entry must explain
 # why the finding is not reachable and expire, so it gets re-checked.
-
-[[IgnoredVulns]]
-# deepmerge: mergeObject() prototype poisoning of returned objects.
-# No patched release exists; 4.3.1 is both the latest and last affected
-# version. deepmerge is not in the production graph: it reaches this repo
-# only through the shadcn scaffolding CLI, which is never run in the build,
-# CI or at runtime. Drop this entry as soon as a fixed deepmerge ships.
-id = "GHSA-gcqx-w48m-w2h4"
-ignoreUntil = 2027-01-27
-reason = "No fix released; dev-only path (shadcn CLI), never executed in build, CI or runtime. Re-check by expiry."
