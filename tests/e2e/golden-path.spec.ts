@@ -14,10 +14,15 @@ test.describe("Causeway golden path", () => {
   test("home page renders the eight-track grid", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Causeway/);
-    await expect(page.getByRole("heading", { name: /the eight tracks/i })).toBeVisible();
-    // All eight track cards present as links
+    const heading = page.getByRole("heading", { name: /the eight tracks/i });
+    await expect(heading).toBeVisible();
+    // Track links also appear in SideNav and the (hidden) MobileNav drawer,
+    // which come first in DOM order. Scope to the grid section so each card
+    // must be visible and unique.
+    const grid = page.locator("section").filter({ has: heading });
+    await expect(grid.locator('a[href^="/tracks/"]')).toHaveCount(8);
     for (const letter of ["A", "B", "C", "D", "E", "F", "G", "H"]) {
-      await expect(page.locator(`a[href="/tracks/${letter}"]`).first()).toBeVisible();
+      await expect(grid.locator(`a[href="/tracks/${letter}"]`)).toBeVisible();
     }
   });
 
