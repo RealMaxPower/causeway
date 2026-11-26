@@ -29,6 +29,9 @@ export interface WbSeries {
 
 const WB_BASE = "https://api.worldbank.org/v2";
 const REVALIDATE_SECONDS = 60 * 60 * 6;
+// Give up on a slow upstream and serve the snapshot instead of hanging the
+// page. Only cache misses pay this; hits come from the 6h data cache.
+const TIMEOUT_MS = 8_000;
 
 interface WbApiObservation {
   indicator: { id: string; value: string };
@@ -40,8 +43,8 @@ interface WbApiObservation {
 
 /**
  * Fetch the most-recent `perPage` observations for one (country, indicator).
- * Observations come back newest-first. `fallback` is returned if the API
- * key is unset, the upstream fails, or the response shape is unexpected.
+ * Observations come back newest-first. `fallback` is returned if the
+ * upstream fails or times out, or the response shape is unexpected.
  */
 export async function fetchWbSeries(
   indicator: string,
@@ -65,7 +68,10 @@ export async function fetchWbSeries(
   const url = `${WB_BASE}/country/${encodeURIComponent(countryIso3)}/indicator/${encodeURIComponent(indicator)}?format=json&per_page=${perPage}`;
 
   try {
-    const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS } });
+    const res = await fetch(url, {
+      next: { revalidate: REVALIDATE_SECONDS },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
     if (!res.ok) throw new Error(`WB ${indicator}/${countryIso3} ${res.status}`);
     const json: unknown = await res.json();
     const parsed = parseWbResponse(json);

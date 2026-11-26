@@ -78,10 +78,30 @@ const ANTI_BOT_HOSTS = new Set([
   // Round 7: think-tank pages that 403 GitHub Actions' cloud IPs but
   // resolve 200 for browsers.
   "www.bruegel.org",
+  // Round 8: Cloudflare bot challenge (`cf-mitigated: challenge`) for any
+  // automated request, including from a desktop machine.
+  "press.princeton.edu",
 ]);
+
+// A 503 or 429 that carries Retry-After is the server saying "down for now,
+// come back later" (e.g. maintenance), not that the URL is gone. Warn
+// instead of failing; a URL that is really dead stops sending it.
+const TEMPORARY_STATUSES = new Set([429, 503]);
+
+function classify(res, url, id) {
+  if (res.ok) return { id, url, ok: true, status: res.status };
+  if (res.status === 403 && ANTI_BOT_HOSTS.has(new URL(url).host)) {
+    return { id, url, ok: true, status: res.status, antiBot: true };
+  }
+  if (TEMPORARY_STATUSES.has(res.status) && res.headers.has("retry-after")) {
+    return { id, url, ok: true, status: res.status, temporary: true };
+  }
+  return { id, url, ok: false, status: res.status };
+}
 
 let failed = 0;
 let antiBot = 0;
+let temporary = 0;
 
 async function checkOne(url, id) {
   try {
@@ -90,22 +110,14 @@ async function checkOne(url, id) {
     if (!res.ok && res.status !== 405) {
       res = await fetch(url, { method: "GET", redirect: "follow", headers: HEADERS });
     }
-    const host = new URL(url).host;
-    if (!res.ok && res.status === 403 && ANTI_BOT_HOSTS.has(host)) {
-      return { id, url, ok: true, status: res.status, antiBot: true };
-    }
-    return { id, url, ok: res.ok, status: res.status };
+    return classify(res, url, id);
   } catch {
     // Connect-level failure (Cloudflare TLS drop, DNS, etc). Retry once
     // with GET in case HEAD specifically was rejected. If that also throws,
     // treat allowlisted hosts as anti-bot — the URL is still canonical.
     try {
       const res = await fetch(url, { method: "GET", redirect: "follow", headers: HEADERS });
-      const host = new URL(url).host;
-      if (!res.ok && res.status === 403 && ANTI_BOT_HOSTS.has(host)) {
-        return { id, url, ok: true, status: res.status, antiBot: true };
-      }
-      return { id, url, ok: res.ok, status: res.status };
+      return classify(res, url, id);
     } catch (err2) {
       const host = (() => {
         try { return new URL(url).host; } catch { return ""; }
@@ -139,12 +151,21 @@ for (let i = 0; i < urls.length; i += CONCURRENCY) {
 }
 
 for (const r of results) {
-  const tag = r.antiBot ? "WARN" : r.ok ? "  ok" : "FAIL";
-  const detail = r.error ? ` (${r.error})` : r.antiBot ? " (anti-bot · skipped)" : "";
+  const tag = r.antiBot || r.temporary ? "WARN" : r.ok ? "  ok" : "FAIL";
+  const detail = r.error
+    ? ` (${r.error})`
+    : r.antiBot
+      ? " (anti-bot · skipped)"
+      : r.temporary
+        ? " (temporarily unavailable · Retry-After)"
+        : "";
   console.log(`[${tag}] ${String(r.status).padStart(3, " ")}  ${r.id}  ${r.url}${detail}`);
   if (!r.ok) failed++;
   if (r.antiBot) antiBot++;
+  if (r.temporary) temporary++;
 }
 
-console.log(`\n${results.length - failed} ok (${antiBot} anti-bot), ${failed} broken.`);
+console.log(
+  `\n${results.length - failed} ok (${antiBot} anti-bot, ${temporary} temporarily down), ${failed} broken.`,
+);
 process.exit(failed === 0 ? 0 : 1);

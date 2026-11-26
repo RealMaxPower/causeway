@@ -1136,7 +1136,7 @@ export const SOURCES: Record<string, Source> = {
     title: "The Chicago Plan Revisited",
     year: "2012",
     kind: "report",
-    url: "https://www.imf.org/external/pubs/cat/longres.aspx?sk=26178.0",
+    url: "https://www.imf.org/en/Publications/WP/Issues/2016/12/31/The-Chicago-Plan-Revisited-26178",
   },
   "bis-trade-finance-collapse-2009": {
     id: "bis-trade-finance-collapse-2009",
@@ -1332,7 +1332,7 @@ export const SOURCES: Record<string, Source> = {
     title: "Papers on the Fiscal Theory of the Price Level (homepage)",
     year: "various",
     kind: "academic",
-    url: "http://sims.princeton.edu/",
+    url: "https://www.princeton.edu/~sims/",
   },
   "bernanke-gertler-watson-systematic-policy-1997": {
     id: "bernanke-gertler-watson-systematic-policy-1997",
