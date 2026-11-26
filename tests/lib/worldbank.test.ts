@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { latestWb, parseWbResponse } from "@/lib/data/worldbank";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { fetchWbSeries, latestWb, parseWbResponse } from "@/lib/data/worldbank";
 import {
   COUNTRIES,
   DEFAULT_COUNTRY_CODES,
@@ -128,5 +128,30 @@ describe("country + indicator catalogues", () => {
   it("default selections fit within the route limits", () => {
     expect(DEFAULT_COUNTRY_CODES.length).toBeLessThanOrEqual(MAX_COUNTRIES);
     expect(DEFAULT_INDICATOR_CODES.length).toBeLessThanOrEqual(MAX_INDICATORS);
+  });
+});
+
+describe("fetchWbSeries", () => {
+  const fallback = [{ date: "2024", value: 1 }];
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+  });
+
+  it("passes a timeout signal and serves the fallback when it fires", async () => {
+    vi.stubEnv("WORLDBANK_OFFLINE", "");
+    const fetchMock = vi.fn<typeof fetch>(async () => {
+      throw new DOMException("The operation timed out.", "TimeoutError");
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const series = await fetchWbSeries("NY.GDP.PCAP.CD", "USA", fallback);
+
+    // Assert outside the mock: fetchWbSeries swallows errors thrown inside it.
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(fetchMock.mock.calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
+    expect(series.source).toBe("fallback");
+    expect(series.observations).toEqual(fallback);
   });
 });

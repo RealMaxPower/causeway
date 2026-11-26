@@ -140,8 +140,7 @@ jobs:
     name: E2E (Playwright)
     runs-on: ubuntu-latest
     # playwright.config.ts builds the app and serves it with `next start`, so
-    # the specs run against the production output. Needs no secrets: specs
-    # that depend on external APIs skip themselves.
+    # the specs run against the production output. Needs no secrets.
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
@@ -160,8 +159,13 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium webkit
 
+      # Serve /compare from the bundled World Bank snapshot so the specs don't
+      # depend on the live API being fast from GitHub's runners. This also
+      # runs the snapshot-badge spec, which skips without it.
       - name: Run E2E
         run: pnpm e2e
+        env:
+          WORLDBANK_OFFLINE: "1"
 
       # Traces are recorded on the first retry (see playwright.config.ts).
       - name: Upload test results
