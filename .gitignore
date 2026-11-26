@@ -2,6 +2,10 @@
 node_modules/
 .pnpm-store/
 
+# locally installed, pinned sensitive-data scanners (never publication inputs)
+.sensitive-data-tools/
+scripts/sensitive-data/__pycache__/
+
 # next.js
 .next/
 out/

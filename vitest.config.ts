@@ -15,8 +15,11 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: false,
-    // Exclude the legacy v0 prototype + Next build output from collection.
-    exclude: ["node_modules", "legacy", ".next", "tests/e2e"],
+    // Privacy guards use node:test and isolated Git repositories, not Vitest.
+    exclude: [
+      "node_modules", "legacy", ".next", ".sensitive-data-tools",
+      "tests/e2e", "tests/privacy",
+    ],
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],

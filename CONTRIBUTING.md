@@ -34,7 +34,7 @@ Two paths, both fine, mix freely on the same rail:
 />
 ```
 
-- **Registry path**: add to `lib/sources.ts` with a canonical URL, then reference by id. CI's `pnpm check:sources` HEAD-pings every URL — if you can't find a stable publisher landing page in <60s, leave the citation inline.
+- **Registry path**: add to `lib/sources.ts` with a canonical URL, then reference by id. `pnpm check:sources` checks registered URLs on the weekly schedule and manual CI runs. Prefer a stable publisher or institution landing page.
 - **Inline path**: `entries={[{ who, title, year }]}` works for one-off references.
 
 ### …fix a bug or polish a widget
@@ -44,21 +44,59 @@ Open an issue first if the change is non-obvious. Small fixes can come straight 
 
 ```bash
 pnpm install
+pnpm privacy:setup         # Git, Node 22, and Python 3.11–3.13 required
+pnpm privacy:tools         # verify pinned detectors and model
+pnpm privacy:install-hooks # installs the local publication gates
 cp .env.example .env.local   # FRED_API_KEY, ANTHROPIC_API_KEY (optional)
 pnpm dev
 ```
 
 Dev server runs at `http://localhost:3000`. Pass `-p 3033` (or your preferred port) if 3000 is busy.
 
-## Before you commit
+The sensitive-data bootstrap downloads pinned tools into the ignored
+`.sensitive-data-tools/` directory; analysis runs locally. Hook installation
+refuses conflicting custom hooks rather than overwriting them. Follow
+[docs/SENSITIVE_DATA.md](docs/SENSITIVE_DATA.md) for setup, integration,
+reviewed exceptions, artifact inspection, and the first-commit bootstrap.
+
+## Before a commit or publication
+
+Finish the relevant checks and review the complete diff:
 
 ```bash
-pnpm typecheck     # tsc --noEmit
 pnpm lint          # eslint
+pnpm typecheck     # tsc --noEmit
+pnpm test          # application/model unit tests
+pnpm test:privacy  # publication guards in isolated temporary repositories
 pnpm build:corpus  # regenerate search index if you touched any .mdx
+pnpm check:links
+pnpm privacy:scan  # tracked working files + unignored untracked files
 ```
 
-CI runs lint + typecheck + corpus-drift + `check:links` + `check:sources` + `pnpm audit --prod --audit-level=high` on every PR (plus a Sunday-06:00-UTC cron). The corpus check **will fail your PR** if you edited an MDX without committing the regenerated `lib/search-corpus.generated.ts`. The link checker validates every `/nodes/<id>` href, `meta.relatedNodes`, `<Cite id>`, and `<Sources ids>` against the catalogue. `check:sources` is non-blocking (publisher anti-bot rules surface as yellow warnings, not red gates).
+Run `pnpm build` and `pnpm e2e` for the final application check. Then stage
+only the intended files and run `pnpm privacy:staged`. The hooks also scan
+the exact staged tree and final commit message, rechecking their identity;
+the push hook scans outgoing history, including secrets deleted by later
+commits. A working-tree scan does not replace these checks. Missing tools,
+unresolved findings, and unreviewed binary payloads block publication.
+
+Scan PR titles, bodies, and attachments with `pnpm privacy:artifacts` before
+upload, and rescan edits. Never paste raw detector matches or upload uninspected
+Playwright traces. No bypasses or unscanned GitHub web/API edits are allowed.
+**Agents need explicit user approval before a real repository commit, push,
+or GitHub publication.** Passing checks does not grant that approval.
+
+CI runs lint, typecheck, unit tests, corpus drift, internal links, an OSV
+dependency scan, and production-build Playwright tests. Sensitive-data history
+scans and guard regression tests run on both Linux and macOS. CI is a second
+check after upload; local scans must pass before any upload. External source
+URL checks run only on the Sunday schedule or manual dispatch and remain
+non-blocking because publisher availability and anti-bot behavior can vary.
+
+The corpus check fails if MDX changes lack a matching regenerated
+`lib/search-corpus.generated.ts`. The internal link checker verifies node
+references against MDX filenames and citation IDs against the source registry;
+it does not establish that the cited source supports the claim.
 
 ## Commit messages
 

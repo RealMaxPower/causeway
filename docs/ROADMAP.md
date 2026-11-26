@@ -10,6 +10,14 @@ cross-cutting tools that turn understanding into decisions.
 This file is **forward-looking only**. For what has already shipped, see the
 [CHANGELOG](../CHANGELOG.md).
 
+## Remediation program
+
+The [22 PR remediation plan](REMEDIATION_PLAN.md) sequences the November 2026
+review findings, curriculum improvements across all 44 nodes, tutor work, and
+performance changes. Every commit and push requires local secret and PII
+scanning. PR 1 establishes the automated gates and must itself be scanned
+before its first commit.
+
 ## Direction
 
 Themes, not dated commitments — a solo project moves as time allows.

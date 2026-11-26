@@ -1,0 +1,5 @@
+#!/bin/sh
+# Causeway privacy gate v1
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+exec node scripts/sensitive-data/cli.mjs commit-msg "$1"
