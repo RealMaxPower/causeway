@@ -81,6 +81,9 @@ const ANTI_BOT_HOSTS = new Set([
   // Round 8: Cloudflare bot challenge (`cf-mitigated: challenge`) for any
   // automated request, including from a desktop machine.
   "press.princeton.edu",
+  // 403 to GitHub Actions' cloud IPs, 200 for the same request from a
+  // desktop (seen on the Sims homepage).
+  "www.princeton.edu",
 ]);
 
 // A 503 or 429 that carries Retry-After is the server saying "down for now,

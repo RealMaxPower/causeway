@@ -155,9 +155,48 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Cache what the next step downloads: the browsers (per Playwright
+      # version) and the system packages they need (per runner OS). The step
+      # normally takes under a minute, but a slow Ubuntu mirror once
+      # stretched the package download to 14 minutes.
+      - name: Resolve Playwright cache keys
+        id: pw
+        run: |
+          echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
+          echo "image=$ImageOS" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: pw-browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ steps.pw.outputs.version }}
+
+      - name: Cache Playwright system packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/playwright-debs
+          key: playwright-debs-${{ steps.pw.outputs.image }}-${{ steps.pw.outputs.version }}
+
       # Chromium for the desktop specs, WebKit for the iPhone 13 mobile spec.
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium webkit
+      # Cached .deb files go into apt's archive so apt skips downloading them.
+      - name: Install Playwright browsers and system dependencies
+        env:
+          BROWSERS_CACHED: ${{ steps.pw-browsers.outputs.cache-hit }}
+        run: |
+          debs="$HOME/.cache/playwright-debs"
+          mkdir -p "$debs"
+          echo 'APT::Keep-Downloaded-Packages "true";' | sudo tee /etc/apt/apt.conf.d/99keep-debs > /dev/null
+          if compgen -G "$debs/*.deb" > /dev/null; then
+            sudo cp "$debs"/*.deb /var/cache/apt/archives/
+          fi
+          if [ "$BROWSERS_CACHED" = "true" ]; then
+            pnpm exec playwright install-deps chromium webkit
+          else
+            pnpm exec playwright install --with-deps chromium webkit
+          fi
+          cp /var/cache/apt/archives/*.deb "$debs"/ 2>/dev/null || true
+          echo "Cached system packages: $(find "$debs" -name '*.deb' | wc -l) files, $(du -sh "$debs" | cut -f1)"
 
       # Serve /compare from the bundled World Bank snapshot so the specs don't
       # depend on the live API being fast from GitHub's runners. This also
