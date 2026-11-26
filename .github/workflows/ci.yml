@@ -23,7 +23,7 @@ permissions:
 
 jobs:
   lint-and-typecheck:
-    name: Lint + typecheck
+    name: Lint + typecheck + unit tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -46,6 +46,48 @@ jobs:
         run: |
           rm -f .next/dev/types/validator.ts
           pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+  sensitive-data:
+    name: Sensitive data and guard tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # A removed secret can remain in a parent commit or another ref.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned local detectors
+        run: pnpm privacy:setup
+
+      - name: Verify scanner and model integrity
+        run: pnpm privacy:tools
+
+      - name: Guard regression tests in isolated repositories
+        run: pnpm test:privacy
+
+      # This is defense in depth after upload, not permission to skip local
+      # staged-tree, outgoing-history, message, or publication-artifact scans.
+      - name: Scan all available refs and their history
+        run: pnpm privacy:history
 
   build-corpus-drift:
     name: Search corpus is in sync with MDX
@@ -206,11 +248,7 @@ jobs:
         env:
           WORLDBANK_OFFLINE: "1"
 
-      # Traces are recorded on the first retry (see playwright.config.ts).
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: playwright-test-results
-          path: test-results/
-          retention-days: 7
+      # No automatic upload of test-results: traces/screenshots can contain
+      # sensitive data, and an uninspected trace archive must fail closed.
+      # Reproduce locally, inspect and scan the exact artifacts before any
+      # approved upload; see docs/SENSITIVE_DATA.md.

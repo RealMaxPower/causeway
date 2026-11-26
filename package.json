@@ -24,9 +24,17 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:privacy": "node --test tests/privacy/*.test.mjs",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "privacy:setup": "python3 scripts/sensitive-data/bootstrap.py",
+    "privacy:install-hooks": "node scripts/sensitive-data/install-hooks.mjs",
+    "privacy:scan": "node scripts/sensitive-data/cli.mjs worktree",
+    "privacy:staged": "node scripts/sensitive-data/cli.mjs staged",
+    "privacy:history": "node scripts/sensitive-data/cli.mjs history",
+    "privacy:artifacts": "node scripts/sensitive-data/cli.mjs artifact",
+    "privacy:tools": "node scripts/sensitive-data/cli.mjs verify-tools"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.95.2",

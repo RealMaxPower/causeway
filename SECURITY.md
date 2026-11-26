@@ -100,12 +100,20 @@ to Anthropic. The realistic risks are:
   or analytics that identify users. Vercel Analytics is used in cookieless mode.
 - **Opaque error responses.** Upstream failures return `503 tutor_unavailable`
   with the underlying error logged server-side only.
-- **CI checks.** `pnpm lint`, `pnpm typecheck`, `pnpm build:corpus`
-  (drift check), `pnpm check:links`, `pnpm check:sources` (non-blocking),
-  and `pnpm audit --prod --audit-level=high` run on every PR plus a
-  weekly Sunday cron. Unit (`pnpm test`) and E2E (`pnpm e2e`) suites
-  exist locally but are not yet wired into the workflow — run them
-  before tagging a release.
+- **Publication checks.** Local secret and PII scans check staged content,
+  commit messages and identities, outgoing history, and publication artifacts.
+  Findings and scanner failures block publication. Agents must obtain the
+  user's explicit approval of the diff and redacted scan summary before any
+  repository commit or GitHub publication. See
+  [the sensitive-data workflow](docs/SENSITIVE_DATA.md) for installation,
+  narrow review exceptions, and detection limits. Local hooks can be bypassed;
+  a passing CI job is not permission to skip the required local checks.
+- **CI checks.** Every PR runs lint, typecheck, unit tests, search-corpus drift,
+  internal-link checks, OSV dependency scanning, and production-build E2E.
+  The privacy job verifies the pinned local detectors, runs guard regression
+  tests on Linux and macOS, and scans available Git history. External source
+  URL checks run on the weekly schedule or manual dispatch and are non-blocking.
+  Raw browser traces and scanner findings are not automatically uploaded.
 
 ## What we ask deployers to add
 
@@ -140,8 +148,9 @@ list. The repository's `.gitignore` excludes `.env`, `.env.local`, and
 - Dependabot security updates are enabled for npm dependencies.
 - High- and critical-severity advisories block release; medium and below are
   triaged on the next maintenance cycle.
-- Run `pnpm audit --prod` before tagging a release. Lockfile churn from
-  transitive dependencies should be reviewed, not blindly accepted.
+- Review the OSV lockfile scan before tagging a release. Lockfile churn from
+  transitive dependencies should be reviewed, not blindly accepted. Privacy
+  scanner dependencies are separately pinned and hash-checked during bootstrap.
 
 ## Disclosure
 
