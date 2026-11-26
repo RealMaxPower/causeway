@@ -38,6 +38,31 @@
   text-transform: uppercase;
 }
 
+.provenance {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: 12px;
+  padding: 0;
+  margin: 16px 0;
+  list-style: none;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.provenance li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-left: 2px solid var(--rule);
+  padding-left: 10px;
+}
+
+.provenance a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .chartFrame {
   margin-top: 12px;
   border-top: 1px dashed var(--rule);

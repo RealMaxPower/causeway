@@ -4,7 +4,10 @@ import { useId, useMemo, useState } from "react";
 import styles from "./currency-planner.module.css";
 import {
   CURRENCIES,
+  DATA_NOTICE,
   DEFAULT_INPUTS,
+  MAX_AMOUNT,
+  MAX_MONTHS,
   bandTone,
   formatCurrency,
   formatUSD,
@@ -16,10 +19,9 @@ import {
 /**
  * Currency travel planner (H6 hero).
  *
- * Pick the currency you need + how much + when. The widget plots the
- * dollar's strength against that currency relative to its 5-year range,
- * recommends a strategy, and breaks the purchase into a monthly schedule
- * that front-loads when the dollar is strong and back-loads when it isn't.
+ * Pick the currency you need + how much + when. The widget plots an
+ * illustrative rate within illustrative bounds and shows a fixed schedule.
+ * It does not fetch live prices or forecast a future exchange-rate move.
  */
 export function CurrencyPlanner() {
   const [inputs, setInputs] = useState<Inputs>(DEFAULT_INPUTS);
@@ -28,7 +30,7 @@ export function CurrencyPlanner() {
   const monthsId = useId();
 
   const result = useMemo(() => plan(inputs), [inputs]);
-  const tone = bandTone(result.usdBand);
+  const tone = bandTone(result.rangeBand);
   const bandClass =
     tone === "red"
       ? styles.bandRed
@@ -40,22 +42,20 @@ export function CurrencyPlanner() {
     setInputs((p) => ({ ...p, [key]: value }));
   }
 
-  const savedIfStrong = result.usdCostIfReverts - result.usdCostToday;
-  const savedLabel =
-    savedIfStrong > 0
-      ? `+${formatUSD(savedIfStrong)} cheaper than median`
-      : savedIfStrong < 0
-        ? `${formatUSD(savedIfStrong)} more than median`
-        : "in line with median";
+  const difference = (Math.round(result.usdCostAtExampleRate * 100) - Math.round(result.usdCostAtMidpoint * 100)) / 100;
+  const differenceLabel = difference > 0
+    ? `${formatUSD(difference)} more at the example rate`
+    : difference < 0 ? `${formatUSD(-difference)} less at the example rate` : "Same rounded USD cost";
 
   return (
     <div className={styles.widget}>
       <div className={styles.head}>
-        <span>Currency travel planner · convert at the right time</span>
+        <span>Currency travel planner · an illustrative schedule</span>
         <span className={styles.strategyTag}>
-          {strategyLabel(result.strategy)}
+          {inputs.amount === 0 ? "No conversion" : inputs.monthsToTrip === 1 ? "One purchase now" : strategyLabel(result.strategy)}
         </span>
       </div>
+      <p className={styles.notice}>{DATA_NOTICE}</p>
 
       <div className={styles.body}>
         <div className={styles.inputs}>
@@ -75,23 +75,23 @@ export function CurrencyPlanner() {
                 </option>
               ))}
             </select>
-            <p className={styles.currencyNote}>{result.currency.note}</p>
           </div>
 
           <div className={styles.field}>
             <label htmlFor={amountId} className={styles.fieldLabel}>
-              Amount needed ({inputs.currencyCode})
+              Whole units needed ({inputs.currencyCode})
             </label>
             <div className={styles.amountRow}>
               <input
                 id={amountId}
                 type="number"
                 inputMode="numeric"
-                min={1}
-                max={10_000_000}
+                min={0}
+                max={MAX_AMOUNT}
+                step={1}
                 value={inputs.amount}
                 onChange={(e) =>
-                  update("amount", Math.max(1, parseFloat(e.target.value) || 0))
+                  update("amount", Math.min(MAX_AMOUNT, Math.max(0, Math.round(parseFloat(e.target.value) || 0))))
                 }
                 className={styles.amountInput}
               />
@@ -112,7 +112,7 @@ export function CurrencyPlanner() {
               id={monthsId}
               type="range"
               min={1}
-              max={18}
+              max={MAX_MONTHS}
               step={1}
               value={inputs.monthsToTrip}
               onChange={(e) =>
@@ -130,36 +130,36 @@ export function CurrencyPlanner() {
 
         <div className={styles.summary}>
           <div>
-            <div className={styles.eyebrow}>Spot today</div>
+            <div className={styles.eyebrow}>Illustrative exchange rate</div>
             <div className={styles.spot}>
-              {result.spot.toLocaleString(undefined, {
-                maximumFractionDigits: result.spot >= 100 ? 0 : 3,
+              {result.exampleRate.toLocaleString("en-US", {
+                maximumFractionDigits: result.exampleRate >= 100 ? 0 : 3,
               })}{" "}
               <span style={{ fontSize: 14, color: "var(--ink-3)" }}>
                 {inputs.currencyCode}/USD
               </span>
             </div>
             <div className={styles.spotSub}>
-              5-year range {result.currency.fiveYearMin.toLocaleString(undefined, { maximumFractionDigits: result.spot >= 100 ? 0 : 3 })} – {result.currency.fiveYearMax.toLocaleString(undefined, { maximumFractionDigits: result.spot >= 100 ? 0 : 3 })}
+              Illustrative bounds {result.currency.rangeLow.toLocaleString("en-US")} – {result.currency.rangeHigh.toLocaleString("en-US")}
             </div>
 
-            <div className={styles.rangeBar} role="img" aria-label={`USD strength ${Math.round(result.usdPercentile * 100)} percent of 5-year range`}>
+            <div className={styles.rangeBar} role="img" aria-label={`Example rate is ${Math.round(result.rangePosition * 100)} percent of the distance from the lower to upper illustrative bound`}>
               <div className={styles.rangeTrack} />
               <div
                 className={styles.rangeMarker}
-                style={{ left: `${result.usdPercentile * 100}%` }}
+                style={{ left: `${Math.max(0, Math.min(1, result.rangePosition)) * 100}%` }}
               />
             </div>
             <div className={styles.rangeLabels}>
-              <span>USD weak</span>
-              <span>median</span>
-              <span>USD strong</span>
+              <span>Lower bound</span>
+              <span>Midpoint</span>
+              <span>Upper bound</span>
             </div>
 
             <div className={`${styles.band} ${bandClass}`}>
-              USD {result.usdBand}{" "}
+              {result.rangeBand} third of example range{" "}
               <span style={{ opacity: 0.7 }}>
-                · {Math.round(result.usdPercentile * 100)}th pct
+                · {Math.round(result.rangePosition * 100)}% of range distance
               </span>
             </div>
           </div>
@@ -167,35 +167,35 @@ export function CurrencyPlanner() {
           <div>
             <div className={styles.costRow}>
               <span className={styles.costLabel}>
-                Cost in USD today for{" "}
+                USD at example rate for{" "}
                 {formatCurrency(inputs.amount, inputs.currencyCode)}
               </span>
               <span className={styles.costValue}>
-                {formatUSD(result.usdCostToday)}
+                {formatUSD(result.usdCostAtExampleRate)}
               </span>
             </div>
             <div className={styles.costRow}>
               <span className={styles.costLabel}>
-                If spot reverts to median
+                USD at range midpoint ({result.rangeMidpoint.toLocaleString("en-US")})
               </span>
               <span className={styles.costValue}>
-                {formatUSD(result.usdCostIfReverts)}
+                {formatUSD(result.usdCostAtMidpoint)}
               </span>
             </div>
             <div className={styles.costRow}>
-              <span className={styles.costLabel}>vs median</span>
+              <span className={styles.costLabel}>Difference between examples</span>
               <span
                 className={styles.costValue}
                 style={{
                   color:
-                    savedIfStrong > 0
+                    difference < 0
                       ? "var(--cw-green)"
-                      : savedIfStrong < 0
+                      : difference > 0
                         ? "var(--cw-red)"
                         : "var(--ink-3)",
                 }}
               >
-                {savedLabel}
+                {differenceLabel}
               </span>
             </div>
           </div>
@@ -204,7 +204,7 @@ export function CurrencyPlanner() {
 
       <div className={styles.schedule}>
         <div className={styles.scheduleHead}>
-          <span>Suggested monthly purchases</span>
+          <span>Example monthly allocations ({inputs.currencyCode})</span>
           <span>Total {formatCurrency(inputs.amount, inputs.currencyCode)}</span>
         </div>
         <div className={styles.scheduleGrid}>
@@ -214,15 +214,15 @@ export function CurrencyPlanner() {
                 {s.month === 0 ? "Now" : `+${s.month} mo`}
               </div>
               <div className={styles.scheduleAmount}>
-                {formatCurrency(s.units, inputs.currencyCode)}
+                {s.units.toLocaleString("en-US")}
               </div>
               <div className={styles.scheduleShare}>
-                {Math.round(s.share * 100)}%
+                ≈{(s.share * 100).toFixed(1)}%
               </div>
               <div className={styles.scheduleBarWrap}>
                 <div
                   className={styles.scheduleBar}
-                  style={{ width: `${Math.min(s.share * 100 * 3, 100)}%` }}
+                  style={{ width: `${s.share * 100}%` }}
                 />
               </div>
             </div>
@@ -231,13 +231,16 @@ export function CurrencyPlanner() {
       </div>
 
       <div className={styles.advice}>
-        <div className={styles.adviceLabel}>What to do ▸</div>
+        <div className={styles.adviceLabel}>Schedule rule ▸</div>
         <div className={styles.adviceBody}>{result.advice}</div>
       </div>
 
       <div className={styles.foot}>
-        Hedging is cheapest when home currency is strong.{" "}
-        <em>Most households do it backwards.</em>
+        This example uses earlier purchases in the upper third of the range,
+        later purchases in the lower third, and even purchases in the middle.
+        Allocations use whole foreign-currency units; displayed shares are rounded.
+        The range midpoint is not a historical median or a forecast.
+        Costs exclude fees and conversion spreads. Check provider quotes before converting.
       </div>
     </div>
   );

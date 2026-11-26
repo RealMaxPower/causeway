@@ -1,31 +1,14 @@
-/**
- * Causeway · regime composite read.
- *
- * Four live axes wired to FRED — inflation (CPI YoY), monetary stance
- * (effective fed funds), labor (U-3 unemployment), and credit cycle
- * (SLOOS net % tightening C&I, large + middle).
- *
- * Thresholds are deliberately simple — three buckets per axis, derived
- * from the post-1990 sample (Fed target, neutral rate, natural rate,
- * neutral SLOOS reading). This is a pedagogical dashboard, not a quant
- * model.
+/** Regime data availability and provenance. Level/trend classification remains
+ * the existing pedagogical model; its redesign belongs to PR 4.
  */
-
 import "server-only";
 import {
-  fetchFredSeries,
-  latest,
-  yoyChange,
-  type FredObservation,
-  type FredSource,
+  fetchFredSeries, latest, yoyChange,
+  type FredObservation, type FredSource, type FredSeries, type FredFallbackReason,
 } from "./fred";
 
-/* -------------------------------------------------------------------------- */
-/* Fallback snapshots — used when FRED_API_KEY is unset or upstream fails.    */
-/* Values reflect publicly released figures through 2026-04 so a key-less     */
-/* deploy still tells a coherent story.                                       */
-/* -------------------------------------------------------------------------- */
-
+// Illustrative bundled snapshots, not verified current provider releases.
+// Dates describe the example observation periods, not a refresh time.
 const CPI_FALLBACK: FredObservation[] = [
   { date: "2026-04-01", value: 322.1 },
   { date: "2026-03-01", value: 321.4 },
@@ -57,8 +40,7 @@ const UNRATE_FALLBACK: FredObservation[] = [
 ];
 
 // SLOOS · net % of banks tightening C&I standards for large/middle firms.
-// Quarterly cadence; positive = tightening, negative = easing. The 2026-Q1
-// fallback reflects the mild-easing-after-2022-tightness regime.
+// Quarterly cadence; positive = tightening, negative = easing.
 const SLOOS_FALLBACK: FredObservation[] = [
   { date: "2026-01-01", value: -2.5 },
   { date: "2025-10-01", value: -3.0 },
@@ -68,290 +50,124 @@ const SLOOS_FALLBACK: FredObservation[] = [
   { date: "2024-10-01", value: 7.4 },
 ];
 
-/* -------------------------------------------------------------------------- */
-
 export type RegimeSignal = "easing" | "neutral" | "tight" | "loose" | "firm";
-
 export interface AxisRead {
   key: "inflation" | "money" | "labor" | "credit";
   label: string;
   seriesId: string;
   seriesLabel: string;
-  /** Headline number rendered in the gauge. */
-  value: number;
+  value: number | null;
   unit: string;
-  /** Month label, e.g. "Apr 2026". */
   asOf: string;
-  /** Gauge fill, 0–100 — where on the scale the current value sits. */
-  fillPct: number;
-  /** Neutral / target marker, 0–100. */
+  fillPct: number | null;
   markerPct: number;
-  /** Visual hint for the fill bar. */
   tone: "red" | "blue" | "green" | "gold";
-  /** One-line read of the value. */
   verdict: string;
-  /** "FRED · live" or "snapshot · last known" — surfaced honestly. */
   source: FredSource;
+  status: "available" | "unavailable";
+  /** Observation-period start, not a release or revision timestamp. */
+  observationDate: string | null;
+  observationAgeDays: number | null;
+  freshness: "recent" | "stale" | "unavailable";
+  /** Display policy based on period age: 90 days monthly, 180 quarterly. */
+  staleAfterDays: number;
+  /** Local attempt time, including when Next returns a cached response. */
+  checkedAt: string;
+  fallbackReason: FredFallbackReason | null;
 }
 
 export interface RegimeRead {
   axes: AxisRead[];
-  composite: {
-    headline: string;
-    detail: string;
-    /** Number of axes confirming the headline theme. */
-    confirming: number;
-    /** Total axes including the un-wired credit cycle. */
-    of: number;
-  };
+  composite: { headline: string; detail: string; confirming: number; of: number };
+  /** Time this composite was assembled, not the provider's release time. */
   fetchedAt: string;
-  /** True if at least one axis came back live (vs all fallback). */
+  /** Compatibility flag: at least one available FRED value, even if stale. */
   liveAny: boolean;
+  sourceSummary: "fred" | "fallback" | "mixed" | "unavailable";
 }
 
-function fmtMonth(iso: string): string {
-  const d = new Date(iso + "T00:00:00Z");
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+interface AxisDefinition {
+  key: AxisRead["key"];
+  label: string;
+  seriesId: string;
+  seriesLabel: string;
+  minimum: number;
+  maximum: number;
+  marker: number;
+  staleAfterDays: number;
 }
+const DEFINITIONS: AxisDefinition[] = [
+  { key: "inflation", label: "Inflation", seriesId: "CPIAUCSL", seriesLabel: "CPI YoY", minimum: 0, maximum: 6, marker: 2, staleAfterDays: 90 },
+  { key: "money", label: "Money", seriesId: "FEDFUNDS", seriesLabel: "Fed funds rate", minimum: 0, maximum: 8, marker: 3, staleAfterDays: 90 },
+  { key: "labor", label: "Labor", seriesId: "UNRATE", seriesLabel: "U-3 unemployment", minimum: 2, maximum: 10, marker: 5, staleAfterDays: 90 },
+  { key: "credit", label: "Credit", seriesId: "DRTSCILM", seriesLabel: "SLOOS · net % tightening", minimum: -30, maximum: 60, marker: 0, staleAfterDays: 180 },
+];
 
-function clampPct(n: number): number {
-  return Math.max(2, Math.min(98, n));
-}
-
-/* -------------------------- Axis readers -------------------------- */
-
-function readInflation(
-  cpiObs: FredObservation[],
-  source: FredSource,
-): AxisRead {
-  const yoy = yoyChange(cpiObs);
-  const value = yoy?.value ?? 0;
-  const asOf = yoy ? fmtMonth(yoy.date) : "—";
-
-  // Scale 0–6% YoY; target 2%.
-  const fillPct = clampPct((value / 6) * 100);
-  const markerPct = (2 / 6) * 100;
-
-  let verdict: string;
-  let tone: AxisRead["tone"];
-  if (value <= 2.2) {
-    verdict = "At or below Fed target. Disinflation complete.";
-    tone = "green";
-  } else if (value <= 3.3) {
-    verdict = "Above target, trending down. Disinflating.";
-    tone = "gold";
-  } else {
-    verdict = "Well above target. Inflationary regime intact.";
-    tone = "red";
+/** Existing classification wording/thresholds; trend inference is PR 4 scope. */
+function classify(key: AxisRead["key"], value: number): Pick<AxisRead, "verdict" | "tone"> {
+  switch (key) {
+    case "inflation":
+      if (value <= 2.2) return { verdict: "At or below Fed target. Disinflation complete.", tone: "green" };
+      if (value <= 3.3) return { verdict: "Above target, trending down. Disinflating.", tone: "gold" };
+      return { verdict: "Well above target. Inflationary regime intact.", tone: "red" };
+    case "money":
+      if (value < 2) return { verdict: "Below neutral. Loose policy.", tone: "blue" };
+      if (value <= 3.5) return { verdict: "Near neutral. Roughly balanced.", tone: "gold" };
+      return { verdict: "Above neutral. Restrictive but easing.", tone: "red" };
+    case "labor":
+      if (value < 4.5) return { verdict: "Below long-run average. Labor still firm.", tone: "green" };
+      if (value < 5.5) return { verdict: "Near long-run average. Loosening.", tone: "gold" };
+      return { verdict: "Above long-run average. Slack opening up.", tone: "red" };
+    case "credit":
+      if (value < 0) return { verdict: "Banks net-easing C&I standards. Credit cycle expansionary.", tone: "blue" };
+      if (value <= 20) return { verdict: "Standards near neutral. No clear credit signal either way.", tone: "gold" };
+      return { verdict: "Banks net-tightening. Credit cycle contractionary; watch for spillovers.", tone: "red" };
   }
-
-  return {
-    key: "inflation",
-    label: "Inflation",
-    seriesId: "CPIAUCSL",
-    seriesLabel: "CPI YoY",
-    value: Number(value.toFixed(1)),
-    unit: "%",
-    asOf,
-    fillPct,
-    markerPct,
-    tone,
-    verdict,
-    source,
-  };
 }
 
-function readMoney(ffObs: FredObservation[], source: FredSource): AxisRead {
-  const newest = latest(ffObs);
-  const value = newest?.value ?? 0;
-  const asOf = newest ? fmtMonth(newest.date) : "—";
-
-  // Scale 0–8%; neutral ~3%.
-  const fillPct = clampPct((value / 8) * 100);
-  const markerPct = (3 / 8) * 100;
-
-  let verdict: string;
-  let tone: AxisRead["tone"];
-  if (value < 2) {
-    verdict = "Below neutral. Loose policy.";
-    tone = "blue";
-  } else if (value <= 3.5) {
-    verdict = "Near neutral. Roughly balanced.";
-    tone = "gold";
-  } else {
-    verdict = "Above neutral. Restrictive but easing.";
-    tone = "red";
-  }
-
-  return {
-    key: "money",
-    label: "Money",
-    seriesId: "FEDFUNDS",
-    seriesLabel: "Fed funds rate",
-    value: Number(value.toFixed(1)),
-    unit: "%",
-    asOf,
-    fillPct,
-    markerPct,
-    tone,
-    verdict,
-    source,
-  };
+function readAxis(definition: AxisDefinition, series: FredSeries): AxisRead {
+  const { key, minimum, maximum, marker, ...labels } = definition;
+  const observation = key === "inflation" ? yoyChange(series.observations) : latest(series.observations);
+  const base: AxisRead = { ...labels, key, unit: "%", markerPct: (marker - minimum) / (maximum - minimum) * 100,
+    source: "unavailable", status: "unavailable", value: null, fillPct: null, asOf: "—", tone: "gold",
+    verdict: key === "inflation" ? "Unavailable: a valid index and its prior-year comparison are required." : "Unavailable: no valid observation.",
+    observationDate: null, observationAgeDays: null, freshness: "unavailable",
+    checkedAt: series.checkedAt, fallbackReason: series.fallbackReason };
+  if (!observation || observation.value === null || !Number.isFinite(observation.value) || series.source === "unavailable") return base;
+  const age = Math.max(0, Math.floor((Date.parse(series.checkedAt) - Date.parse(observation.date + "T00:00:00Z")) / 86_400_000));
+  return { ...base, ...classify(key, observation.value), source: series.source, status: "available",
+    value: Number(observation.value.toFixed(1)), fillPct: Math.max(2, Math.min(98, (observation.value - minimum) / (maximum - minimum) * 100)),
+    asOf: new Date(observation.date + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" }),
+    observationDate: observation.date, observationAgeDays: age, freshness: age > definition.staleAfterDays ? "stale" : "recent" };
 }
-
-function readLabor(urObs: FredObservation[], source: FredSource): AxisRead {
-  const newest = latest(urObs);
-  const value = newest?.value ?? 0;
-  const asOf = newest ? fmtMonth(newest.date) : "—";
-
-  // Scale 2–10%; long-run average ~5%.
-  const fillPct = clampPct(((value - 2) / 8) * 100);
-  const markerPct = ((5 - 2) / 8) * 100;
-
-  let verdict: string;
-  let tone: AxisRead["tone"];
-  if (value < 4.5) {
-    verdict = "Below long-run average. Labor still firm.";
-    tone = "green";
-  } else if (value < 5.5) {
-    verdict = "Near long-run average. Loosening.";
-    tone = "gold";
-  } else {
-    verdict = "Above long-run average. Slack opening up.";
-    tone = "red";
-  }
-
-  return {
-    key: "labor",
-    label: "Labor",
-    seriesId: "UNRATE",
-    seriesLabel: "U-3 unemployment",
-    value: Number(value.toFixed(1)),
-    unit: "%",
-    asOf,
-    fillPct,
-    markerPct,
-    tone,
-    verdict,
-    source,
-  };
-}
-
-function readCredit(obs: FredObservation[], source: FredSource): AxisRead {
-  const newest = latest(obs);
-  const value = newest?.value ?? 0;
-  const asOf = newest ? fmtMonth(newest.date) : "—";
-
-  // SLOOS ranges roughly −30 to +80 in the post-1990 sample. Neutral is 0.
-  // Scale −30 to +60 onto the bar; neutral marker at 0.
-  const lo = -30;
-  const hi = 60;
-  const fillPct = clampPct(((value - lo) / (hi - lo)) * 100);
-  const markerPct = ((0 - lo) / (hi - lo)) * 100;
-
-  let verdict: string;
-  let tone: AxisRead["tone"];
-  if (value < 0) {
-    verdict = "Banks net-easing C&I standards. Credit cycle expansionary.";
-    tone = "blue";
-  } else if (value <= 20) {
-    verdict = "Standards near neutral. No clear credit signal either way.";
-    tone = "gold";
-  } else {
-    verdict = "Banks net-tightening. Credit cycle contractionary; watch for spillovers.";
-    tone = "red";
-  }
-
-  return {
-    key: "credit",
-    label: "Credit",
-    seriesId: "DRTSCILM",
-    seriesLabel: "SLOOS · net % tightening",
-    value: Number(value.toFixed(1)),
-    unit: "%",
-    asOf,
-    fillPct,
-    markerPct,
-    tone,
-    verdict,
-    source,
-  };
-}
-
-/* -------------------------- Composite -------------------------- */
 
 function composite(axes: AxisRead[]): RegimeRead["composite"] {
-  const inflation = axes.find((a) => a.key === "inflation");
-  const money = axes.find((a) => a.key === "money");
-  const labor = axes.find((a) => a.key === "labor");
-  const credit = axes.find((a) => a.key === "credit");
-
-  // Theme: "disinflating, post-restrictive, labor still firm, credit easing"
-  // — count axes that agree with it.
-  let confirming = 0;
-  if (inflation && inflation.value <= 3.3) confirming++;
-  if (money && money.value > 3.5) confirming++;
-  if (labor && labor.value < 5) confirming++;
-  if (credit && credit.value < 0) confirming++;
-
-  const inflationWord =
-    !inflation || inflation.value > 3.3
-      ? "inflationary"
-      : inflation.value > 2.2
-        ? "disinflating"
-        : "at target";
-  const moneyWord =
-    !money || money.value > 3.5
-      ? "post-restrictive"
-      : money.value < 2
-        ? "loose"
-        : "near-neutral";
-  const laborWord =
-    !labor || labor.value < 4.5
-      ? "labor still firm"
-      : labor.value < 5.5
-        ? "labor loosening"
-        : "slack opening";
-  const creditWord =
-    !credit || credit.value > 20
-      ? "credit tightening"
-      : credit.value < 0
-        ? "credit easing"
-        : "credit neutral";
-
-  const headline = `${inflationWord} · ${moneyWord} · ${laborWord} · ${creditWord}`;
-
-  const detail =
-    "All four axes wired live. Each is shown alone — the composite is the count of axes confirming a single theme, not a blended index.";
-
-  return { headline, detail, confirming, of: 4 };
+  const inflation = axes.find((axis) => axis.key === "inflation")?.value ?? null;
+  const money = axes.find((axis) => axis.key === "money")?.value ?? null;
+  const labor = axes.find((axis) => axis.key === "labor")?.value ?? null;
+  const credit = axes.find((axis) => axis.key === "credit")?.value ?? null;
+  const available = axes.filter((axis) => axis.status === "available").length;
+  const confirming = Number(inflation !== null && inflation <= 3.3) + Number(money !== null && money > 3.5) +
+    Number(labor !== null && labor < 5) + Number(credit !== null && credit < 0);
+  const detail = `${available} of 4 indicators available. Sources and observation periods can differ; the count reflects the existing illustrative theme, not a blended index.`;
+  if (available !== 4) return { headline: available === 0 ? "Data unavailable" : "Incomplete indicator snapshot", detail, confirming, of: 4 };
+  const inflationWord = inflation! > 3.3 ? "inflationary" : inflation! > 2.2 ? "disinflating" : "at target";
+  const moneyWord = money! > 3.5 ? "post-restrictive" : money! < 2 ? "loose" : "near-neutral";
+  const laborWord = labor! < 4.5 ? "labor still firm" : labor! < 5.5 ? "labor loosening" : "slack opening";
+  const creditWord = credit! > 20 ? "credit tightening" : credit! < 0 ? "credit easing" : "credit neutral";
+  return { headline: `${inflationWord} · ${moneyWord} · ${laborWord} · ${creditWord}`, detail, confirming, of: 4 };
 }
 
-/* -------------------------- Entry point -------------------------- */
-
 export async function getRegimeRead(): Promise<RegimeRead> {
-  const [cpi, ff, ur, sloos] = await Promise.all([
-    fetchFredSeries("CPIAUCSL", CPI_FALLBACK, 18),
+  const series = await Promise.all([
+    fetchFredSeries("CPIAUCSL", CPI_FALLBACK, 18, { requireYoy: true }),
     fetchFredSeries("FEDFUNDS", FEDFUNDS_FALLBACK, 6),
     fetchFredSeries("UNRATE", UNRATE_FALLBACK, 6),
     fetchFredSeries("DRTSCILM", SLOOS_FALLBACK, 6),
   ]);
-
-  const axes: AxisRead[] = [
-    readInflation(cpi.observations, cpi.source),
-    readMoney(ff.observations, ff.source),
-    readLabor(ur.observations, ur.source),
-    readCredit(sloos.observations, sloos.source),
-  ];
-
-  return {
-    axes,
-    composite: composite(axes),
-    fetchedAt: new Date().toISOString(),
-    liveAny: axes.some((a) => a.source === "fred"),
-  };
+  const axes = DEFINITIONS.map((definition, index) => readAxis(definition, series[index]));
+  const sources = new Set(axes.map((axis) => axis.source));
+  const sourceSummary = sources.size > 1 ? "mixed" : axes[0].source;
+  return { axes, composite: composite(axes), fetchedAt: new Date().toISOString(),
+    liveAny: axes.some((axis) => axis.source === "fred"), sourceSummary };
 }

@@ -19,6 +19,17 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
+}
+
+.notice {
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper-2);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-2);
 }
 
 .body {
@@ -130,15 +141,6 @@
   color: var(--ink-3);
 }
 
-.currencyNote {
-  font-family: var(--cw-serif);
-  font-size: 13px;
-  font-style: italic;
-  color: var(--ink-3);
-  line-height: 1.45;
-  margin-top: 4px;
-}
-
 /* Right panel */
 .summary {
   padding: 22px 20px;
@@ -170,7 +172,7 @@
   margin-top: 4px;
 }
 
-/* Percentile bar — visually the 5-year range with marker for today */
+/* Position within the illustrative range; no observation distribution. */
 .rangeBar {
   position: relative;
   margin-top: 10px;
@@ -222,7 +224,8 @@
   border-top: 1px solid var(--rule);
   padding-top: 12px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
   align-items: baseline;
   font-family: var(--cw-mono);
   font-size: 12px;
@@ -236,6 +239,7 @@
   font-weight: 500;
   color: var(--ink);
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 /* Schedule table */
@@ -257,11 +261,13 @@
   padding: 14px 0 10px 0;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .scheduleGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 8px;
 }
 
@@ -287,6 +293,7 @@
   font-weight: 500;
   color: var(--ink);
   margin-top: 4px;
+  overflow-wrap: anywhere;
 }
 
 .scheduleShare {
@@ -344,6 +351,7 @@
   letter-spacing: 0.06em;
   color: var(--ink-3);
   text-align: right;
+  line-height: 1.5;
 }
 .foot em { font-style: italic; }
 
@@ -362,11 +370,13 @@
 
 @media (max-width: 479px) {
   .head { padding: 12px 16px; }
+  .notice { padding: 12px 16px; }
   .inputs { padding: 16px; gap: 14px; }
   .summary { padding: 16px; gap: 12px; }
   .spot { font-size: 24px; }
   .schedule { padding: 0 16px 16px 16px; }
-  .scheduleGrid { grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); }
+  .scheduleGrid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
   .scheduleCell { padding: 8px 6px; }
   .foot { padding: 10px 16px; text-align: left; }
+  .advice { flex-direction: column; gap: 6px; }
 }

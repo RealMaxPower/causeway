@@ -1,59 +1,44 @@
 /**
- * Currency travel planner (H6).
- *
- * Pure-math personal calculator. Given a target currency, an amount of
- * that currency you need by a given date, and a USD-strength regime,
- * compute:
- *   - where the current spot sits in its 5-year range (USD percentile)
- *   - a recommended pre-buy strategy (aggressive / staged / wait)
- *   - a monthly purchase schedule (units to buy each month)
- *   - USD cost today vs USD cost if you waited and the spot reverted
- *
- * The pedagogy from H6: hedging is cheapest when home currency is strong.
- * The widget makes that legible by surfacing the percentile and tilting
- * the schedule accordingly.
- *
- * No DOM, no globals — composable in tests.
+ * Offline currency-conversion illustration (H6).
+ * Rates and bounds are teaching inputs, not observed market prices. Range
+ * position and midpoint describe those bounds only; neither is a percentile,
+ * a historical median, nor a forecast. The schedule is fixed, not contingent
+ * on future exchange-rate movements.
  */
-
 export interface Currency {
-  code: string;             // ISO 4217
-  name: string;             // human-readable
-  /** Foreign units per 1 USD (current spot). */
-  unitsPerUSD: number;
-  /** 5-year min units-per-USD (USD at its weakest vs this currency). */
-  fiveYearMin: number;
-  /** 5-year max units-per-USD (USD at its strongest vs this currency). */
-  fiveYearMax: number;
-  /** Where the dollar is structurally. */
-  note: string;
+  code: string;
+  name: string;
+  /** Illustrative foreign-currency units per USD. */
+  exampleRate: number;
+  rangeLow: number;
+  rangeHigh: number;
 }
 
-/**
- * Snapshot data, ~ May 2026. Real version would pull live spot from a
- * data provider; the 5-year band is historically accurate and refreshed
- * infrequently. Values are units of FX per 1 USD.
- */
-export const CURRENCIES: Currency[] = [
-  { code: "EUR", name: "Euro",            unitsPerUSD: 0.93, fiveYearMin: 0.82, fiveYearMax: 1.05, note: "USD near multi-year highs vs euro — historically a favourable pre-buy window." },
-  { code: "GBP", name: "British pound",   unitsPerUSD: 0.80, fiveYearMin: 0.70, fiveYearMax: 0.90, note: "Sterling has rebuilt from the 2022 mini-budget lows but USD is still firm." },
-  { code: "JPY", name: "Japanese yen",    unitsPerUSD: 152,  fiveYearMin: 105,  fiveYearMax: 161,  note: "Generational dollar strength against yen — BOJ policy is the swing variable." },
-  { code: "CHF", name: "Swiss franc",     unitsPerUSD: 0.91, fiveYearMin: 0.83, fiveYearMax: 1.02, note: "CHF is a safe-haven hedge; pricey but stable when risk-off." },
-  { code: "AUD", name: "Australian dollar", unitsPerUSD: 1.52, fiveYearMin: 1.30, fiveYearMax: 1.62, note: "Pro-cyclical commodity currency; USD strong when global cycle slows." },
-  { code: "CAD", name: "Canadian dollar", unitsPerUSD: 1.38, fiveYearMin: 1.21, fiveYearMax: 1.46, note: "Tight comovement with USD; spread is largely a function of crude oil." },
-  { code: "MXN", name: "Mexican peso",    unitsPerUSD: 18.5, fiveYearMin: 16.3, fiveYearMax: 24.5, note: "Peso unusually strong recently; high real rates have flipped the carry trade." },
-  { code: "INR", name: "Indian rupee",    unitsPerUSD: 83.5, fiveYearMin: 73.0, fiveYearMax: 84.2, note: "Slow grind weaker against USD over a decade — managed not free-floating." },
-  { code: "BRL", name: "Brazilian real",  unitsPerUSD: 5.10, fiveYearMin: 4.65, fiveYearMax: 5.85, note: "High-yielding EM currency — high vol but the carry compensates." },
-  { code: "KRW", name: "South Korean won", unitsPerUSD: 1370, fiveYearMin: 1095, fiveYearMax: 1440, note: "Export-driven currency; USD/KRW peaks at every global risk-off episode." },
+export const DATA_NOTICE = "Illustrative rates and ranges · offline teaching inputs, not live quotes or verified historical observations. No market observation date is available.";
+
+export const CURRENCIES: readonly Currency[] = [
+  { code: "EUR", name: "Euro", exampleRate: 0.93, rangeLow: 0.82, rangeHigh: 1.05 },
+  { code: "GBP", name: "British pound", exampleRate: 0.80, rangeLow: 0.70, rangeHigh: 0.90 },
+  { code: "JPY", name: "Japanese yen", exampleRate: 152, rangeLow: 105, rangeHigh: 161 },
+  { code: "CHF", name: "Swiss franc", exampleRate: 0.91, rangeLow: 0.83, rangeHigh: 1.02 },
+  { code: "AUD", name: "Australian dollar", exampleRate: 1.52, rangeLow: 1.30, rangeHigh: 1.62 },
+  { code: "CAD", name: "Canadian dollar", exampleRate: 1.38, rangeLow: 1.21, rangeHigh: 1.46 },
+  { code: "MXN", name: "Mexican peso", exampleRate: 18.5, rangeLow: 16.3, rangeHigh: 24.5 },
+  { code: "INR", name: "Indian rupee", exampleRate: 83.5, rangeLow: 73.0, rangeHigh: 84.2 },
+  { code: "BRL", name: "Brazilian real", exampleRate: 5.10, rangeLow: 4.65, rangeHigh: 5.85 },
+  { code: "KRW", name: "South Korean won", exampleRate: 1370, rangeLow: 1095, rangeHigh: 1440 },
 ];
 
 export type Strategy = "aggressive" | "staged" | "wait";
+export type RangeBand = "lower" | "middle" | "upper";
+export const MAX_AMOUNT = 10_000_000;
+export const MAX_MONTHS = 18;
 
 export interface Inputs {
   currencyCode: string;
-  /** Foreign-currency amount you need by the trip date. */
+  /** Whole foreign-currency units needed by the deadline. */
   amount: number;
-  /** Months between today and when you need the FX. */
+  /** Whole months until the deadline, 1–18 inclusive. */
   monthsToTrip: number;
 }
 
@@ -64,150 +49,108 @@ export const DEFAULT_INPUTS: Inputs = {
 };
 
 export interface ScheduleSlice {
-  /** Month index, 0 = now, 1 = next month, ... up to monthsToTrip-1. */
+  /** 0 = now; last allocation is one month before the deadline. */
   month: number;
-  /** Foreign-currency units to buy that month. */
+  /** Whole foreign-currency units; allocations sum exactly to the total. */
   units: number;
-  /** Share of total (0-1). */
+  /** Allocated share, 0–1. Zero when no currency is needed. */
   share: number;
 }
 
 export interface Plan {
   currency: Currency;
-  /** Today's spot, units per 1 USD. */
-  spot: number;
-  /** 0-1: position of spot inside its 5-year range. 1 = USD at its strongest. */
-  usdPercentile: number;
-  /** Where USD strength sits, qualitatively. */
-  usdBand: "weak" | "neutral" | "strong";
-  /** Recommended strategy keyed off percentile. */
+  exampleRate: number;
+  /** Fraction of the distance from the illustrative lower to upper bound. */
+  rangePosition: number;
+  rangeMidpoint: number;
+  rangeBand: RangeBand;
   strategy: Strategy;
-  /** USD cost to buy `amount` foreign units at today's spot. */
-  usdCostToday: number;
-  /** USD cost if spot reverts to 5-year median (historical mean reversion baseline). */
-  usdCostIfReverts: number;
-  /** Per-month plan adding to `amount` units total. */
+  usdCostAtExampleRate: number;
+  /** Hypothetical cost at the bounds' midpoint; no reversion is assumed. */
+  usdCostAtMidpoint: number;
   schedule: ScheduleSlice[];
-  /** One-line advice keyed to the strategy. */
   advice: string;
 }
 
-const STRATEGY_ADVICE: Record<Strategy, string> = {
-  aggressive: "Dollar is near multi-year highs against this currency. Pre-buy 60% in the first two months, then a smaller monthly tail. The cheap window may not last.",
-  staged:     "Dollar is mid-range against this currency. Spread your buying evenly across the months — the textbook dollar-cost-average. No window to exploit, no window to avoid.",
-  wait:       "Dollar is weak against this currency. Buy the minimum you need short-term, hold the rest in USD, and accelerate purchases only if USD strengthens. Don't lock in at a bad spot for no reason.",
-};
-
-function clamp01(n: number): number {
-  return Math.max(0, Math.min(1, n));
+function validateScheduleInputs(amount: number, months: number, strategy: Strategy): void {
+  if (!Number.isSafeInteger(amount) || amount < 0 || amount > MAX_AMOUNT) {
+    throw new RangeError("Use a whole currency amount within the displayed range.");
+  }
+  if (!Number.isInteger(months) || months < 1 || months > MAX_MONTHS) {
+    throw new RangeError("Use a whole horizon from 1 through 18 months.");
+  }
+  if (!["aggressive", "staged", "wait"].includes(strategy)) {
+    throw new RangeError("Unknown schedule shape.");
+  }
 }
 
-function median(c: Currency): number {
-  return (c.fiveYearMin + c.fiveYearMax) / 2;
+/** Linear 5:1 early/late weights, or equal weights, apportioned to whole units. */
+export function buildSchedule(amount: number, monthsToTrip: number, strategy: Strategy): ScheduleSlice[] {
+  validateScheduleInputs(amount, monthsToTrip, strategy);
+  const n = monthsToTrip;
+  if (n === 1) return [{ month: 0, units: amount, share: amount === 0 ? 0 : 1 }];
+
+  // Integer weights preserve the original linear ramp without rounding drift.
+  const weights = Array.from({ length: n }, (_, month) => strategy === "aggressive"
+    ? 5 * (n - 1) - 4 * month
+    : strategy === "wait" ? n - 1 + 4 * month : 1);
+  const weightTotal = weights.reduce((sum, weight) => sum + weight, 0);
+  const units = weights.map((weight) => Math.floor(amount * weight / weightTotal));
+  const remaining = amount - units.reduce((sum, allocation) => sum + allocation, 0);
+  const order = weights.map((weight, month) => ({ month, remainder: amount * weight % weightTotal }))
+    .sort((a, b) => b.remainder - a.remainder || (strategy === "wait" ? b.month - a.month : a.month - b.month));
+  for (const { month } of order.slice(0, remaining)) units[month] += 1;
+  return units.map((allocation, month) => ({ month, units: allocation, share: amount === 0 ? 0 : allocation / amount }));
 }
 
-/**
- * Build the per-month schedule. Total units always sum to `amount` (modulo
- * floating-point). Strategy shapes the curve:
- *   - aggressive: front-loaded (~60% in first two months)
- *   - staged: uniform
- *   - wait: back-loaded (~60% in last two months)
- */
-export function buildSchedule(
-  amount: number,
-  monthsToTrip: number,
-  strategy: Strategy,
-): ScheduleSlice[] {
-  const n = Math.max(1, Math.floor(monthsToTrip));
-  const out: ScheduleSlice[] = [];
-
-  if (n === 1) {
-    out.push({ month: 0, units: amount, share: 1 });
-    return out;
-  }
-
-  // Shape via a linear ramp; weights then normalised.
-  const weights: number[] = [];
-  for (let m = 0; m < n; m++) {
-    const t = m / (n - 1); // 0 → 1
-    let w: number;
-    if (strategy === "aggressive") {
-      // Start high, taper: 2 → 0.4
-      w = 2 - 1.6 * t;
-    } else if (strategy === "wait") {
-      // Start low, ramp: 0.4 → 2
-      w = 0.4 + 1.6 * t;
-    } else {
-      w = 1;
-    }
-    weights.push(w);
-  }
-  const sum = weights.reduce((a, b) => a + b, 0);
-  for (let m = 0; m < n; m++) {
-    const share = weights[m] / sum;
-    out.push({ month: m, units: amount * share, share });
-  }
-  return out;
+export function describeSchedule(schedule: readonly ScheduleSlice[], strategy: Strategy): string {
+  const amount = schedule.reduce((sum, slice) => sum + slice.units, 0);
+  if (amount === 0) return "No currency is needed, so every allocation is zero.";
+  if (schedule.length === 1) return "With one month until the deadline, all units are allocated now; the schedule shapes are identical.";
+  const firstTwo = schedule.slice(0, 2).reduce((sum, slice) => sum + slice.units, 0);
+  const openingShare = (firstTwo / amount * 100).toFixed(1);
+  const shape = strategy === "aggressive"
+    ? "Larger early allocations taper toward the deadline."
+    : strategy === "wait"
+      ? "Smaller early allocations build toward the deadline; purchases do not wait for the exchange rate to improve."
+      : "Units are spread evenly, with at most one unit of rounding difference between months.";
+  return `${shape} The first two slots (now and next month) contain ${openingShare}% of the total, rounded. All units are allocated by month ${schedule.length - 1}, one month before the deadline.`;
 }
 
 export function plan(inputs: Inputs): Plan {
-  const currency =
-    CURRENCIES.find((c) => c.code === inputs.currencyCode) ?? CURRENCIES[0];
-  const spot = currency.unitsPerUSD;
-  const range = currency.fiveYearMax - currency.fiveYearMin;
-  const usdPercentile = range > 0
-    ? clamp01((spot - currency.fiveYearMin) / range)
-    : 0.5;
-
-  const usdBand: Plan["usdBand"] =
-    usdPercentile >= 0.66 ? "strong"
-    : usdPercentile <= 0.34 ? "weak"
-    : "neutral";
-
-  const strategy: Strategy =
-    usdBand === "strong" ? "aggressive"
-    : usdBand === "weak" ? "wait"
-    : "staged";
-
-  const usdCostToday = inputs.amount / spot;
-  const medSpot = median(currency);
-  const usdCostIfReverts = inputs.amount / medSpot;
-
+  const currency = CURRENCIES.find((item) => item.code === inputs.currencyCode);
+  if (!currency) throw new RangeError("Unknown currency; no substitute conversion was calculated.");
+  const { exampleRate, rangeLow, rangeHigh } = currency;
+  if (![exampleRate, rangeLow, rangeHigh].every((value) => Number.isFinite(value) && value > 0) || rangeHigh <= rangeLow) {
+    throw new RangeError("Illustrative rates and bounds must be finite, positive and ordered.");
+  }
+  const rangePosition = (exampleRate - rangeLow) / (rangeHigh - rangeLow);
+  const rangeMidpoint = (rangeLow + rangeHigh) / 2;
+  const rangeBand: RangeBand = rangePosition >= 2 / 3 ? "upper" : rangePosition <= 1 / 3 ? "lower" : "middle";
+  const strategy: Strategy = rangeBand === "upper" ? "aggressive" : rangeBand === "lower" ? "wait" : "staged";
+  const schedule = buildSchedule(inputs.amount, inputs.monthsToTrip, strategy);
   return {
-    currency,
-    spot,
-    usdPercentile,
-    usdBand,
-    strategy,
-    usdCostToday,
-    usdCostIfReverts,
-    schedule: buildSchedule(inputs.amount, inputs.monthsToTrip, strategy),
-    advice: STRATEGY_ADVICE[strategy],
+    currency, exampleRate, rangePosition, rangeMidpoint, rangeBand, strategy,
+    usdCostAtExampleRate: inputs.amount / exampleRate,
+    usdCostAtMidpoint: inputs.amount / rangeMidpoint,
+    schedule,
+    advice: describeSchedule(schedule, strategy),
   };
 }
 
+/** Full amounts keep displayed allocations reconcilable with the total. */
 export function formatCurrency(amount: number, code: string): string {
-  if (amount >= 100_000) return `${code} ${(amount / 1000).toFixed(0)}k`;
-  if (amount >= 10_000)  return `${code} ${(amount / 1000).toFixed(1)}k`;
-  return `${code} ${Math.round(amount).toLocaleString()}`;
+  return `${code} ${amount.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
 }
 
 export function formatUSD(amount: number): string {
-  if (amount >= 100_000) return `$${(amount / 1000).toFixed(0)}k`;
-  if (amount >= 10_000)  return `$${(amount / 1000).toFixed(1)}k`;
-  return `$${Math.round(amount).toLocaleString()}`;
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
 }
 
-export function strategyLabel(s: Strategy): string {
-  switch (s) {
-    case "aggressive": return "Pre-buy now";
-    case "staged":     return "Spread evenly";
-    case "wait":       return "Wait and watch";
-  }
+export function strategyLabel(strategy: Strategy): string {
+  return strategy === "aggressive" ? "Earlier purchases" : strategy === "wait" ? "Later purchases" : "Even purchases";
 }
 
-export function bandTone(b: Plan["usdBand"]): "red" | "gold" | "green" {
-  // USD strong (vs FX) = green for the home-currency holder (cheap to buy)
-  // USD weak = red (expensive)
-  return b === "strong" ? "green" : b === "weak" ? "red" : "gold";
+export function bandTone(band: RangeBand): "red" | "gold" | "green" {
+  return band === "upper" ? "green" : band === "lower" ? "red" : "gold";
 }

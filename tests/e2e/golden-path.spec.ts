@@ -88,9 +88,11 @@ test.describe("Causeway golden path", () => {
     await expect(fab).toBeVisible();
   });
 
-  test("/regime page renders with at least three live-or-snapshot axes", async ({ page }) => {
+  test("/regime page identifies indicator sources and observation periods", async ({ page }) => {
     await page.goto("/regime");
-    await expect(page.getByRole("heading", { name: /Reading the regime|regime/i }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Indicator snapshot/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: "View source series" })).toHaveCount(4);
+    await expect(page.getByText(/Dates identify observation periods/)).toBeVisible();
     // Three named axes should be visible
     await expect(page.getByText(/Inflation/i).first()).toBeVisible();
     await expect(page.getByText(/Money|monetary/i).first()).toBeVisible();

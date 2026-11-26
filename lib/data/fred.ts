@@ -1,102 +1,142 @@
-/**
- * Causeway · FRED data fetcher.
- *
- * Server-only. Wraps the public FRED observations endpoint with Next.js's
- * extended fetch cache (revalidate every 6h — FRED series publish on
- * monthly/quarterly cadence, anything tighter is wasted work).
- *
- * When FRED_API_KEY is unset, or the upstream fails, falls back to the
- * caller-supplied snapshot and labels the read as `fallback`. The dashboard
- * surfaces this honestly rather than pretending stale data is live.
+/** Server-only FRED observations with validated, explicitly dated fallbacks.
+ * Observation dates identify periods, not publication/revision timestamps.
+ * https://fred.stlouisfed.org/docs/api/fred/series_observations.html
  */
-
 import "server-only";
 
 export interface FredObservation {
-  /** ISO date (YYYY-MM-DD) of the observation period start. */
   date: string;
-  /** Numeric value, or null for missing periods (FRED uses "." in JSON). */
+  /** FRED's "." missing-value marker becomes null, never zero. */
   value: number | null;
 }
 
-export type FredSource = "fred" | "fallback";
-
+export type FredSource = "fred" | "fallback" | "unavailable";
+export type FredFallbackReason = "missing-key" | "timeout" | "request-failed" | "invalid-response" | "insufficient-history";
 export interface FredSeries {
   id: string;
   observations: FredObservation[];
-  fetchedAt: string;
+  /** Local attempt time; a cached response may have been retrieved earlier. */
+  checkedAt: string;
+  observationDate: string | null;
   source: FredSource;
+  fallbackReason: FredFallbackReason | null;
 }
 
 const FRED_BASE = "https://api.stlouisfed.org/fred/series/observations";
 const REVALIDATE_SECONDS = 60 * 60 * 6;
+export const FRED_TIMEOUT_MS = 8_000;
+
+function validDate(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(value + "T00:00:00Z");
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
+function validObservation(value: unknown): value is FredObservation {
+  if (typeof value !== "object" || value === null) return false;
+  const row = value as Record<string, unknown>;
+  return validDate(row.date) && (row.value === null || (typeof row.value === "number" && Number.isFinite(row.value)));
+}
+
+/** Reject malformed/ambiguous rows instead of quietly promoting older values. */
+function validateObservations(rows: unknown, asOf: string): FredObservation[] | null {
+  if (!Array.isArray(rows)) return null;
+  const dates = new Set<string>();
+  const observations: FredObservation[] = [];
+  for (const row of rows) {
+    if (!validObservation(row) || row.date > asOf || dates.has(row.date)) return null;
+    dates.add(row.date);
+    observations.push({ date: row.date, value: row.value });
+  }
+  return observations.sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/** Strict documented JSON shape; accepts only complete finite numeric strings. */
+export function parseFredResponse(json: unknown, asOf = new Date().toISOString().slice(0, 10)): FredObservation[] | null {
+  if (typeof json !== "object" || json === null || !validDate(asOf)) return null;
+  const rows = (json as Record<string, unknown>).observations;
+  if (!Array.isArray(rows)) return null;
+  const observations: FredObservation[] = [];
+  for (const row of rows) {
+    if (typeof row !== "object" || row === null || typeof row.value !== "string") return null;
+    let value: number | null = null;
+    if (row.value !== ".") {
+      if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(row.value)) return null;
+      value = Number(row.value);
+      if (!Number.isFinite(value)) return null;
+    }
+    observations.push({ date: row.date, value });
+  }
+  return validateObservations(observations, asOf);
+}
+
+/** Newest finite observation, regardless of caller ordering. Zero is valid. */
+export function latest(observations: FredObservation[]): FredObservation | null {
+  let newest: FredObservation | null = null;
+  for (const row of observations) {
+    if (validObservation(row) && row.value !== null && (!newest || row.date > newest.date)) newest = row;
+  }
+  return newest;
+}
+
+/** CPI YoY requires positive indexes on the same period date one year apart. */
+export function yoyChange(observations: FredObservation[]): { value: number; date: string } | null {
+  const newest = latest(observations);
+  if (!newest || newest.value === null || newest.value <= 0) return null;
+  const previousDate = `${String(Number(newest.date.slice(0, 4)) - 1).padStart(4, "0")}${newest.date.slice(4)}`;
+  const previous = observations.find((row) => validObservation(row) && row.date === previousDate);
+  if (!previous || previous.value === null || previous.value <= 0) return null;
+  const value = (newest.value / previous.value - 1) * 100;
+  return Number.isFinite(value) ? { value, date: newest.date } : null;
+}
 
 /**
- * Fetch the most recent `limit` observations of a FRED series, newest-first.
- * Provide `fallback` so the dashboard always renders even without an API key.
+ * Fetch newest observations. CPI callers require a usable prior-year comparison;
+ * a fallback is selected as a whole series, never spliced into live history.
  */
 export async function fetchFredSeries(
   seriesId: string,
   fallback: FredObservation[],
   limit = 24,
+  options: { requireYoy?: boolean } = {},
 ): Promise<FredSeries> {
+  const checkedAt = new Date().toISOString();
+  const asOf = checkedAt.slice(0, 10);
+  const usable = (observations: FredObservation[]) => options.requireYoy ? yoyChange(observations) : latest(observations);
+  const recover = (reason: FredFallbackReason): FredSeries => {
+    const observations = validateObservations(fallback, asOf);
+    const observation = observations && usable(observations);
+    return { id: seriesId, observations: observation ? observations! : [], checkedAt,
+      observationDate: observation?.date ?? null, source: observation ? "fallback" : "unavailable", fallbackReason: reason };
+  };
   const key = process.env.FRED_API_KEY;
-  const fetchedAt = new Date().toISOString();
+  if (!key) return recover("missing-key");
 
-  if (!key) {
-    return { id: seriesId, observations: fallback, fetchedAt, source: "fallback" };
-  }
-
-  const url = `${FRED_BASE}?series_id=${seriesId}&api_key=${key}&file_type=json&sort_order=desc&limit=${limit}`;
-
+  const query = new URLSearchParams({ series_id: seriesId, api_key: key, file_type: "json", sort_order: "desc", limit: String(limit) });
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => { controller.abort(); reject(new Error("FRED timeout")); }, FRED_TIMEOUT_MS);
+  });
   try {
-    const res = await fetch(url, { next: { revalidate: REVALIDATE_SECONDS } });
-    if (!res.ok) throw new Error(`FRED ${seriesId} ${res.status}`);
-    const json = (await res.json()) as {
-      observations: { date: string; value: string }[];
-    };
-    return {
-      id: seriesId,
-      observations: json.observations.map((o) => ({
-        date: o.date,
-        value: o.value === "." ? null : parseFloat(o.value),
-      })),
-      fetchedAt,
-      source: "fred",
-    };
+    // The timeout covers response-body parsing too, and bounds even a provider
+    // or test transport that does not settle after the abort signal fires.
+    const request = (async () => {
+      const response = await fetch(`${FRED_BASE}?${query}`, {
+        next: { revalidate: REVALIDATE_SECONDS }, signal: controller.signal,
+      });
+      if (!response.ok) throw new Error("FRED request failed");
+      return response.json() as Promise<unknown>;
+    })();
+    const observations = parseFredResponse(await Promise.race([request, timeout]), asOf);
+    if (!observations) return recover("invalid-response");
+    const observation = usable(observations);
+    if (!observation) return recover("insufficient-history");
+    return { id: seriesId, observations, checkedAt, observationDate: observation.date,
+      source: "fred", fallbackReason: null };
   } catch {
-    return { id: seriesId, observations: fallback, fetchedAt, source: "fallback" };
+    return recover(controller.signal.aborted ? "timeout" : "request-failed");
+  } finally {
+    clearTimeout(timer);
   }
-}
-
-/** Newest non-null observation. */
-export function latest(obs: FredObservation[]): FredObservation | null {
-  return obs.find((o) => o.value !== null) ?? null;
-}
-
-/**
- * YoY % change from a descending monthly series. Walks back from the newest
- * non-null observation to the one exactly 12 calendar months earlier.
- */
-export function yoyChange(
-  obs: FredObservation[],
-): { value: number; date: string } | null {
-  const newest = latest(obs);
-  if (!newest || newest.value === null) return null;
-
-  const nd = new Date(newest.date + "T00:00:00Z");
-  for (const o of obs) {
-    if (o.value === null) continue;
-    const d = new Date(o.date + "T00:00:00Z");
-    const months =
-      (nd.getUTCFullYear() - d.getUTCFullYear()) * 12 +
-      (nd.getUTCMonth() - d.getUTCMonth());
-    if (months === 12) {
-      return {
-        value: ((newest.value - o.value) / o.value) * 100,
-        date: newest.date,
-      };
-    }
-  }
-  return null;
 }
