@@ -5,8 +5,12 @@ import { useRegime } from "@/components/providers/RegimeProvider";
 import styles from "./crypto-sizer.module.css";
 import {
   DEFAULT_INPUTS,
+  clampPortfolio,
   compute,
   formatMoney,
+  PORTFOLIO_LIMIT,
+  REST_RETURN_PCT,
+  RISK_SHARE_LIMIT_PCT,
   verdictTone,
   type Inputs,
 } from "./model";
@@ -25,8 +29,8 @@ const TAIL_DRAG_PER_PP = 3;
  *
  * Two honest readings of bitcoin coexist — tail-risk and reserve-asset.
  * Drag the allocation; the two columns show what the portfolio looks like
- * under each reading. The verdict tells you whether the sizing survives
- * the wrong-reading scenario.
+ * under each reading. Descriptive flags compare the results with explicit
+ * illustrative limits; they do not assess suitability or survivability.
  *
  * Lab-mode reader: when wrapped in a RegimeProvider, the regime shifts the
  * effective return assumptions used by compute(). High inflation strengthens
@@ -91,7 +95,7 @@ export function CryptoSizer() {
     <div className={styles.widget}>
       <div className={styles.head}>
         <span className={styles.headTitle}>
-          Crypto sizer · survive both readings
+          Crypto sizer · compare both readings
           <span
             style={{
               marginLeft: 10,
@@ -112,12 +116,12 @@ export function CryptoSizer() {
 
       {regime && (
         <div className={styles.regimeBanner}>
-          <span className={styles.regimeBannerLabel}>Regime adjustment</span>
+          <span className={styles.regimeBannerLabel}>Illustrative regime adjustment</span>
           <span>
             Inflation {regime.inputs.inflation.toFixed(1)}% vs target {INFLATION_TARGET}% →
-            reserve return {fmtDelta(reserveBoost)}pct ·
+            reserve return {fmtDelta(reserveBoost)} ·
             Fed funds {regime.inputs.fedFunds.toFixed(1)}% vs neutral {NEUTRAL_FED_FUNDS}% →
-            tail return {fmtDelta(tailDrag)}pct
+            tail return {fmtDelta(tailDrag)}
           </span>
           <label htmlFor={followId} className={styles.regimeBannerToggle}>
             <input
@@ -144,13 +148,13 @@ export function CryptoSizer() {
                 id={portfolioId}
                 type="number"
                 min={0}
-                max={100_000_000}
+                max={PORTFOLIO_LIMIT}
                 step={5000}
                 value={inputs.portfolio}
                 onChange={(e) =>
                   update(
                     "portfolio",
-                    Math.max(0, parseFloat(e.target.value) || 0),
+                    clampPortfolio(e.target.valueAsNumber),
                   )
                 }
                 className={styles.input}
@@ -217,10 +221,10 @@ export function CryptoSizer() {
                 <div className={styles.sliderHead}>
                   <label htmlFor={tailReturnId} className={styles.fieldLabel}>
                     {isFollowing
-                      ? `Expected return · regime ${fmtDelta(tailDrag)} (locked)`
+                      ? `Assumed return · regime ${fmtDelta(tailDrag)} (locked)`
                       : tailDrag !== 0
-                        ? `Expected return · slider + regime ${fmtDelta(tailDrag)}`
-                        : "Expected return"}
+                        ? `Assumed return · slider + regime ${fmtDelta(tailDrag)}`
+                        : "Assumed return"}
                   </label>
                   <span className={styles.sliderValue}>
                     {effectiveInputs.tailReturnPct > 0 ? "+" : ""}
@@ -280,13 +284,14 @@ export function CryptoSizer() {
                     className={styles.fieldLabel}
                   >
                     {isFollowing
-                      ? `Expected return · regime ${fmtDelta(reserveBoost)} (locked)`
+                      ? `Assumed return · regime ${fmtDelta(reserveBoost)} (locked)`
                       : reserveBoost !== 0
-                        ? `Expected return · slider + regime ${fmtDelta(reserveBoost)}`
-                        : "Expected return"}
+                        ? `Assumed return · slider + regime ${fmtDelta(reserveBoost)}`
+                        : "Assumed return"}
                   </label>
                   <span className={styles.sliderValue}>
-                    +{effectiveInputs.reserveReturnPct}%
+                    {effectiveInputs.reserveReturnPct > 0 ? "+" : ""}
+                    {effectiveInputs.reserveReturnPct}%
                   </span>
                 </div>
                 <input
@@ -332,7 +337,7 @@ export function CryptoSizer() {
 
         <div className={styles.results}>
           <div className={verdictClass}>
-            {result.verdict.replace("-", " ")}
+            Illustration: {result.verdict.replaceAll("-", " ")}
           </div>
           <p className={styles.explanation}>{result.explanation}</p>
 
@@ -350,7 +355,7 @@ export function CryptoSizer() {
             <div
               className={`${styles.compareCell} ${styles.compareCellLabel}`}
             >
-              Expected $ from crypto (1y)
+              Crypto return (1y scenario)
             </div>
             <div
               className={`${styles.compareCell} ${result.tail.expectedDollar < 0 ? styles.compareCellRed : ""}`}
@@ -366,7 +371,7 @@ export function CryptoSizer() {
             <div
               className={`${styles.compareCell} ${styles.compareCellLabel}`}
             >
-              Portfolio return (1y)
+              Portfolio return (1y scenario)
             </div>
             <div className={styles.compareCell}>
               {result.tail.portfolioReturnPct.toFixed(1)}%
@@ -378,17 +383,17 @@ export function CryptoSizer() {
             <div
               className={`${styles.compareCell} ${styles.compareCellLabel}`}
             >
-              Crypto&apos;s share of portfolio vol
+              Crypto share of variance
             </div>
             <div
-              className={`${styles.compareCell} ${result.tail.volContribPct > 60 ? styles.compareCellRed : ""}`}
+              className={`${styles.compareCell} ${result.tail.riskSharePct > RISK_SHARE_LIMIT_PCT ? styles.compareCellRed : ""}`}
             >
-              {result.tail.volContribPct.toFixed(0)}%
+              {result.tail.portfolioVolPct > 0 ? `${result.tail.riskSharePct.toFixed(1)}%` : "—"}
             </div>
             <div
-              className={`${styles.compareCell} ${result.reserve.volContribPct > 60 ? styles.compareCellRed : ""}`}
+              className={`${styles.compareCell} ${result.reserve.riskSharePct > RISK_SHARE_LIMIT_PCT ? styles.compareCellRed : ""}`}
             >
-              {result.reserve.volContribPct.toFixed(0)}%
+              {result.reserve.portfolioVolPct > 0 ? `${result.reserve.riskSharePct.toFixed(1)}%` : "—"}
             </div>
 
             <div
@@ -411,11 +416,15 @@ export function CryptoSizer() {
       </div>
 
       <div className={styles.foot}>
-        <span className={styles.footLabel}>What to do ▸</span>
+        <span className={styles.footLabel}>Assumptions ▸</span>
         <span>
-          Size for the wrong reading, not the right one. If the position
-          breaks the portfolio under the tail-risk reading, you&apos;ve sized
-          for a reserve-asset bet you can&apos;t afford to lose.
+          Correlation with other holdings is fixed at zero. Risk share is
+          weighted crypto variance divided by total variance, equivalent to
+          its relative contribution to volatility under this assumption.
+          Other holdings assume {REST_RETURN_PCT}% annual return and {inputs.restVolPct}%
+          volatility; they stay flat in the crypto-only drawdown stress.
+          Returns and regime adjustments are illustrative assumptions. Correlations
+          and simultaneous losses in other assets can change the outcome.
         </span>
       </div>
     </div>
@@ -423,7 +432,7 @@ export function CryptoSizer() {
 }
 
 function fmtDelta(n: number): string {
-  if (n > 0) return `+${n}pct`;
-  if (n < 0) return `${n}pct`;
-  return "0";
+  if (n > 0) return `+${n}pp`;
+  if (n < 0) return `${n}pp`;
+  return "0pp";
 }

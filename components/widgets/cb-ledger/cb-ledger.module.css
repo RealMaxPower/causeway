@@ -177,8 +177,12 @@
   cursor: pointer;
   transition: background 120ms ease;
 }
-.action:hover {
+.action:hover:not(:disabled) {
   background: var(--paper-3);
+}
+.action:disabled {
+  cursor: not-allowed;
+  background: var(--paper-2);
 }
 .actionTitle {
   font-weight: 600;

@@ -61,6 +61,20 @@ export function cbReducer(state: CBState, action: CBAction): CBState {
     case "QE": {
       // CB buys $STEP of Treasuries from the bank.
       // CB: treasuries +, bankReserves +. Bank: securities −, reserves +.
+      if (state.bank.securities < STEP_AMOUNT) {
+        return {
+          ...state,
+          pulse: {},
+          events: pushEvent(state, [
+            { kind: "money-down", text: "QE blocked" },
+            {
+              kind: "text",
+              text: " — the bank has insufficient securities for a $100B sale.",
+            },
+          ]),
+          step: state.step + 1,
+        };
+      }
       return {
         ...state,
         cb: {

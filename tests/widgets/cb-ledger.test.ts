@@ -78,6 +78,50 @@ describe("cb-ledger reducer", () => {
       expect(cbAssets(after)).toBe(cbLiab(after));
       expect(bankAssets(after)).toBe(bankLiab(after));
     });
+
+    it("26 QE attempts exhaust the bank's securities without creating negative assets", () => {
+      let state = initState();
+      for (let i = 0; i < 26; i++) {
+        state = cbReducer(state, { type: "QE" });
+        expect(state.bank.securities).toBeGreaterThanOrEqual(0);
+        expect(state.cb.bankReserves).toBe(state.bank.reserves);
+        expect(cbAssets(state)).toBe(cbLiab(state));
+        expect(bankAssets(state)).toBe(bankLiab(state));
+      }
+      expect(state.bank.securities).toBe(0);
+      expect(state.cb.treasuries).toBe(6500);
+      expect(state.bank.reserves).toBe(5700);
+      expect(baseMoney(state)).toBe(8000);
+      expect(broadMoney(state)).toBe(17300);
+      expect(state.events[0].segments[0].text).toBe("QE blocked");
+      expect(state.pulse).toEqual({});
+    });
+
+    it("blocks a partial sale and permits an exactly funded sale", () => {
+      for (const securities of [0, 99, 100]) {
+        const before = initState();
+        before.bank.securities = securities;
+        const after = cbReducer(before, { type: "QE" });
+        if (securities < STEP_AMOUNT) {
+          expect(after.cb).toEqual(before.cb);
+          expect(after.bank).toEqual(before.bank);
+        } else {
+          expect(after.bank.securities).toBe(0);
+          expect(after.bank.reserves).toBe(3300);
+        }
+      }
+    });
+
+    it("QT replenishes securities so QE can resume", () => {
+      let state = initState();
+      for (let i = 0; i < 25; i++) state = cbReducer(state, { type: "QE" });
+      const exhausted = state;
+      state = cbReducer(state, { type: "QT" });
+      expect(state.bank.securities).toBe(100);
+      state = cbReducer(state, { type: "QE" });
+      expect(state.bank).toEqual(exhausted.bank);
+      expect(state.cb).toEqual(exhausted.cb);
+    });
   });
 
   describe("QT", () => {

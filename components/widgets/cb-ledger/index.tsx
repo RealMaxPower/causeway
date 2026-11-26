@@ -2,7 +2,7 @@
 
 import { useEffect, useReducer, useRef, useState } from "react";
 import styles from "./cb-ledger.module.css";
-import { cbReducer, initState } from "./reducer";
+import { cbReducer, initState, STEP_AMOUNT } from "./reducer";
 import type { CBState, EventSegment } from "./types";
 
 function fmt(n: number): string {
@@ -183,7 +183,10 @@ export function CBLedger() {
       <div className={styles.actions}>
         <ActionBtn
           title="QE"
-          hint="CB buys $100B Treasuries"
+          hint={state.bank.securities < STEP_AMOUNT
+            ? "Unavailable: bank securities below $100B"
+            : "CB buys $100B Treasuries"}
+          disabled={state.bank.securities < STEP_AMOUNT}
           onClick={() => dispatch({ type: "QE" })}
         />
         <ActionBtn
@@ -268,12 +271,13 @@ function EventSpan({ segment }: { segment: EventSegment }) {
 interface ActionBtnProps {
   title: string;
   hint: string;
+  disabled?: boolean;
   onClick: () => void;
 }
 
-function ActionBtn({ title, hint, onClick }: ActionBtnProps) {
+function ActionBtn({ title, hint, disabled, onClick }: ActionBtnProps) {
   return (
-    <button type="button" className={styles.action} onClick={onClick}>
+    <button type="button" className={styles.action} disabled={disabled} onClick={onClick}>
       <div className={styles.actionTitle}>{title}</div>
       <div className={styles.actionHint}>{hint}</div>
     </button>

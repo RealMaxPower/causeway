@@ -115,6 +115,16 @@
   padding: 24px 28px;
 }
 
+.assumptions {
+  padding: 14px 20px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-2);
+  font-family: var(--cw-serif);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
 .tableHead, .tableRow {
   display: grid;
   grid-template-columns: 200px 70px 1fr 100px 80px;
