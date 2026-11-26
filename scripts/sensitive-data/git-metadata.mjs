@@ -73,7 +73,18 @@ export function addObjectMetadata(snapshot, data, type) {
       add(`@git/${type}/header/${header.name}`, `${header.lines.join("\n")}\n`);
     }
   }
-  add(type === "commit" ? "@git/message" : "@git/tag/message", message);
+  let messagePath = type === "commit" ? "@git/message" : "@git/tag/message";
+  if (type === "commit") {
+    const parents = headers.filter((header) => header.name === "parent").map((header) => header.value);
+    // GitHub's generated summary names the merged head and then the base.
+    // Only immutable commits with those exact ordered parents get this path;
+    // a pre-commit message has no such provenance and stays fully scanned.
+    if (parents.length === 2 && parents[0].length === parents[1].length &&
+        message === `Merge ${parents[1]} into ${parents[0]}\n`) {
+      messagePath = "@git/commit/merge-summary";
+    }
+  }
+  add(messagePath, message);
   return type === "tag" ? {
     oid: headers.find((header) => header.name === "object").value,
     type: headers.find((header) => header.name === "type").value,

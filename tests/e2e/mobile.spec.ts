@@ -41,12 +41,11 @@ test.describe("Mobile viewport", () => {
   });
 
   /**
-   * Track H is the priority for the mobile audit per docs/ROADMAP.md.
-   * Each L2 page renders the node's widget; this sweep verifies that no
-   * page introduces horizontal overflow at 390px (iPhone 13).
+   * Cover Track H plus the ledger and rate-transmission widgets. Each L2
+   * page renders its widget; none should overflow at 390px (iPhone 13).
    */
-  const TRACK_H_NODES = ["H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9"];
-  for (const id of TRACK_H_NODES) {
+  const WIDGET_NODES = ["A4", "C5", "H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9"];
+  for (const id of WIDGET_NODES) {
     test(`/nodes/${id}?l=2 fits the iPhone 13 viewport`, async ({ page }) => {
       await page.goto(`/nodes/${id}?l=2`);
       const overflow = await page.evaluate(
@@ -55,6 +54,22 @@ test.describe("Mobile viewport", () => {
       expect(overflow).toBeLessThanOrEqual(1);
     });
   }
+
+  test("QE stops at available securities and resumes after QT", async ({ page }) => {
+    await page.goto("/nodes/A4?l=2");
+    const qe = page.getByRole("button", { name: /^QE / });
+    for (let i = 0; i < 25; i++) await qe.click();
+    await expect(qe).toBeDisabled();
+    await expect(qe).toContainText("Unavailable: bank securities below $100B");
+
+    await page.getByRole("button", { name: /^QT / }).click();
+    await expect(qe).toBeEnabled();
+    await qe.click();
+    await expect(qe).toBeDisabled();
+
+    await page.getByRole("button", { name: /Reset/ }).click();
+    await expect(qe).toBeEnabled();
+  });
 
   test("widget number inputs hit the 44px touch-target minimum", async ({ page }) => {
     // H7 hosts the leverage-stress widget which has the most number inputs.

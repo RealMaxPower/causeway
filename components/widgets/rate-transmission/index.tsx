@@ -3,7 +3,7 @@
 import { useId, useState } from "react";
 import { useRegime } from "@/components/providers/RegimeProvider";
 import styles from "./rate-transmission.module.css";
-import { CHANNELS, HORIZON, pathFor, readingAt, type Channel } from "./model";
+import { CHANNELS, DEFAULT_DELTA_BP, DEFAULT_MONTH, HORIZON, MODEL_ASSUMPTIONS, pathFor, readingAt, type Channel } from "./model";
 
 /** Neutral fed-funds reference for deriving a regime-implied policy Δ (bp). */
 const NEUTRAL_FED_FUNDS = 3.5;
@@ -34,8 +34,8 @@ export function RateTransmission() {
     ? clampDelta(Math.round((regime.inputs.fedFunds - NEUTRAL_FED_FUNDS) * 100))
     : null;
 
-  const [localDelta, setLocalDelta] = useState(-100); // bp · negative = cut
-  const [t, setT] = useState(6);
+  const [localDelta, setLocalDelta] = useState(DEFAULT_DELTA_BP);
+  const [t, setT] = useState(DEFAULT_MONTH);
   const [followRegime, setFollowRegime] = useState(false);
   const delta = regimeDelta ?? localDelta;
   const deltaPct = delta / 100;
@@ -60,7 +60,7 @@ export function RateTransmission() {
 
       <div className={styles.controls}>
         <div>
-          <div className={styles.eyebrow}>Policy change Δ</div>
+          <label htmlFor={deltaId} className={styles.eyebrow}>Hypothetical policy change Δ</label>
           <div className={deltaBigClass}>
             {delta > 0 ? "+" : ""}
             {delta} bp
@@ -104,7 +104,7 @@ export function RateTransmission() {
         </div>
 
         <div>
-          <div className={styles.eyebrow}>Months since</div>
+          <label htmlFor={tId} className={styles.eyebrow}>Months since</label>
           <div className={`${styles.bigNum} ${styles.bigNumMonths}`}>
             {t}
             <span className={styles.bigNumMonthsSub}> / {HORIZON}</span>
@@ -134,15 +134,22 @@ export function RateTransmission() {
       <div className={styles.table}>
         <div className={styles.tableHead}>
           <span>Channel</span>
-          <span>Peak lag</span>
+          <span>Half-effect lag</span>
           <span className={styles.colPath}>Path · 0 → 24mo</span>
-          <span className={styles.colRight}>Now (t={t})</span>
+          <span className={styles.colRight}>Model (t={t})</span>
           <span className={`${styles.colRight} ${styles.colDelta}`}>Δ vs base</span>
         </div>
 
         {CHANNELS.map((c) => (
           <ChannelRow key={c.id} c={c} deltaPct={deltaPct} t={t} />
         ))}
+      </div>
+
+      <div className={styles.assumptions}>
+        {MODEL_ASSUMPTIONS}
+        {regime && (
+          <> Lab Δ treats the selected rate&apos;s distance from the {NEUTRAL_FED_FUNDS}% reference as the hypothetical policy shift.</>
+        )}
       </div>
     </div>
   );

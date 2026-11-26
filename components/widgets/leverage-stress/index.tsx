@@ -6,7 +6,11 @@ import styles from "./leverage-stress.module.css";
 import {
   ASSET_TEMPLATES,
   DEFAULT_INPUTS,
+  INCOME_LIMIT,
+  POSITION_LIMIT,
+  clampMoney,
   compute,
+  inputsForAsset,
   findAssetTemplate,
   formatMoney,
   verdictTone,
@@ -48,6 +52,8 @@ export function LeverageStress() {
   const assetStressId = useId();
   const incomeStressId = useId();
   const followId = useId();
+  const rateTypeId = useId();
+  const maintenanceId = useId();
 
   // When a regime is present, fold the regime-implied stress into the
   // baseline so compute() sees the total. When "follow" is on, the slider is
@@ -68,16 +74,17 @@ export function LeverageStress() {
   }
 
   function setKind(kind: AssetKind) {
-    const t = findAssetTemplate(kind);
-    if (!t) return;
     setInputs((p) => ({
-      ...p,
-      kind,
-      apr: t.defaultRate,
-      termMonths: t.defaultTerm,
-      loanAmount: Math.round(p.assetValue * (t.defaultLtv / 100)),
+      ...inputsForAsset(kind),
+      rateStressBp: p.rateStressBp,
+      assetStressPct: p.assetStressPct,
+      incomeStressPct: p.incomeStressPct,
     }));
   }
+
+  const margin = inputs.kind === "margin-loan";
+  const rental = inputs.kind === "rental-property";
+  const percent = (value: number) => Number.isFinite(value) ? `${value.toFixed(1)}%` : "—";
 
   const tone = verdictTone(result.verdict);
   const verdictClass =
@@ -141,11 +148,11 @@ export function LeverageStress() {
                 id={assetId}
                 type="number"
                 min={0}
-                max={50_000_000}
+                max={POSITION_LIMIT}
                 step={5000}
                 value={inputs.assetValue}
                 onChange={(e) =>
-                  update("assetValue", Math.max(0, parseFloat(e.target.value) || 0))
+                  update("assetValue", clampMoney(e.target.valueAsNumber, POSITION_LIMIT))
                 }
                 className={styles.input}
               />
@@ -155,18 +162,18 @@ export function LeverageStress() {
 
           <div className={styles.field}>
             <label htmlFor={loanId} className={styles.fieldLabel}>
-              Loan amount
+              Loan balance
             </label>
             <div className={styles.fieldRow}>
               <input
                 id={loanId}
                 type="number"
                 min={0}
-                max={50_000_000}
+                max={POSITION_LIMIT}
                 step={5000}
                 value={inputs.loanAmount}
                 onChange={(e) =>
-                  update("loanAmount", Math.max(0, parseFloat(e.target.value) || 0))
+                  update("loanAmount", clampMoney(e.target.valueAsNumber, POSITION_LIMIT))
                 }
                 className={styles.input}
               />
@@ -177,7 +184,7 @@ export function LeverageStress() {
           <div className={styles.field}>
             <div className={styles.sliderHead}>
               <label htmlFor={aprId} className={styles.fieldLabel}>
-                APR
+                Annual interest rate
               </label>
               <span className={styles.sliderValue}>
                 {inputs.apr.toFixed(1)}%
@@ -195,10 +202,19 @@ export function LeverageStress() {
             />
           </div>
 
-          <div className={styles.field}>
+          {!margin && <div className={styles.field}>
+            <label htmlFor={rateTypeId} className={styles.fieldLabel}>Rate terms</label>
+            <select id={rateTypeId} className={styles.input} value={inputs.rateType}
+              onChange={(e) => update("rateType", e.target.value === "fixed" ? "fixed" : "floating")}>
+              <option value="fixed">Fixed rate</option>
+              <option value="floating">Floating · immediate reset</option>
+            </select>
+          </div>}
+
+          {!margin && <div className={styles.field}>
             <div className={styles.sliderHead}>
               <label htmlFor={termId} className={styles.fieldLabel}>
-                Term
+                Remaining term
               </label>
               <span className={styles.sliderValue}>
                 {inputs.termMonths} mo
@@ -214,22 +230,32 @@ export function LeverageStress() {
               onChange={(e) => update("termMonths", parseInt(e.target.value))}
               className={styles.range}
             />
-          </div>
+          </div>}
+
+          {margin && <div className={styles.field}>
+            <div className={styles.sliderHead}>
+              <label htmlFor={maintenanceId} className={styles.fieldLabel}>Maintenance · equity / assets</label>
+              <span className={styles.sliderValue}>{inputs.maintenanceMarginPct}%</span>
+            </div>
+            <input id={maintenanceId} type="range" min={25} max={50} step={1}
+              value={inputs.maintenanceMarginPct} className={styles.range}
+              onChange={(e) => update("maintenanceMarginPct", Number(e.target.value))} />
+          </div>}
 
           <div className={styles.field}>
             <label htmlFor={incomeId} className={styles.fieldLabel}>
-              Monthly income · net (rent if rental, take-home if personal)
+              {rental ? "Monthly rental NOI · after operating costs, before debt" : "Monthly take-home income"}
             </label>
             <div className={styles.fieldRow}>
               <input
                 id={incomeId}
                 type="number"
                 min={0}
-                max={500_000}
+                max={INCOME_LIMIT}
                 step={500}
                 value={inputs.monthlyIncome}
                 onChange={(e) =>
-                  update("monthlyIncome", Math.max(0, parseFloat(e.target.value) || 0))
+                  update("monthlyIncome", clampMoney(e.target.valueAsNumber, INCOME_LIMIT))
                 }
                 className={styles.input}
               />
@@ -335,23 +361,39 @@ export function LeverageStress() {
             <div className={styles.compareHead}>Base</div>
             <div className={styles.compareHead}>Under stress</div>
 
-            <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>Monthly payment</div>
+            <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>{margin ? "Monthly interest" : "Monthly principal + interest"}</div>
             <div className={styles.compareCell}>{formatMoney(result.basePayment)}</div>
             <div className={styles.compareCell}>{formatMoney(result.stressedPayment)}</div>
 
             <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>LTV</div>
-            <div className={styles.compareCell}>{result.ltv.toFixed(1)}%</div>
+            <div className={styles.compareCell}>{percent(result.ltv)}</div>
             <div className={`${styles.compareCell} ${result.stressedLtv > 100 ? styles.compareCellRed : ""}`}>
-              {Number.isFinite(result.stressedLtv) ? `${result.stressedLtv.toFixed(1)}%` : "—"}
+              {percent(result.stressedLtv)}
             </div>
 
-            <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>Payment / income</div>
-            <div className={styles.compareCell}>{result.baseDti.toFixed(1)}%</div>
-            <div className={`${styles.compareCell} ${result.stressedDti > 40 ? styles.compareCellRed : ""}`}>
-              {Number.isFinite(result.stressedDti) ? `${result.stressedDti.toFixed(1)}%` : "—"}
-            </div>
+            {rental ? <>
+              <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>DSCR · NOI / payment</div>
+              <div className={styles.compareCell}>{result.basePayment === 0 ? "No payment" : `${result.baseDscr.toFixed(2)}×`}</div>
+              <div className={`${styles.compareCell} ${result.stressedDscr < 1 ? styles.compareCellRed : ""}`}>
+                {result.stressedPayment === 0 ? "No payment" : `${result.stressedDscr.toFixed(2)}×`}
+              </div>
+            </> : <>
+              <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>{margin ? "Interest / take-home" : "Payment / take-home"}</div>
+              <div className={styles.compareCell}>{percent(result.basePaymentToIncome)}</div>
+              <div className={`${styles.compareCell} ${result.stressedPaymentToIncome > 40 ? styles.compareCellRed : ""}`}>
+                {percent(result.stressedPaymentToIncome)}
+              </div>
+            </>}
 
-            <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>Equity under stress</div>
+            {margin && <>
+              <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>Equity / assets · minimum {inputs.maintenanceMarginPct}%</div>
+              <div className={styles.compareCell}>{percent(result.baseEquityPct)}</div>
+              <div className={`${styles.compareCell} ${result.marginCall ? styles.compareCellRed : ""}`}>
+                {percent(result.stressedEquityPct)}
+              </div>
+            </>}
+
+            <div className={`${styles.compareCell} ${styles.compareCellLabel}`}>Equity</div>
             <div className={styles.compareCell}>{formatMoney(inputs.assetValue - inputs.loanAmount)}</div>
             <div className={`${styles.compareCell} ${result.stressedUnderwater ? styles.compareCellRed : ""}`}>
               {formatMoney(result.stressedEquity)}
@@ -361,12 +403,8 @@ export function LeverageStress() {
       </div>
 
       <div className={styles.foot}>
-        <span className={styles.footLabel}>What to do ▸</span>
-        <span>
-          Well-structured leverage survives the stress with margin. If your
-          position only works in the base case, you don&apos;t have leverage —
-          you have a bet that the regime will hold.
-        </span>
+        <span className={styles.footLabel}>Model assumptions ▸</span>
+        <span>{result.assumptions}</span>
       </div>
     </div>
   );

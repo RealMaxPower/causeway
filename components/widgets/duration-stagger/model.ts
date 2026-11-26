@@ -1,9 +1,9 @@
 /**
  * Duration stagger simulator (H8).
  *
- * The H8 pedagogy: extending duration is the canonical late-cycle move;
- * doing it all at once is the canonical mistake. Stagger to capture most
- * of the regime move without needing to call the pivot exactly.
+ * Compare the cost of waiting with the exposure taken before a yield move.
+ * These prescribed paths illustrate timing risk, not a strategy ranking
+ * that is guaranteed to hold in other markets.
  *
  * This widget simulates a 24-month horizon. The user picks:
  *   - a starting + target duration (e.g. 2y → 10y)
@@ -30,17 +30,17 @@ export const STRATEGIES: Strategy[] = [
   {
     id: "go-now",
     name: "Go now (all in)",
-    blurb: "Extend to target duration in month 0. Captures the full move if cuts arrive — but bleeds the full carry difference if they don't.",
+    blurb: "Move to target duration at month 0. Takes the full price effect of both yield rises and falls; carry is the same for every strategy.",
   },
   {
     id: "stagger",
     name: "Stagger over 12 months",
-    blurb: "Quarter of the extension each three months for a year. Trades theoretical optimum for robustness — survives mistimed pivots without disaster.",
+    blurb: "Move one quarter of the duration gap at months 0, 3, 6 and 9. Spreads the timing of the change without guaranteeing a better outcome.",
   },
   {
     id: "wait-confirmation",
     name: "Wait for confirmation",
-    blurb: "Hold short until the cuts actually start, then extend over the following six months. Misses the pre-pivot rally but doesn't bleed while waiting.",
+    blurb: "Keep starting duration through the first monthly yield cut, then move one sixth of the gap in each of the following six months.",
   },
 ];
 
@@ -50,37 +50,39 @@ export interface Scenario {
   blurb: string;
   /** Monthly rate changes (percentage points) over the 24-month horizon. */
   rateChanges: number[];
-  /** Month at which the rate-cut cycle is "confirmed" (used by wait strategy). */
-  confirmMonth: number;
+  /** Elapsed month when the first monthly cut has been observed; null if none. */
+  confirmMonth: number | null;
 }
 
-export const SCENARIOS: Scenario[] = [
+const SCENARIO_PATHS: Omit<Scenario, "confirmMonth">[] = [
   {
     id: "on-time",
     name: "Cuts on time",
-    blurb: "200bp of cuts arrive smoothly over months 6-12, the playbook scenario. Markets price in early; the rally compounds.",
+    blurb: "Six monthly yield cuts end in months 7–12 (200bp total); smaller cuts end in months 13–18 (25bp total). There is no modeled price rally before these yield changes occur.",
     rateChanges: buildOnTime(),
-    confirmMonth: 6,
   },
   {
     id: "delayed",
-    name: "Cuts delayed 12 months",
-    blurb: "Cuts get pushed back; the 'higher-for-longer' narrative wins through 2023-style. The extend-early strategy bleeds for a year before the move.",
+    name: "Cuts after month 12",
+    blurb: "Yields rise 60bp through month 12, then fall 200bp in six monthly steps ending in months 13–18. Carry may offset some or all of the early price losses.",
     rateChanges: buildDelayed(),
-    confirmMonth: 18,
   },
   {
     id: "higher-for-longer",
-    name: "No cuts · curve sits",
-    blurb: "Rates flat or even creeping higher over the full horizon. Duration trade is a clean loss; staying short was the call.",
+    name: "No cuts · yields rise",
+    blurb: "Yields rise 45bp over the first 18 months, then stay flat. There is no cut to confirm. Longer duration loses more on price; total return also includes carry.",
     rateChanges: buildHigherForLonger(),
-    confirmMonth: HORIZON_MONTHS, // never confirms
   },
 ];
 
+export const SCENARIOS: Scenario[] = SCENARIO_PATHS.map((scenario) => {
+  const firstCut = scenario.rateChanges.findIndex((change) => change < 0);
+  return { ...scenario, confirmMonth: firstCut < 0 ? null : firstCut + 1 };
+});
+
 function buildOnTime(): number[] {
   const arr = new Array(HORIZON_MONTHS).fill(0);
-  // 200bp of cuts over months 6-12, plus 25bp drift down through month 18.
+  // Six cuts end at months 7–12; six smaller cuts end at months 13–18.
   for (let m = 6; m < 12; m++) arr[m] = -200 / 6 / 100; // -0.333pp per month
   for (let m = 12; m < 18; m++) arr[m] = -25 / 6 / 100;
   return arr;
@@ -96,16 +98,15 @@ function buildDelayed(): number[] {
 
 function buildHigherForLonger(): number[] {
   const arr = new Array(HORIZON_MONTHS).fill(0);
-  // Slow drift upward for the first 18 months, brief drop in the last quarter.
+  // The no-cut scenario stays flat after its initial rise.
   for (let m = 0; m < 18; m++) arr[m] = 0.025;
-  for (let m = 21; m < 24; m++) arr[m] = -0.1;
   return arr;
 }
 
 export interface Inputs {
-  /** Starting portfolio duration in years (e.g. 2y T-bills). */
+  /** Starting modified duration (price sensitivity), in years; not maturity. */
   startDuration: number;
-  /** Target portfolio duration (e.g. 10y Treasuries). */
+  /** Target modified duration in years; not bond maturity. */
   targetDuration: number;
   /** Coupon / running yield approximation, annualised %. */
   carryPct: number;
@@ -120,12 +121,13 @@ export const DEFAULT_INPUTS: Inputs = {
 };
 
 export interface MonthlyPoint {
+  /** Elapsed month at the end of this observation, from 1 through 24. */
   month: number;
   /** Portfolio duration this month (years). */
   duration: number;
-  /** Monthly return (%). */
+  /** Monthly contribution, percentage points of starting portfolio value. */
   monthlyReturn: number;
-  /** Cumulative total return (%). */
+  /** Sum of monthly contributions (% of starting value), without compounding. */
   cumReturn: number;
 }
 
@@ -134,7 +136,7 @@ export interface StrategyResult {
   points: MonthlyPoint[];
   /** Total return over the horizon, %. */
   totalReturn: number;
-  /** Worst peak-to-trough during the horizon, %. */
+  /** Largest loss as a percentage of prior peak wealth, including initial 100. */
   maxDrawdown: number;
   /** Final portfolio duration. */
   finalDuration: number;
@@ -143,28 +145,35 @@ export interface StrategyResult {
 /**
  * For a given strategy + scenario, build the month-by-month duration
  * path and compute returns. Monthly return ≈ carry/12 − duration × rate
- * change (in percentage points).
+ * change (in percentage points). Monthly contributions are added on a fixed
+ * starting-value basis; this deliberately omits compounding and convexity.
  */
 export function simulateStrategy(
   strategy: StrategyId,
   inputs: Inputs,
 ): StrategyResult {
+  for (const [value, maximum] of [[inputs.startDuration, 30], [inputs.targetDuration, 30], [inputs.carryPct, 15]]) {
+    if (!Number.isFinite(value) || value < 0 || value > maximum) {
+      throw new RangeError("Duration inputs must be finite and within the displayed ranges.");
+    }
+  }
   const scenario = SCENARIOS.find((s) => s.id === inputs.scenarioId)!;
   const points: MonthlyPoint[] = [];
 
   let cum = 0;
-  let peak = 0;
+  let peakWealth = 100;
   let maxDD = 0;
 
   for (let m = 0; m < HORIZON_MONTHS; m++) {
     const dur = durationAt(strategy, m, inputs, scenario);
-    const drCpp = scenario.rateChanges[m]; // pp this month
-    const monthlyReturn = inputs.carryPct / 12 - dur * drCpp * 100;
+    const yieldChangePp = scenario.rateChanges[m];
+    const monthlyReturn = inputs.carryPct / 12 - dur * yieldChangePp;
     cum += monthlyReturn;
-    if (cum > peak) peak = cum;
-    const dd = peak - cum;
+    const wealth = 100 + cum;
+    peakWealth = Math.max(peakWealth, wealth);
+    const dd = ((peakWealth - wealth) / peakWealth) * 100;
     if (dd > maxDD) maxDD = dd;
-    points.push({ month: m, duration: dur, monthlyReturn, cumReturn: cum });
+    points.push({ month: m + 1, duration: dur, monthlyReturn, cumReturn: cum });
   }
 
   const finalDuration = durationAt(strategy, HORIZON_MONTHS - 1, inputs, scenario);
@@ -181,9 +190,9 @@ export function simulateStrategy(
 /**
  * Returns the portfolio duration in month m under the given strategy.
  * - go-now: target from m=0
- * - stagger: linear ramp from start to target over months 0-12 in 4 chunks
- * - wait-confirmation: hold start until scenario.confirmMonth, then 6-month
- *   linear ramp to target.
+ * - stagger: four equal steps at the start of months 0, 3, 6 and 9
+ * - wait-confirmation: observe the first cut, then take six equal monthly steps
+ *   starting with the following month; no position uses a future yield change.
  */
 function durationAt(
   strategy: StrategyId,
@@ -206,10 +215,9 @@ function durationAt(
 
   // wait-confirmation
   const start = scenario.confirmMonth;
-  if (m < start) return startDuration;
-  const sinceStart = m - start;
-  if (sinceStart >= 6) return targetDuration;
-  return startDuration + (sinceStart / 6) * (targetDuration - startDuration);
+  if (start === null || m < start) return startDuration;
+  const steps = Math.min(m - start + 1, 6);
+  return startDuration + (steps / 6) * (targetDuration - startDuration);
 }
 
 /** Convenience: simulate all three strategies under the chosen scenario. */

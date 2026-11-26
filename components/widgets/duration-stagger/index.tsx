@@ -2,9 +2,9 @@
 
 import { useId, useMemo, useState } from "react";
 import styles from "./duration-stagger.module.css";
+import { RateChart, ReturnChart } from "./charts";
 import {
   DEFAULT_INPUTS,
-  HORIZON_MONTHS,
   SCENARIOS,
   findScenario,
   simulateAll,
@@ -87,7 +87,7 @@ export function DurationStagger() {
                 step={0.5}
                 value={inputs.startDuration}
                 onChange={(e) =>
-                  update("startDuration", Math.max(0, parseFloat(e.target.value) || 0))
+                  update("startDuration", Math.min(30, Math.max(0, parseFloat(e.target.value) || 0)))
                 }
                 className={styles.input}
               />
@@ -104,7 +104,7 @@ export function DurationStagger() {
                 step={0.5}
                 value={inputs.targetDuration}
                 onChange={(e) =>
-                  update("targetDuration", Math.max(0, parseFloat(e.target.value) || 0))
+                  update("targetDuration", Math.min(30, Math.max(0, parseFloat(e.target.value) || 0)))
                 }
                 className={styles.input}
               />
@@ -121,7 +121,7 @@ export function DurationStagger() {
                 step={0.1}
                 value={inputs.carryPct}
                 onChange={(e) =>
-                  update("carryPct", Math.max(0, parseFloat(e.target.value) || 0))
+                  update("carryPct", Math.min(15, Math.max(0, parseFloat(e.target.value) || 0)))
                 }
                 className={styles.input}
               />
@@ -130,19 +130,26 @@ export function DurationStagger() {
         </div>
       </div>
 
-      {scenario && <div className={styles.blurb}>{scenario.blurb}</div>}
+      {scenario && (
+        <div className={styles.blurb}>
+          {scenario.blurb}{" "}
+          {scenario.confirmMonth === null
+            ? "The wait strategy keeps its starting duration throughout."
+            : `The first cut is observed at month ${scenario.confirmMonth}; the wait strategy then takes six monthly steps toward its target.`}
+        </div>
+      )}
 
       <div className={styles.charts}>
         <div>
           <div className={styles.chartHead}>
-            <span>Rate path · cumulative change from month 0 (pp)</span>
+            <span>Bond-yield path · cumulative change (pp)</span>
             <span style={{ color: "var(--ink-3)" }}>24 months →</span>
           </div>
           {scenario && <RateChart rateChanges={scenario.rateChanges} />}
         </div>
         <div>
           <div className={styles.chartHead}>
-            <span>Cumulative total return (%) · all three strategies</span>
+            <span>Additive cumulative return (%) · all three strategies</span>
             <span style={{ color: "var(--ink-3)" }}>24 months →</span>
           </div>
           <ReturnChart results={results} />
@@ -181,8 +188,8 @@ export function DurationStagger() {
         </div>
         <div className={styles.resultsTable}>
           <div className={styles.resultsCellHead}>Strategy</div>
-          <div className={styles.resultsCellHead}>Total return</div>
-          <div className={styles.resultsCellHead}>Max drawdown</div>
+          <div className={styles.resultsCellHead}>Additive return</div>
+          <div className={styles.resultsCellHead}>Max drawdown (% of peak)</div>
           <div className={styles.resultsCellHead}>Final duration</div>
 
           {results.map((r, i) => (
@@ -192,12 +199,16 @@ export function DurationStagger() {
       </div>
 
       <div className={styles.foot}>
-        <span className={styles.footLabel}>What this is ▸</span>
+        <span className={styles.footLabel}>Model assumptions ▸</span>
         <span>
-          Staggering trades the theoretically-optimal outcome for robustness
-          across scenarios. Walk all three rate paths — the stagger row is
-          almost never the best, but it&apos;s almost never the worst either.
-          That&apos;s the trade.
+          Monthly contribution (%) ≈ carry ÷ 12 − duration × yield change in
+          percentage points. Contributions are added without compounding;
+          every strategy receives the same fixed carry. Duration measures price
+          sensitivity, not maturity. This illustration assumes parallel yield
+          changes and ignores convexity, fees and changing coupons. Drawdown is
+          the largest percentage fall from prior peak wealth, starting at 100.
+          Staggering uses quarter steps at months 0, 3, 6 and 9; it does not
+          guarantee the best return or the smallest loss.
         </span>
       </div>
     </div>
@@ -229,172 +240,11 @@ function ResultRow({ result, isBest }: ResultRowProps) {
         {ret.toFixed(1)}%
       </div>
       <div className={`${styles.resultsCell} ${styles.resultsCellRed}`}>
-        −{result.maxDrawdown.toFixed(1)}%
+        {result.maxDrawdown > 0 ? "−" : ""}{result.maxDrawdown.toFixed(1)}%
       </div>
       <div className={`${styles.resultsCell} ${styles.resultsCellInk}`}>
         {result.finalDuration.toFixed(1)}y
       </div>
     </>
-  );
-}
-
-/* ----------------------------- Charts ----------------------------- */
-
-const CHART_W = 660;
-const CHART_H = 130;
-const PAD_L = 38;
-const PAD_R = 12;
-const PAD_T = 10;
-const PAD_B = 22;
-
-function RateChart({ rateChanges }: { rateChanges: number[] }) {
-  const cum: number[] = [];
-  let s = 0;
-  for (const dr of rateChanges) {
-    s += dr;
-    cum.push(s);
-  }
-  const yMin = Math.min(0, ...cum);
-  const yMax = Math.max(0.1, ...cum);
-  const yRange = Math.max(yMax - yMin, 0.5);
-
-  const xFor = (m: number) =>
-    PAD_L + (m / (HORIZON_MONTHS - 1)) * (CHART_W - PAD_L - PAD_R);
-  const yFor = (v: number) =>
-    CHART_H - PAD_B - ((v - yMin) / yRange) * (CHART_H - PAD_T - PAD_B);
-
-  const d = cum.map((v, m) => `${m === 0 ? "M" : "L"} ${xFor(m)} ${yFor(v)}`).join(" ");
-
-  return (
-    <svg viewBox={`0 0 ${CHART_W} ${CHART_H}`} className={styles.chartSvg} role="img" aria-label="Rate path">
-      <line
-        x1={PAD_L}
-        y1={CHART_H - PAD_B}
-        x2={CHART_W - PAD_R}
-        y2={CHART_H - PAD_B}
-        stroke="var(--ink-2)"
-      />
-      <line x1={PAD_L} y1={CHART_H - PAD_B} x2={PAD_L} y2={PAD_T} stroke="var(--ink-2)" />
-      {/* zero line if range crosses zero */}
-      {yMin < 0 && yMax > 0 && (
-        <line
-          x1={PAD_L}
-          x2={CHART_W - PAD_R}
-          y1={yFor(0)}
-          y2={yFor(0)}
-          stroke="var(--rule-strong)"
-          strokeDasharray="2 3"
-        />
-      )}
-      {/* y labels: min, mid, max */}
-      {[yMin, (yMin + yMax) / 2, yMax].map((v, i) => (
-        <text
-          key={i}
-          x={PAD_L - 4}
-          y={yFor(v) + 3}
-          textAnchor="end"
-          fontSize="9"
-          fontFamily="var(--cw-mono)"
-          fill="var(--ink-3)"
-        >
-          {v >= 0 ? "+" : ""}
-          {v.toFixed(1)}
-        </text>
-      ))}
-      {/* x ticks */}
-      {[0, 6, 12, 18, 23].map((m) => (
-        <text
-          key={m}
-          x={xFor(m)}
-          y={CHART_H - 6}
-          textAnchor="middle"
-          fontSize="9"
-          fontFamily="var(--cw-mono)"
-          fill="var(--ink-3)"
-        >
-          m{m}
-        </text>
-      ))}
-      <path d={d} stroke="var(--ink)" strokeWidth="2" fill="none" />
-    </svg>
-  );
-}
-
-interface ReturnChartProps {
-  results: StrategyResult[];
-}
-
-const STRATEGY_COLORS: Record<string, string> = {
-  "go-now": "var(--cw-red)",
-  "stagger": "var(--gold-deep)",
-  "wait-confirmation": "var(--cw-blue)",
-};
-
-function ReturnChart({ results }: ReturnChartProps) {
-  const all = results.flatMap((r) => r.points.map((p) => p.cumReturn));
-  const yMin = Math.min(0, ...all);
-  const yMax = Math.max(1, ...all);
-  const yRange = Math.max(yMax - yMin, 1);
-
-  const xFor = (m: number) =>
-    PAD_L + (m / (HORIZON_MONTHS - 1)) * (CHART_W - PAD_L - PAD_R);
-  const yFor = (v: number) =>
-    CHART_H - PAD_B - ((v - yMin) / yRange) * (CHART_H - PAD_T - PAD_B);
-
-  return (
-    <svg viewBox={`0 0 ${CHART_W} ${CHART_H}`} className={styles.chartSvg} role="img" aria-label="Strategy returns">
-      <line
-        x1={PAD_L}
-        y1={CHART_H - PAD_B}
-        x2={CHART_W - PAD_R}
-        y2={CHART_H - PAD_B}
-        stroke="var(--ink-2)"
-      />
-      <line x1={PAD_L} y1={CHART_H - PAD_B} x2={PAD_L} y2={PAD_T} stroke="var(--ink-2)" />
-      {yMin < 0 && yMax > 0 && (
-        <line
-          x1={PAD_L}
-          x2={CHART_W - PAD_R}
-          y1={yFor(0)}
-          y2={yFor(0)}
-          stroke="var(--rule-strong)"
-          strokeDasharray="2 3"
-        />
-      )}
-      {[yMin, (yMin + yMax) / 2, yMax].map((v, i) => (
-        <text
-          key={i}
-          x={PAD_L - 4}
-          y={yFor(v) + 3}
-          textAnchor="end"
-          fontSize="9"
-          fontFamily="var(--cw-mono)"
-          fill="var(--ink-3)"
-        >
-          {v >= 0 ? "+" : ""}
-          {v.toFixed(1)}%
-        </text>
-      ))}
-      {[0, 6, 12, 18, 23].map((m) => (
-        <text
-          key={m}
-          x={xFor(m)}
-          y={CHART_H - 6}
-          textAnchor="middle"
-          fontSize="9"
-          fontFamily="var(--cw-mono)"
-          fill="var(--ink-3)"
-        >
-          m{m}
-        </text>
-      ))}
-      {results.map((r) => {
-        const color = STRATEGY_COLORS[r.strategy.id] ?? "var(--ink)";
-        const d = r.points
-          .map((p, m) => `${m === 0 ? "M" : "L"} ${xFor(m)} ${yFor(p.cumReturn)}`)
-          .join(" ");
-        return <path key={r.strategy.id} d={d} stroke={color} strokeWidth="2" fill="none" />;
-      })}
-    </svg>
   );
 }

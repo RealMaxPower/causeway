@@ -130,6 +130,8 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .chartSvg {
@@ -172,7 +174,7 @@
 
 .resultsTable {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
   gap: 0;
 }
 
@@ -185,6 +187,7 @@
   padding: 8px 10px;
   border-bottom: 1px solid var(--rule);
   background: var(--paper-2);
+  overflow-wrap: anywhere;
 }
 
 .resultsCell {
@@ -252,7 +255,7 @@
   .scenario { flex: 1 1 auto; min-height: 44px; padding: 8px 10px; font-size: 11px; }
   .inputsInline { flex-direction: column; gap: 10px; }
   .charts { padding: 12px 16px; gap: 14px; }
-  .resultsTable { grid-template-columns: 1.2fr 0.9fr 0.9fr 0.9fr; }
+  .resultsTable { grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 0.9fr)); }
   .resultsCell, .resultsCellHead { padding: 8px 5px; font-size: 11px; }
   .resultsCellLabel { font-size: 10.5px; }
   .foot { padding: 12px 16px; flex-direction: column; gap: 6px; }
