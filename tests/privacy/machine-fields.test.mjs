@@ -50,6 +50,23 @@ test('fixed object IDs and clocks require exact metadata provenance, paths and c
   }
 });
 
+test('merge summaries require collector provenance and two complete same-format object IDs', () => {
+  for (const size of [40, 64]) {
+    const content = `Merge ${'a'.repeat(size)} into ${'b'.repeat(size)}\n`;
+    assert.deepEqual(classifyGitMachineFields(record('metadata:merge', '@git/commit/merge-summary', content)), both);
+    for (const invalid of [content.trimEnd(), content + '\n', content.replace('\n', '\r\n'), content + 'extra', 'prefix ' + content,
+      content.replace('into', 'person'), content.replace('a', 'g'), content.replace('a', ''), content.replace('\n', ' suffix\n')]) {
+      assert.deepEqual(classifyGitMachineFields(record('metadata:merge', '@git/commit/merge-summary', invalid)), none);
+    }
+    for (const id of ['blob:merge', 'path:merge', 'ordinary:merge']) {
+      assert.deepEqual(classifyGitMachineFields(record(id, '@git/commit/merge-summary', content)), none);
+    }
+    assert.deepEqual(classifyGitMachineFields(record('metadata:merge', '@git/tag/message', content)), none);
+    assert.deepEqual(classifyGitMachineFields(record('metadata:merge', '@git/message', content)), none);
+  }
+  assert.deepEqual(classifyGitMachineFields(record('metadata:merge', '@git/commit/merge-summary', `Merge ${'a'.repeat(40)} into ${'b'.repeat(64)}\n`)), none);
+});
+
 test('signatures require complete armor plus fixed decoded packet structures', () => {
   assert.deepEqual(classifyGitMachineFields(metadata('gpgsig', fixtures.signature)), ner);
   assert.deepEqual(classifyGitMachineFields(metadata('gpgsig-sha256', fixtures.signature.replace(/^gpgsig /, 'gpgsig-sha256 '))), ner);
@@ -96,7 +113,20 @@ test('real detectors calibrate only complete Git machine fields and retain freef
   const fakeArmor = [' Washington\n AA', ' John\n Smith\n AAA'].map((body, index) => ({ ...metadata('gpgsig', `gpgsig -----BEGIN SSH SIGNATURE-----\n${body}\n -----END SSH SIGNATURE-----\n`), id: 'metadata:fake:' + index }));
   const filename = { ...record('path:fixture', '@git/commit/header/author-time', fixtures.clock.content), machineGitPhone: true };
   const secret = metadata('parent', `parent ghp_${randomBytes(24).toString('hex').slice(0, 36)}\n`); secret.id = 'metadata:secret';
-  const findings = await scanTextRecords([...known, ...ordinary, ssh, ...free, ...fakeArmor, filename, secret], { root });
+  // Public CI merge text that previously produced a PERSON false positive.
+  const mergeText = 'Merge e462a7357f3eb42c42c1320550e86462e74d1303 into 69a4fdcd1219889bd048d73fec1be8c105e39fa3\n';
+  const merge = record('metadata:merge', '@git/commit/merge-summary', mergeText);
+  const precommitMerge = record('metadata:precommit-merge', '@git/message', mergeText);
+  const ordinaryMerge = record('blob:merge', 'synthetic/merge.txt', mergeText);
+  const freeMerge = { ...record('metadata:free-merge', '@git/commit/merge-summary', mergeText + text + '\n' + secret.content), machineGitNer: true, machineGitPhone: true };
+  const findings = await scanTextRecords([...known, ...ordinary, ssh, ...free, ...fakeArmor, filename, secret, merge, precommitMerge, ordinaryMerge, freeMerge], { root });
+  assert.ok(!findings.some((f) => f.recordId === merge.id));
+  assert.ok(findings.some((f) => f.recordId === ordinaryMerge.id && f.rule === 'PERSON'));
+  assert.ok(findings.some((f) => f.recordId === precommitMerge.id && f.rule === 'PERSON'));
+  for (const rule of ['PERSON', 'LOCATION', 'EMAIL_ADDRESS', 'PHONE_NUMBER']) {
+    assert.ok(findings.some((f) => f.recordId === freeMerge.id && f.rule === rule), `Message suffix ${rule} remains detected`);
+  }
+  assert.ok(findings.some((f) => f.recordId === freeMerge.id && f.detector === 'gitleaks'));
   for (const item of known) assert.ok(!findings.some((f) => f.recordId === item.id && ['PERSON', 'LOCATION'].includes(f.rule)));
   for (const item of known.slice(0, 2)) assert.ok(!findings.some((f) => f.recordId === item.id && f.rule === 'PHONE_NUMBER'));
   assert.ok(findings.some((f) => f.recordId === 'ordinary:0' && ['PERSON', 'LOCATION'].includes(f.rule)));

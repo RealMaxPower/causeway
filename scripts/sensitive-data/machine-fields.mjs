@@ -47,6 +47,13 @@ function encodedSignature(content, header) {
 export function classifyGitMachineFields({ id, path, content }) {
   const none = { machineGitNer: false, machineGitPhone: false };
   if (typeof id !== 'string' || !id.startsWith('metadata:') || typeof content !== 'string') return none;
+  // The collector reserves this path for an exact message/ordered-parent match.
+  // Ordinary and pre-commit messages stay fully scanned, even with this syntax.
+  const merge = path === '@git/commit/merge-summary'
+    ? /^Merge ([a-f0-9]{40}|[a-f0-9]{64}) into ([a-f0-9]{40}|[a-f0-9]{64})\n(?![\s\S])/.exec(content) : null;
+  if (merge && merge[1].length === merge[2].length) {
+    return { machineGitNer: true, machineGitPhone: true };
+  }
   const oid = oidHeaders.get(path);
   if (oid && new RegExp(`^${oid} (?:[a-f0-9]{40}|[a-f0-9]{64})\\n(?![\\s\\S])`).test(content)) {
     return { machineGitNer: true, machineGitPhone: true };

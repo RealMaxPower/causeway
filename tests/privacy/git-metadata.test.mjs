@@ -7,6 +7,7 @@ import test from "node:test";
 import { collectHistory, collectMessage } from "../../scripts/sensitive-data/git.mjs";
 import { addObjectMetadata, stableIdentity } from "../../scripts/sensitive-data/git-metadata.mjs";
 import { Snapshot, bufferData } from "../../scripts/sensitive-data/git-snapshot.mjs";
+import { classifyGitMachineFields } from "../../scripts/sensitive-data/machine-fields.mjs";
 
 const PERSON = "Synthetic Fixture <fixture@example.invalid>";
 const tree = "a".repeat(40);
@@ -50,6 +51,38 @@ test("changing tree, parent and clock does not invalidate identical person/messa
   for (const name of ["@git/author", "@git/committer", "@git/message"]) {
     assert.deepEqual(first.find((record) => record.path === name), second.find((record) => record.path === name));
   }
+});
+
+test("only exact summaries matching two ordered commit parents get machine provenance", () => {
+  for (const size of [40, 64]) {
+    const first = "a".repeat(size), second = "b".repeat(size), third = "c".repeat(size);
+    const summary = `Merge ${second} into ${first}\n`;
+    const object = (parents, message) => records(`tree ${third}\n${parents.map((oid) => `parent ${oid}\n`).join("")}author ${PERSON} 978307200 +0000\ncommitter ${PERSON} 978307201 +0000\n\n${message}`);
+    const valid = object([first, second], summary);
+    const found = valid.find((record) => record.path === "@git/commit/merge-summary");
+    assert.equal(found.content, summary);
+    assert.ok(!valid.some((record) => record.path === "@git/message"));
+    assert.deepEqual(classifyGitMachineFields(found), { machineGitNer: true, machineGitPhone: true });
+    for (const [parents, message] of [
+      [[], summary], [[first], summary], [[first, second, third], summary],
+      [[second, first], summary], [[first, third], summary],
+      [[first, second], `Merge ${third} into ${first}\n`],
+      [[first, second], summary + "Synthetic suffix\n"],
+      [[first, second], summary + "\n"],
+      [[first, second], summary.trimEnd()],
+      [[first, second], summary.replace("\n", "\r\n")],
+      [[first, second], summary.replace("\n", " suffix\n")],
+    ]) {
+      const ordinary = object(parents, message);
+      assert.ok(!ordinary.some((record) => record.path === "@git/commit/merge-summary"));
+      const record = ordinary.find((item) => item.path === "@git/message");
+      assert.equal(record.content, message);
+      assert.deepEqual(classifyGitMachineFields(record), { machineGitNer: false, machineGitPhone: false });
+    }
+  }
+  const mixed = records(`${baseHeaders}\nparent ${parent}\nparent ${"c".repeat(64)}\n\nMerge ${"c".repeat(64)} into ${parent}\n`);
+  assert.ok(mixed.some((record) => record.path === "@git/message"));
+  assert.ok(!mixed.some((record) => record.path === "@git/commit/merge-summary"));
 });
 
 test("tagger and tag message records stay stable while every tag header is preserved", () => {
@@ -111,6 +144,19 @@ test("real hook and historical metadata produce identical person/message record 
       assert.deepEqual(hook.records.find((record) => record.path === name), history.records.find((record) => record.path === name));
     }
     assert.ok(history.records.some((record) => record.path === "@git/commit/header/author-time"));
+    const base = git("rev-parse", "HEAD");
+    const committedTree = git("rev-parse", "HEAD^{tree}");
+    const head = git("commit-tree", committedTree, "-p", base, "-m", "Synthetic merged head");
+    const summary = `Merge ${head} into ${base}\n`;
+    const merge = git("commit-tree", committedTree, "-p", base, "-p", head, "-m", summary);
+    const merged = await collectHistory(root, { revisions: [merge] });
+    assert.equal(merged.records.find((record) => record.path === "@git/commit/merge-summary").content, summary);
+    await writeFile(path.join(root, ".git/COMMIT_EDITMSG"), summary);
+    const precommit = await collectMessage(root, ".git/COMMIT_EDITMSG");
+    assert.ok(!precommit.records.some((record) => record.path === "@git/commit/merge-summary"));
+    const message = precommit.records.find((record) => record.path === "@git/message");
+    assert.equal(message.content, summary);
+    assert.deepEqual(classifyGitMachineFields(message), { machineGitNer: false, machineGitPhone: false });
   } finally {
     for (const key of Object.keys(process.env)) if (key.startsWith("GIT_")) delete process.env[key];
     Object.assign(process.env, saved);
