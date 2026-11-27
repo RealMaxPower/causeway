@@ -166,7 +166,8 @@
   color: var(--ink-2);
 }
 
-.colPath svg {
+/* Lower specificity keeps the mobile .colPath hide rule in control. */
+svg:where(.colPath) {
   width: 100%;
   height: 50px;
   display: block;
