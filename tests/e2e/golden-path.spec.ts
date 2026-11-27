@@ -93,10 +93,32 @@ test.describe("Causeway golden path", () => {
     await expect(page.getByRole("heading", { name: /Indicator snapshot/i })).toBeVisible();
     await expect(page.getByRole("link", { name: "View source series" })).toHaveCount(4);
     await expect(page.getByText(/Dates identify observation periods/)).toBeVisible();
+    await expect(page.getByText("Evidence coverage", { exact: true })).toBeVisible();
+    await expect(page.getByText("Trend coverage", { exact: true })).toBeVisible();
+    const implications = page.locator("section").filter({ has: page.getByRole("heading", { name: "What these readings can help you examine" }) });
+    await expect(implications.locator('a[href^="/nodes/"]')).toHaveCount(4);
+    await expect(page.getByText("Confirming axes", { exact: true })).toHaveCount(0);
     // Three named axes should be visible
     await expect(page.getByText(/Inflation/i).first()).toBeVisible();
     await expect(page.getByText(/Money|monetary/i).first()).toBeVisible();
     await expect(page.getByText(/Labor|unemployment/i).first()).toBeVisible();
+  });
+
+  test("H1 scenarios update independent levels without inventing historical change", async ({ page }) => {
+    await page.goto("/nodes/H1?l=2");
+    await page.getByRole("button", { name: "Weak employment illustration", exact: true }).click();
+    await expect(page.getByText("Single-period scenario; direction unavailable", { exact: true })).toBeVisible();
+    await expect(page.getByText("Unemployment above reference band.", { exact: true })).toBeVisible();
+    await expect(page.getByText("Banks report net tightening.", { exact: true })).toBeVisible();
+    const credit = page.getByRole("slider", { name: "Credit · SLOOS net % tightening", exact: true });
+    await credit.focus();
+    await credit.press("Home");
+    await expect(credit).toHaveValue("-40");
+    await expect(page.getByText("Banks report net easing.", { exact: true })).toBeVisible();
+    await credit.press("End");
+    await expect(credit).toHaveValue("80");
+    await expect(page.getByText("Banks report net tightening.", { exact: true })).toBeVisible();
+    await expect(page.getByText("axes confirming the dominant theme", { exact: true })).toHaveCount(0);
   });
 
   test("keyboard layer-switching with 1/2/3 keys", async ({ page }) => {

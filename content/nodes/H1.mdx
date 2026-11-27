@@ -5,13 +5,12 @@ import { RegimeComposer } from "@/components/widgets/regime-composer";
 export const meta = {
   heroClaim: {
     lbl: "The framing",
-    text: "Macro regimes aren't predicted, they're read — the way you read weather. Watch four indicators; when three or more agree, you have your read.",
-    sub: "Inflation, money, labor, credit. The composer below pulls each live from FRED so you can see today's regime, not last quarter's.",
+    text: "A useful regime read separates where an indicator stands from how it changed. Inflation, interest rates, labor, and credit can tell different stories.",
+    sub: "Read each observation's date and source. The dashboard uses dated FRED observations when available; the composer below is an illustrative sandbox.",
   },
-  heroStatsLabel: "By the numbers",
+  heroStatsLabel: "This dashboard",
   heroStats: [
-    { lbl: "Indicators the composer tracks", val: "4", sub: "Inflation, money, labor, credit — each live from FRED, refreshed monthly." },
-    { lbl: "Threshold for a clear regime read", val: "3 of 4", sub: "Three or more confirming axes = a clear read. Fewer = the regime is in transition." },
+    { lbl: "Indicators to read separately", val: "4", sub: "Causeway's dashboard: CPI inflation, the effective federal funds rate, unemployment, and bank lending standards." },
   ],
   relatedNodes: ["H2", "C5", "F1"],
 };
@@ -20,15 +19,15 @@ export const L1Body = (
   <L1 title="The thirty-second answer">
     <div>
       <L1QA question="What is this?">
-        Four orthogonal axes — inflation, money, labor, credit — combine into a regime read.
-        Three of four agreeing is a high-confidence read; two is a turning point. The signal
-        you want is which way the wind is blowing before you make a decision, not what
-        someone says about it after.
+        A regime read is a description of economic conditions. Read inflation, interest
+        rates, unemployment, and bank lending standards separately: what is the level,
+        what changed since the previous period, and how recent is the evidence?
+        A high level alone does not tell you whether an indicator is rising or falling.
       </L1QA>
       <L1QA question="Why should I care?">
-        Every Track H decision — saving, housing, career, debt — is regime-dependent.
-        Reading the regime first means each later question is a smaller question.
-        Skipping it means re-litigating every decision from scratch.
+        These conditions can change the questions you ask about saving, housing, career,
+        and debt. They do not settle those decisions. Compare the economic evidence with
+        your actual borrowing terms, income resilience, and time horizon.
       </L1QA>
     </div>
     <div
@@ -49,7 +48,7 @@ export const L1Body = (
           marginBottom: 12,
         }}
       >
-        Open the live read
+        Open the dated indicator snapshot
       </div>
       <p
         style={{
@@ -60,9 +59,11 @@ export const L1Body = (
           margin: "0 0 14px",
         }}
       >
-        Four FRED indicators are wired — CPI YoY (CPIAUCSL), the effective fed funds
-        rate (FEDFUNDS), U-3 unemployment (UNRATE), and SLOOS net-tightening (DRTSCILM).
-        The dashboard updates each time FRED publishes.
+        The dashboard derives annual CPI inflation from CPIAUCSL and reads the effective
+        federal funds rate (FEDFUNDS), unemployment (UNRATE), and banks&apos; net tightening
+        share (DRTSCILM). The first three are monthly; the lending survey is quarterly.
+        Check each observation date and source: unavailable provider data may be replaced
+        by a clearly labelled bundled illustration.
       </p>
       <Link
         href="/regime"
@@ -82,173 +83,192 @@ export const L1Body = (
 export const L2Body = (
   <L2 title="Four axes, read one at a time">
     <L2Grid>
-      <L2Step num="01" title="Pick orthogonal axes, not collinear ones">
+      <L2Step num="01" title="Separate the level from the change">
         <p className="lede">
-          A regime read is only useful if the axes can disagree. Inflation, money, labor,
-          and credit can each be loose or tight independently — and the interesting moments
-          are when they do.
+          Annual inflation of 3% could follow 2.5% or 3.5% in the previous month.
+          The same current level can mean inflation rose or fell. A fall in a positive
+          inflation rate means prices rose more slowly, not that prices fell.
         </p>
         <p>
-          Blending them into one number hides the disagreement, which is where the
-          information actually is. Report each axis alone; let the composite be the
-          count of axes confirming a theme.
-        </p>
-      </L2Step>
-      <L2Step num="02" title="Cheap thresholds beat clever models">
-        <p>
-          A dashboard built for decision support doesn&apos;t need a hidden-state filter —
-          it needs <em>thresholds you can defend in a sentence</em>. Inflation against the
-          Fed&apos;s target, fed funds against r*, unemployment against its long-run
-          average. The post-1990 sample is calibration enough.
+          The dashboard compares adjacent months, or adjacent quarters for lending
+          standards. For inflation it compares the annual inflation rates in those two
+          months. A missing comparison means change is unknown, not zero. Two observations
+          describe a change; they do not establish a lasting trend or a turning point.
         </p>
       </L2Step>
-      <L2Step num="03" title="Turning points are the point">
+      <L2Step num="02" title="Keep the reference assumptions visible">
         <p>
-          Three-of-four agreeing is a recognisable regime; the decisions in Track H
-          ride on it. Two-of-four is the more interesting state — that&apos;s when the
-          regime is about to flip and the canonical playbook stops working. The dashboard
-          should make turning points <strong>obvious</strong>, not hide them in a
-          smoothed average.
+          Causeway uses a 2% CPI benchmark, a 3% nominal interest-rate reference with
+          a 2.5–3.5% band, and unemployment boundaries of 4.5% and 5.5%.
+          These are illustrative teaching choices. The Fed&apos;s 2% inflation goal uses
+          PCE, not CPI; the interest-rate band does not estimate the neutral rate; and
+          the unemployment band does not estimate full employment.
+        </p>
+      </L2Step>
+      <L2Step num="03" title="Read the sign as well as the movement">
+        <p>
+          The lending survey reports the share of banks tightening standards minus the
+          share easing them. Positive means net tightening; negative means net easing.
+          A fall from +20% to +5% is a 15 percentage-point fall in the net tightening
+          share, but banks still report <strong>net tightening</strong>. It is not the
+          same observation as net easing.
+        </p>
+      </L2Step>
+      <L2Step num="04" title="Count evidence, not confidence">
+        <p>
+          <strong>Evidence coverage</strong> counts recent FRED observations supporting
+          the displayed level classifications. Available adjacent-period comparisons are
+          counted separately. Neither count measures agreement between indicators,
+          confidence in an economic forecast, or the probability of a turning point.
+          Read mixed directions as mixed directions.
         </p>
       </L2Step>
       <Callout
-        title="Read the regime before you decide anything else."
-        link={{ to: "/regime", text: "Regime dashboard · live" }}
+        title="Use the evidence to ask a better decision question."
+        link={{ to: "/regime", text: "Regime dashboard · dated observations" }}
       >
         <p>
-          When the regime is clear, most Track H questions answer themselves. When the
-          regime is turning, the same questions need different answers than they did six
-          months ago. Either way, this is the first stop.
+          If rates change, ask whether your savings yield or loan quote has changed too.
+          If lending standards tighten, ask whether financing remains available on terms
+          you can sustain. These are conditional checks, not instructions to buy, sell,
+          borrow, or wait based on a dashboard label.
         </p>
       </Callout>
     </L2Grid>
 
+    <p>
+      The composer below lets you change hypothetical levels. Its sliders do not fetch
+      FRED observations or supply a history, so they cannot show an observed direction
+      of change or current evidence coverage.
+    </p>
     <RegimeComposer />
   </L2>
 );
 
 export const L3Body = (
-  <L3 title="History, debate, sources">
+  <L3 title="Assumptions, limits, sources">
     <L3Grid
       sources={
         <Sources
           ids={[
-            "bis-borio-financial-cycle-2014",
-            "fed-monetary-policy-report",
+            "fred-cpiaucsl",
+            "fred-fedfunds",
+            "fred-unrate",
             "fred-drtscilm",
-            "nber-business-cycle-dating",
-            "romer-romer-monetary-shocks-2004",
-            "bridgewater-all-weather",
+          ]}
+          entries={[
+            { who: "Federal Reserve Board", title: "Economy at a Glance: Inflation (PCE)", year: "ongoing" },
+            { who: "Federal Reserve Bank of New York", title: "Measuring the Natural Rate of Interest", year: "ongoing" },
           ]}
         />
       }
     >
-      <h3>Where this framework comes from</h3>
+      <h3>What the model assumes</h3>
       <p>
-        The four-axes-with-tally read isn&apos;t something a single economist
-        invented. It crystallised over the 2000s out of three traditions
-        running in parallel. <strong>Bridgewater&apos;s All-Weather work</strong>{" "}
-        formalised the growth × inflation quadrant for portfolio construction
-        in the 1990s. <strong>The BIS</strong> (notably Borio&apos;s financial-
-        cycle work after 2008) made the credit-cycle axis a first-class object
-        alongside the macro cycle. <strong>The Fed&apos;s own dashboards</strong>{" "}
-        treat inflation, money, and labor as the three legs of the dual-mandate
-        read; adding credit completes the picture by capturing the financial-
-        plumbing dimension the dual mandate explicitly excludes.
+        This four-indicator display is an educational framework, not an estimated
+        business-cycle model. Its CPI labels use 2.2% and 3.3% teaching boundaries around
+        a visible 2% benchmark. These boundaries are not a claim that CPI has met the
+        Fed&apos;s target: the Fed defines its longer-run inflation goal using the{" "}
+        <a href="https://www.federalreserve.gov/economy-at-a-glance-inflation-pce.htm" style={{ color: "var(--gold-deep)" }}>
+          PCE price index
+        </a>.
       </p>
 
-      <h3>Why a tally, not a composite index</h3>
       <p>
-        The temptation when you have four indicators is to weight and blend them
-        into one number. Don&apos;t. <em>Composite indices hide the disagreement,
-        and the disagreement is where the information actually is.</em> The
-        Conference Board&apos;s Leading Economic Index, the Chicago Fed&apos;s
-        National Financial Conditions Index, even the Fed&apos;s own
-        recession-probability models all blend; all turn out to be most wrong
-        at exactly the turning points where the simpler four-axis read makes
-        the gap visible.
+        FEDFUNDS is a nominal effective interest rate. The natural rate, often called
+        r*, is a model-dependent real-rate concept; the{" "}
+        <a href="https://www.newyorkfed.org/research/policy/rstar" style={{ color: "var(--gold-deep)" }}>
+          New York Fed publishes estimates
+        </a>{" "}
+        from models of the economy. Causeway&apos;s fixed nominal reference does not
+        estimate r*, adjust for expected inflation, or establish whether monetary policy
+        is restrictive. A change in the monthly effective rate also does not identify
+        a particular policy decision or its cause.
       </p>
       <p>
-        The tally preserves the structure. Three of four agreeing tells you{" "}
-        <em>which</em> theme is winning and which axis is the holdout. Two of
-        four tells you the regime is mid-transition. A single blended number
-        loses both signals in the same gesture.
+        The 4.5–5.5% unemployment band is also illustrative. Neither it nor the other
+        bands was fitted to identify recessions or turning points. Moving a boundary
+        can change a label without changing the underlying observation.
       </p>
 
-      <Debate question="Is the four-axis read a forecast, or a current-state diagnostic?">
-        <DebateSide side="mainstream" who="● Diagnostic only">
+      <h3>What evidence coverage does and does not say</h3>
+      <p>
+        An axis counts toward coverage when it has an available FRED observation whose
+        period is recent under the dashboard&apos;s display policy: at most 90 days old
+        for monthly series, or 180 days for the quarterly lending survey. These age
+        limits are conventions, not guarantees that the newest release has arrived.
+        Observation periods, local checking times, and publication times are different.
+        Older readings and bundled illustrations remain labelled and do not count as
+        current provider evidence.
+      </p>
+      <p>
+        Four covered levels can coexist with missing comparisons or opposing changes.
+        Inflation, policy rates, employment, and credit also affect one another, so
+        four indicators are not four independent tests. Coverage is not a vote for one
+        regime, a statistical confidence measure, or evidence that this display
+        outperforms a composite index.
+      </p>
+
+      <Debate label="Interpretation" question="How can a limited snapshot help a decision?">
+        <DebateSide side="useful" who="● A structured set of questions">
           <p>
-            The dashboard reports what&apos;s happening now, not what&apos;s
-            coming. Calling future turning points is a separate (much harder)
-            problem the four axes don&apos;t solve. Treat the read as a snapshot
-            for positioning decisions; don&apos;t pretend it&apos;s predictive.
+            Separate observations make assumptions easier to inspect. You can ask how
+            higher borrowing costs, changing inflation, or tighter lending standards
+            would affect a plan, then test that plan against actual prices and terms.
+            Disagreement is useful information to preserve.
           </p>
         </DebateSide>
-        <DebateSide side="heterodox" who="● Embedded forecast">
+        <DebateSide side="limits" who="● An incomplete and delayed picture">
           <p>
-            The axes <em>are</em> implicitly forward-looking — SLOOS leads bank
-            loan growth by 1-2 quarters, unemployment lags policy by 12-18
-            months, inflation lags rate moves further still. Reading the
-            current configuration is reading a partially-revealed future. Deny
-            that and you lose the operational value.
+            The series cover different periods, may be revised, and omit much of the
+            economy. A relationship between past indicators and later outcomes does
+            not make the latest reading a forecast. A useful decision should also be
+            checked against outcomes the dashboard does not anticipate.
           </p>
         </DebateSide>
       </Debate>
 
-      <h3>The honest middle position</h3>
-      <p>
-        Both sides are partly right. The dashboard is unambiguously a current-
-        state diagnostic when you ask &quot;what is the regime now?&quot;.
-        It&apos;s also partially forward-looking because the axes have built-in
-        lags relative to the policy variable that drove them. Treating it as
-        either pure snapshot OR pure forecast is wrong; the right framing is
-        &quot;a snapshot of variables that respond to policy at different
-        speeds, some of which are already telling you what the next read will
-        look like.&quot;
-      </p>
-
       <h3>Edge cases worth flagging</h3>
       <p>
-        <strong>Reading the tally during a supply shock.</strong> 2022 produced
-        a configuration the four-axis framework wasn&apos;t calibrated for —
-        inflation tight, money loose-then-rapidly-tight, labor tight, credit
-        easy. The tally read 2-of-4 for most of 2022, which suggested a turning
-        point. It WAS a turning point, but for reasons the dashboard couldn&apos;t
-        see (energy spike, fiscal hangover) rather than the conventional
-        endogenous-cycle reasons. Honest users of the framework noted that the
-        turning-point signal was right and the underlying mechanism was different.
+        <strong>A smaller positive tightening share.</strong> In a hypothetical quarter,
+        the survey&apos;s net tightening share falls from +20% to +5%. The sign and
+        change answer different questions: tightening still exceeds easing, but by a
+        smaller share of banks. The{" "}
+        <a href="https://fred.stlouisfed.org/series/DRTSCILM" style={{ color: "var(--gold-deep)" }}>
+          SLOOS series
+        </a>{" "}
+        covers standards for commercial and industrial loans to large and middle-market
+        firms. It does not directly measure your mortgage offer, credit-card terms, or
+        the amount of credit available to every borrower.
       </p>
       <p>
-        <strong>Single-country reads in a global regime.</strong> The US
-        dashboard treats the US economy as self-contained. When global
-        conditions diverge sharply (China deflating while the US runs hot,
-        Eurozone recession while US grows), the US-only read can mislead about
-        the regime US assets actually face. Cross-check the headline read
-        against{" "}
+        <strong>A US snapshot is not a global regime.</strong> These four series
+        describe US conditions. A business or household with income, spending, or
+        investments abroad may face different conditions elsewhere. Compare{" "}
         <a href="/compare?c=USA,CHN,DEU&i=FP.CPI.TOTL.ZG,BN.CAB.XOKA.GD.ZS" style={{ color: "var(--gold-deep)" }}>
           comparable indicators across major economies
         </a>{" "}
-        before betting heavily on a single-country reading.
+        while checking their dates, definitions, and sources separately.
       </p>
 
       <Check
-        question="Three of the four regime axes (inflation, money, labor, credit) are signalling 'easing'; one is mixed. How should you interpret this?"
+        question="The dashboard shows evidence coverage of 3 out of 4. Annual CPI inflation is 3%, but its preceding-month comparison is unavailable. What can you conclude?"
         options={[
           {
-            label: "Wait until all four agree — three-out-of-four isn't statistically significant.",
-            explain: "There's no statistical-significance threshold being applied here; the framing is interpretive. Three-of-four is exactly the configuration that supports a high-confidence regime read."
+            label: "Inflation is falling toward 2%, and three covered indicators make that a high-confidence read.",
+            explain: "The 3% level alone does not reveal a change. Coverage counts recent FRED observations supporting level classifications, not indicators agreeing with an inflation forecast."
           },
           {
-            label: "High-confidence read — three of four agreeing is the strong regime signal. The mixed axis is worth watching, but the dominant theme is clear; act on it and let the laggard catch up.",
+            label: "Inflation is above the illustrative 2% CPI benchmark, its direction is unknown, and the coverage count does not measure agreement or confidence.",
             correct: true,
-            explain: "Right. Three-of-four is the operational threshold for confidence. Two-of-four (split) is the turning-point signal that says the playbook needs reassessment. Waiting for unanimity means acting after the move has already happened."
+            explain: "Right. A level, a dated change, and evidence coverage answer different questions. The missing comparison prevents a direction claim; the count does not establish a turning point or tell you what financial action to take."
           },
           {
-            label: "Inconclusive — any disagreement means the regime isn't really an easing one.",
-            explain: "Too restrictive. Regimes are messy at the edges; the indicators are noisy. The framework explicitly tolerates partial confirmation precisely because perfect agreement is rare in real time."
+            label: "One missing covered axis proves the economy is at a turning point.",
+            explain: "A missing, older, or illustrative reading limits the available provider evidence. It is not evidence of an economic turning point."
           }
         ]}
-        seeAlso={{ href: "/regime", label: "the live regime dashboard" }}
+        seeAlso={{ href: "/regime", label: "the dated regime dashboard" }}
       />
     </L3Grid>
   </L3>

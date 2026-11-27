@@ -62,6 +62,48 @@ describe("FRED observation validation", () => {
     expect(yoyChange([{ ...current, value: 0 }, { date: "2025-10-01", value: 100 }])).toBeNull();
     expect(yoyChange([current, { date: "2025-10-01", value: Number.MIN_VALUE }])).toBeNull();
   });
+
+  it("dates CPI YoY to September when October's exact prior-year index is missing", () => {
+    const observations = [
+      { date: "2026-10-01", value: 337.476 }, { date: "2026-09-01", value: 336.298 },
+      { date: "2025-10-01", value: null }, { date: "2025-09-01", value: 324.245 },
+    ];
+    expect(latest(observations)?.date).toBe("2026-10-01");
+    expect(yoyChange(observations)).toEqual({ date: "2026-09-01", value: expect.closeTo(3.7172508442689933, 10) });
+  });
+
+  it("selects the newest complete pair regardless of row order without mutating inputs", () => {
+    const observations = [
+      { date: "2025-09-01", value: 100 }, { date: "2026-08-01", value: 105 },
+      { date: "2025-08-01", value: 100 }, { date: "2026-09-01", value: 110 },
+      { date: "2026-10-01", value: 120 },
+    ];
+    const before = observations.map((row) => ({ ...row }));
+    expect(yoyChange(observations)).toEqual({ date: "2026-09-01", value: expect.closeTo(10, 10) });
+    expect(observations).toEqual(before);
+  });
+
+  it("skips unusable index pairs and overflowing changes when an older complete pair exists", () => {
+    const older = [{ date: "2026-09-01", value: 110 }, { date: "2025-09-01", value: 100 }];
+    for (const invalid of [null, 0, -1, NaN, Infinity]) {
+      for (const [current, previous] of [[invalid, 100], [120, invalid]]) {
+        expect(yoyChange([{ date: "2026-10-01", value: current }, { date: "2025-10-01", value: previous }, ...older]))
+          .toEqual({ date: "2026-09-01", value: expect.closeTo(10, 10) });
+      }
+    }
+    expect(yoyChange([{ date: "2026-10-01", value: Number.MAX_VALUE },
+      { date: "2025-10-01", value: Number.MIN_VALUE }, ...older]))
+      .toEqual({ date: "2026-09-01", value: expect.closeTo(10, 10) });
+  });
+
+  it("returns no change when every annual pair is incomplete or invalid", () => {
+    expect(yoyChange([])).toBeNull();
+    expect(yoyChange([
+      { date: "2026-10-01", value: 120 }, { date: "2025-10-01", value: null },
+      { date: "2026-09-01", value: 110 }, { date: "2025-09-01", value: 0 },
+      { date: "2026-08-01", value: 105 }, { date: "2025-08-02", value: 100 },
+    ])).toBeNull();
+  });
 });
 
 describe("bounded FRED reads and fallback provenance", () => {
@@ -102,6 +144,30 @@ describe("bounded FRED reads and fallback provenance", () => {
     expect(result.observationDate).toBe("2026-04-01");
     expect(result.observations).toEqual(cpiFallback);
     expect(yoyChange(result.observations)?.value).toBeCloseTo(20, 10);
+  });
+
+  it("retains live CPI and its missing periods when an older complete annual pair is available", async () => {
+    const rows = [
+      { date: "2026-10-01", value: "337.476" }, { date: "2026-09-01", value: "336.298" },
+      { date: "2025-10-01", value: "." }, { date: "2025-09-01", value: "324.245" },
+    ];
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response(rows)));
+    const cpiFallback = [{ date: "2026-04-01", value: 120 }, { date: "2025-04-01", value: 100 }];
+    const result = await fetchFredSeries("CPIAUCSL", cpiFallback, 18, { requireYoy: true });
+    expect(result).toMatchObject({ source: "fred", observationDate: "2026-09-01", fallbackReason: null });
+    expect(result.observations).toEqual(parseFredResponse({ observations: rows }));
+    expect(result.observations.find((row) => row.date === "2025-10-01")?.value).toBeNull();
+    expect(yoyChange(result.observations)?.value).toBeCloseTo(3.7172508442689933, 10);
+    expect(result.observations.some((row) => row.date === "2026-04-01")).toBe(false);
+  });
+
+  it("still rejects malformed provider rows even if other rows form a complete annual pair", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response([
+      { date: "2026-10-01", value: "337oops" }, { date: "2026-09-01", value: "110" },
+      { date: "2025-09-01", value: "100" },
+    ])));
+    const result = await fetchFredSeries("CPIAUCSL", [], 18, { requireYoy: true });
+    expect(result).toMatchObject({ source: "unavailable", observationDate: null, observations: [], fallbackReason: "invalid-response" });
   });
 
   it.each([[], [{ date: "bad", value: 4 }], [{ date: "2026-10-01", value: NaN }], [{ date: "2026-10-01", value: null }]].map((snapshot) => ({ snapshot })))("bad or absent fallback produces explicit unavailability", async ({ snapshot }) => {

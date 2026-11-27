@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Topbar, Crumb } from "@/components/chrome/Topbar";
 import { Footer } from "@/components/chrome/Footer";
 import { getRegimeRead, type AxisRead } from "@/lib/data/regime";
+import { classifyLevel } from "@/lib/regime-classification";
 
 export const metadata = {
   title: "Regime dashboard · Causeway",
@@ -9,7 +10,7 @@ export const metadata = {
     "Four economic indicators with observation dates, source status, and clearly labelled offline illustrations. The entry point for Track H.",
 };
 
-// FRED data refreshes on a monthly cadence; rebuild the static read every 6h.
+// Monthly and quarterly observations are checked for updates every 6h.
 // Note: Next.js 16 requires `revalidate` to be statically analyzable —
 // literal number, not a computed expression.
 export const revalidate = 21600; // 60 * 60 * 6
@@ -59,13 +60,7 @@ export default async function RegimePage() {
           ))}
         </section>
 
-        {read.sourceSummary === "fred" && read.axes.every((axis) => axis.freshness === "recent")
-          ? <Implications />
-          : <section className="mt-12 border-t border-rule pt-6 space-y-3">
-              <h2 className="text-2xl" style={{ fontFamily: "var(--cw-serif)" }}>Learn how to read these indicators</h2>
-              <p className="text-ink-2">This view contains illustrative, older, or unavailable data. Use it to explore the framework; it does not establish current conditions.</p>
-              <Link href="/nodes/H1" className="underline">Open H1 · Reading the regime →</Link>
-            </section>}
+        <Implications items={read.implications} />
 
         <Methodology />
       </main>
@@ -107,12 +102,11 @@ function Hero({ composite, sourceSummary }: HeroProps) {
         >
           Indicator snapshot:{" "}
           <em
-            className="text-gold-deep"
+            className="block mt-4 text-2xl lg:text-3xl leading-snug text-gold-deep"
             style={{ fontStyle: "italic" }}
           >
-            {composite.headline}
-          </em>{" "}
-          {sourceSummary === "fallback" ? " illustration." : "."}
+            {composite.headline}.
+          </em>
         </h1>
         <p
           className="text-lg text-ink-2 leading-relaxed max-w-2xl"
@@ -125,7 +119,7 @@ function Hero({ composite, sourceSummary }: HeroProps) {
       </div>
 
       <aside className="border border-rule rounded-md p-6 self-start bg-paper-2/40 space-y-4">
-        <StatBlock label="Confirming axes">
+        <StatBlock label="Evidence coverage">
           <div
             className="text-3xl text-gold-deep"
             style={{ fontFamily: "var(--cw-serif)", fontStyle: "italic" }}
@@ -136,6 +130,17 @@ function Hero({ composite, sourceSummary }: HeroProps) {
             {composite.detail}
           </div>
         </StatBlock>
+        <div className="border-t border-rule pt-3">
+          <StatBlock label="Trend coverage">
+            <div className="text-xl text-ink-2" style={{ fontFamily: "var(--cw-serif)" }}>
+              {composite.trendCoverage} of {composite.of}
+            </div>
+            <p className="text-xs text-ink-3 leading-relaxed">
+              Recent FRED readings with an exact preceding-period comparison.
+              Two periods describe a change, not a forecast.
+            </p>
+          </StatBlock>
+        </div>
         <div className="border-t border-rule pt-3">
           <StatBlock label="Source">
             <div className="text-xs text-ink-2 leading-relaxed">
@@ -181,6 +186,24 @@ const TONE_COLORS: Record<AxisRead["tone"], string> = {
   gold: "var(--gold-deep)",
 };
 
+const VALUE_FORMAT = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+
+function displayValue(axis: AxisRead): string {
+  const { value } = axis;
+  if (value === null) return "—";
+  if (value !== 0 && VALUE_FORMAT.format(Math.abs(value)) === "0") {
+    return value < 0 ? "−<0.01" : "<0.01";
+  }
+  // Preserve the displayed classification on either side of a boundary.
+  for (let digits = 2; digits <= 10; digits += 1) {
+    const formatted = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: digits, useGrouping: false,
+    }).format(value);
+    if (classifyLevel(axis.key, Number(formatted)).level.label === axis.level.label) return formatted;
+  }
+  return String(value);
+}
+
 function Gauge({ axis }: GaugeProps) {
   const fill = TONE_COLORS[axis.tone];
   const sourceLabel = axis.source === "fred" ? "FRED observation"
@@ -210,7 +233,7 @@ function Gauge({ axis }: GaugeProps) {
         className="text-4xl leading-none mt-4 tabular-nums"
         style={{ fontFamily: "var(--cw-serif)" }}
       >
-        {axis.value === null ? "—" : axis.value.toFixed(1)}
+        {displayValue(axis)}
         <span
           className="text-lg text-ink-3 ml-1"
           style={{ fontFamily: "var(--cw-mono)" }}
@@ -233,10 +256,20 @@ function Gauge({ axis }: GaugeProps) {
         />
       </div>
 
-      {/* Verdict — flex-1 pushes the footer to the bottom so all cards align. */}
-      <p className="text-sm text-ink-2 leading-relaxed mt-4 flex-1">
-        {axis.verdict}
-      </p>
+      <div className="mt-4 flex-1 space-y-3">
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-ink-3">Level</p>
+          <p className="text-sm text-ink-2 leading-relaxed mt-1">{axis.verdict}</p>
+          <p className="text-xs text-ink-3 leading-relaxed mt-2">{axis.level.reference}</p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-ink-3">Change</p>
+          <p className="text-sm text-ink-2 leading-relaxed mt-1">{axis.trend.label}</p>
+        </div>
+        {axis.selectionNote && (
+          <p className="text-xs text-ink-3 leading-relaxed">{axis.selectionNote}</p>
+        )}
+      </div>
       <p className="text-xs text-ink-3 leading-relaxed mt-3">
         {axis.source === "fallback"
           ? `Bundled illustration, not current provider data. Example period age: ${axis.observationAgeDays} days${axis.freshness === "stale" ? `; exceeds the ${axis.staleAfterDays}-day display threshold` : ""}.`
@@ -262,33 +295,12 @@ function Gauge({ axis }: GaugeProps) {
   );
 }
 
-function Implications() {
-  const items: { axis: string; href: string; title: string; line: string }[] = [
-    {
-      axis: "H2 · Saving",
-      href: "/nodes/H2",
-      title: "Cash still earns; lock some in.",
-      line: "Short-duration Treasuries pay real yield for the first time in a generation. Laddering preserves it without committing to a bottom.",
-    },
-    {
-      axis: "H3 · Housing",
-      href: "/nodes/H3",
-      title: "Don't chase the rate; watch the spread.",
-      line: "Mortgage rates lag policy. The 10y–30y mortgage spread is the leading indicator, not the headline number.",
-    },
-    {
-      axis: "H8 · Portfolio",
-      href: "/nodes/H8",
-      title: "Stagger duration; don't pile in.",
-      line: "Extending duration into a cuts cycle is canonical; doing it all at once is the canonical mistake.",
-    },
-  ];
-
+function Implications({ items }: { items: Awaited<ReturnType<typeof getRegimeRead>>["implications"] }) {
   return (
     <section className="mt-16 pt-10 border-t border-rule">
-      <div className="flex items-baseline justify-between mb-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-4 mb-6">
         <h2 className="text-2xl" style={{ fontFamily: "var(--cw-serif)" }}>
-          What this regime implies for your decisions
+          What these readings can help you examine
         </h2>
         <Link
           href="/tracks/H"
@@ -303,12 +315,12 @@ function Implications() {
         className="text-base text-ink-2 leading-relaxed max-w-3xl mb-6"
         style={{ fontFamily: "var(--cw-serif)" }}
       >
-        These are <em>directional defaults</em>, not advice. They flip when the
-        regime flips. The point is to know which way the wind is blowing before
-        you decide.
+        Each question follows its own indicator and data limitations. Use the
+        linked lessons to examine the mechanism, your circumstances, and the
+        assumptions; no single reading establishes what you should do next.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {items.map((it) => (
           <Link
             key={it.axis}
@@ -351,20 +363,36 @@ function Methodology() {
           className="text-base text-ink-2 leading-relaxed"
           style={{ fontFamily: "var(--cw-serif)" }}
         >
-          Causeway scores each axis against simple thresholds calibrated to the
-          post-1990 sample: Fed target for inflation, neutral rate for monetary
-          stance, long-run average for labor. The composite is the count of
-          axes confirming a single thematic read — we report it transparently
-          rather than blending into a single number that hides disagreement.
+          Levels use illustrative thresholds to make comparisons legible. These
+          are teaching heuristics, not fitted estimates or a diagnosis of one
+          economic cycle. Each axis is read independently. Evidence coverage
+          counts recent FRED observations that support their own level
+          classifications; it is not statistical confidence or agreement among
+          indicators. Values normally show up to two decimals, with more precision
+          near a boundary so the number and classification remain consistent.
         </p>
         <p
           className="text-base text-ink-2 leading-relaxed"
           style={{ fontFamily: "var(--cw-serif)" }}
         >
-          When axes disagree — common at turning points — the dashboard says
-          so. The point is not to pretend the future is knowable; it&apos;s to
-          make today&apos;s read legible.
+          Changes compare exact adjacent months, or adjacent quarters for the
+          lending survey. A gap leaves the change unknown. CPI uses the newest
+          complete annual pair of positive indexes for the same month one year
+          apart, stepping back when needed without interpolation. A monthly
+          effective-rate change does not by itself identify an FOMC decision.
         </p>
+        <ul className="space-y-2 text-sm text-ink-2 leading-relaxed list-disc pl-5">
+          <li>
+            CPI uses a 2% reference and 2.2% / 3.3% teaching boundaries.
+            The Federal Reserve&apos;s{" "}
+            <a href="https://www.federalreserve.gov/faqs/economy_14400.htm" target="_blank" rel="noopener noreferrer" className="underline">
+              2% longer-run goal uses PCE inflation
+            </a>, a different price index.
+          </li>
+          <li>Money uses an assumed 3% nominal reference with a 2.5–3.5% band, not an observed neutral rate.</li>
+          <li>Labor uses an illustrative 4.5–5.5% unemployment band, not an estimate of full employment.</li>
+          <li>Credit is net tightening above zero and net easing below zero. That sign and the change since the preceding quarter answer different questions.</li>
+        </ul>
       </div>
       <div className="border-t-2 border-ink pt-3 self-start">
         <div

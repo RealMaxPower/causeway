@@ -436,7 +436,7 @@ export const TRACKS: Record<TrackLetter, Track> = {
         id: "H1",
         title: "Reading the regime",
         pocket:
-          "Four orthogonal axes — inflation, money, labor, credit — combine into a regime read. Three of four agreeing is high-confidence; two is a turning point. The dashboard updates daily.",
+          "Read inflation, interest rates, labor, and credit separately: each level, its dated change, and the source's freshness. Evidence coverage describes available observations, not confidence or a turning point.",
         time: "11 min",
         status: "ready",
         star: true,

@@ -7,16 +7,14 @@ import {
   DEFAULT_INPUTS,
   PRESETS,
   compose,
-  signalTone,
   type Inputs,
 } from "./model";
 
 /**
  * Regime composer (H1 hero + lab-mode writer).
  *
- * Dial the four regime axes by hand. Watch how the composite tally changes:
- * three-of-four is high-confidence, two-of-four is a turning point. Mirrors
- * the live /regime composite math; works as a sandbox for the same logic.
+ * Dial four hypothetical values and compare their levels with the same
+ * teaching references used on /regime. No history is supplied here.
  *
  * When wrapped in a RegimeProvider (e.g. on `/lab`), this widget writes to
  * the shared regime context so reader widgets respond in real time. Outside
@@ -85,6 +83,7 @@ export function RegimeComposer() {
             <button
               key={p.id}
               type="button"
+              aria-pressed={presetId === p.id}
               onClick={() => applyPreset(p.id)}
               className={`${styles.preset} ${
                 presetId === p.id ? styles.presetActive : ""
@@ -124,7 +123,7 @@ export function RegimeComposer() {
             step={0.1}
             unit="%"
             boundLeft="0 (ZIRP)"
-            boundMid="3 (neutral)"
+            boundMid="3 (reference)"
             boundRight="12"
             onChange={(v) => update("fedFunds", v)}
           />
@@ -137,7 +136,7 @@ export function RegimeComposer() {
             step={0.1}
             unit="%"
             boundLeft="2"
-            boundMid="5 (long-run avg)"
+            boundMid="5 (reference)"
             boundRight="12"
             onChange={(v) => update("unemployment", v)}
           />
@@ -150,7 +149,7 @@ export function RegimeComposer() {
             step={1}
             unit="%"
             boundLeft="easing"
-            boundMid="neutral"
+            boundMid="0 (net balance)"
             boundRight="tightening"
             onChange={(v) => update("sloos", v)}
           />
@@ -158,42 +157,32 @@ export function RegimeComposer() {
 
         <div className={styles.composite}>
           <div>
-            <div className={styles.eyebrow}>Regime headline</div>
+            <div className={styles.eyebrow}>Hypothetical levels</div>
             <div className={styles.headline}>{result.headline}</div>
           </div>
 
-          <div className={styles.confirmingRow}>
-            <span className={styles.confirmingValue}>
-              {result.confirming} / {result.total}
-            </span>
-            <span className={styles.confirmingLabel}>
-              axes confirming the dominant theme
-            </span>
-          </div>
-
-          <div className={styles.confidence}>{result.confidence}</div>
+          <div className={styles.detail}>{result.detail}</div>
 
           <div className={styles.axisGrid}>
             {result.axes.map((a) => {
-              const tone = signalTone(a.signal);
+              const tone = a.tone;
               const sigClass =
                 tone === "red"
                   ? `${styles.axisSignal} ${styles.axisSignalRed}`
                   : tone === "gold"
                     ? `${styles.axisSignal} ${styles.axisSignalGold}`
-                    : `${styles.axisSignal} ${styles.axisSignalGreen}`;
+                    : tone === "blue"
+                      ? `${styles.axisSignal} ${styles.axisSignalBlue}`
+                      : `${styles.axisSignal} ${styles.axisSignalGreen}`;
               return (
                 <div key={a.key} className={styles.axisRow}>
                   <span className={styles.axisLabel}>
-                    <span
-                      className={`${styles.confirmsDot} ${a.confirms ? styles.confirmsDotOn : styles.confirmsDotOff}`}
-                      aria-hidden
-                    />
-                    {a.label}: {a.value.toFixed(1)}
+                    {a.label}: {a.value}
                     {a.unit}
                   </span>
-                  <span className={sigClass}>{a.signal}</span>
+                  <span className={sigClass}>{a.level.band}</span>
                   <span className={styles.axisVerdict}>{a.verdict}</span>
+                  <span className={styles.axisReference}>{a.level.reference}</span>
                 </div>
               );
             })}
@@ -204,9 +193,9 @@ export function RegimeComposer() {
       <div className={styles.foot}>
         <span className={styles.footLabel}>What this is ▸</span>
         <span>
-          The regime tally is not a forecast. It&apos;s a count of how many
-          orthogonal axes agree on the same theme. Three of four is decisive;
-          two of four is the turning point.
+          Presets are illustrations, not current readings or reconstructions of
+          dated historical episodes. Badges compare each value with its stated
+          teaching reference; they do not score confidence or forecast a cycle.
         </span>
       </div>
     </div>
@@ -247,7 +236,7 @@ function SliderField({
           {label}
         </label>
         <span className={styles.sliderValue}>
-          {value.toFixed(1)}
+          {value}
           {unit}
         </span>
       </div>
