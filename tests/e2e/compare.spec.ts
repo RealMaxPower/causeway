@@ -63,5 +63,22 @@ test.describe("Country compare", () => {
     );
     await page.goto("/compare");
     await expect(page.getByText(/snapshot/i).first()).toBeVisible();
+    const provenance = page.getByRole("list", { name: "Sources and freshness by country" });
+    await expect(provenance).toHaveCount(3);
+    await expect(provenance.first()).toContainText("Illustrative snapshot");
+    await expect(provenance.first()).toContainText("Snapshot update date: unrecorded");
+    await expect(provenance.first()).toContainText("Latest value year: 2024");
+  });
+
+  test("repeated query parameters preserve valid selections and normalize on interaction", async ({ page }) => {
+    await page.goto("/compare?c=deu,USA&c=USA&c=CHN&i=FP.CPI.TOTL.ZG&i=NY.GDP.PCAP.CD");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Germany · United States · China");
+    await expect(page.getByRole("heading", { name: /Inflation.*annual %/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /GDP per capita/i })).toBeVisible();
+    await page.getByRole("button", { name: /China/, pressed: true }).click();
+    await expect(page.getByRole("heading", { level: 1 })).not.toContainText("China");
+    const params = new URL(page.url()).searchParams;
+    expect(params.getAll("c")).toEqual(["DEU,USA"]);
+    expect(params.getAll("i")).toEqual(["FP.CPI.TOTL.ZG,NY.GDP.PCAP.CD"]);
   });
 });

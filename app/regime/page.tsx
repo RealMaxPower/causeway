@@ -6,7 +6,7 @@ import { getRegimeRead, type AxisRead } from "@/lib/data/regime";
 export const metadata = {
   title: "Regime dashboard · Causeway",
   description:
-    "Four live FRED axes — inflation, money, labor, credit — combined into a single regime read. The entry point for Track H.",
+    "Four economic indicators with observation dates, source status, and clearly labelled offline illustrations. The entry point for Track H.",
 };
 
 // FRED data refreshes on a monthly cadence; rebuild the static read every 6h.
@@ -51,7 +51,7 @@ export default async function RegimePage() {
       />
 
       <main id="main" tabIndex={-1} className="flex-1 mx-auto max-w-[1320px] w-full px-4 sm:px-6 lg:px-9 py-12">
-        <Hero composite={read.composite} liveAny={read.liveAny} />
+        <Hero composite={read.composite} sourceSummary={read.sourceSummary} />
 
         <section className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {read.axes.map((axis) => (
@@ -59,7 +59,13 @@ export default async function RegimePage() {
           ))}
         </section>
 
-        <Implications />
+        {read.sourceSummary === "fred" && read.axes.every((axis) => axis.freshness === "recent")
+          ? <Implications />
+          : <section className="mt-12 border-t border-rule pt-6 space-y-3">
+              <h2 className="text-2xl" style={{ fontFamily: "var(--cw-serif)" }}>Learn how to read these indicators</h2>
+              <p className="text-ink-2">This view contains illustrative, older, or unavailable data. Use it to explore the framework; it does not establish current conditions.</p>
+              <Link href="/nodes/H1" className="underline">Open H1 · Reading the regime →</Link>
+            </section>}
 
         <Methodology />
       </main>
@@ -73,10 +79,17 @@ export default async function RegimePage() {
 
 interface HeroProps {
   composite: Awaited<ReturnType<typeof getRegimeRead>>["composite"];
-  liveAny: boolean;
+  sourceSummary: Awaited<ReturnType<typeof getRegimeRead>>["sourceSummary"];
 }
 
-function Hero({ composite, liveAny }: HeroProps) {
+const SOURCE_LABELS = {
+  fred: "FRED observations · dates vary by series",
+  fallback: "Illustrative offline snapshot",
+  mixed: "Mixed sources · check each indicator",
+  unavailable: "Data unavailable",
+};
+
+function Hero({ composite, sourceSummary }: HeroProps) {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 pb-12 border-b border-rule">
       <div className="space-y-5">
@@ -86,28 +99,28 @@ function Hero({ composite, liveAny }: HeroProps) {
         >
           ▣ Cross-cutting
           <span className="text-gold-deep">●</span>
-          <span>{liveAny ? "live · FRED" : "snapshot · upstream unavailable"}</span>
+          <span>{SOURCE_LABELS[sourceSummary]}</span>
         </div>
         <h1
           className="text-4xl lg:text-5xl leading-[1.05] tracking-tight"
           style={{ fontFamily: "var(--cw-serif)" }}
         >
-          Right now you are in a{" "}
+          Indicator snapshot:{" "}
           <em
             className="text-gold-deep"
             style={{ fontStyle: "italic" }}
           >
             {composite.headline}
           </em>{" "}
-          regime.
+          {sourceSummary === "fallback" ? " illustration." : "."}
         </h1>
         <p
           className="text-lg text-ink-2 leading-relaxed max-w-2xl"
           style={{ fontFamily: "var(--cw-serif)" }}
         >
-          A single screen telling you the macro environment across orthogonal
-          axes — and what it implies for the decisions you actually make. All
-          four axes are wired live; the read updates with each new FRED release.
+          Inflation, money, labor, and credit in one view. Each card shows its
+          source and observation period. Provider data may be cached for six
+          hours; a recent retrieval does not make an older observation current.
         </p>
       </div>
 
@@ -120,13 +133,14 @@ function Hero({ composite, liveAny }: HeroProps) {
             {composite.confirming} of {composite.of}
           </div>
           <div className="text-xs text-ink-3 leading-relaxed">
-            Three or more is a clear regime read. Fewer means a turning point.
+            {composite.detail}
           </div>
         </StatBlock>
         <div className="border-t border-rule pt-3">
           <StatBlock label="Source">
             <div className="text-xs text-ink-2 leading-relaxed">
-              FRED · St. Louis Fed. Cached 6h.
+              {SOURCE_LABELS[sourceSummary]}. Bundled fallbacks are illustrative
+              inputs, not verified current readings.
             </div>
           </StatBlock>
         </div>
@@ -169,7 +183,8 @@ const TONE_COLORS: Record<AxisRead["tone"], string> = {
 
 function Gauge({ axis }: GaugeProps) {
   const fill = TONE_COLORS[axis.tone];
-  const sourceLabel = axis.source === "fred" ? "live" : "snapshot";
+  const sourceLabel = axis.source === "fred" ? "FRED observation"
+    : axis.source === "fallback" ? "Illustrative snapshot" : "Unavailable";
 
   return (
     <div className="border border-rule rounded-md p-5 bg-paper-2/30 flex flex-col h-full">
@@ -182,7 +197,7 @@ function Gauge({ axis }: GaugeProps) {
           ⊕ {axis.label}
         </div>
         <div
-          className="text-[10px] text-ink-3 truncate"
+          className="text-[10px] text-ink-3 leading-relaxed"
           style={{ fontFamily: "var(--cw-mono)", letterSpacing: "0.08em" }}
           title={`FRED series ${axis.seriesId} · ${axis.asOf}`}
         >
@@ -195,7 +210,7 @@ function Gauge({ axis }: GaugeProps) {
         className="text-4xl leading-none mt-4 tabular-nums"
         style={{ fontFamily: "var(--cw-serif)" }}
       >
-        {axis.value.toFixed(1)}
+        {axis.value === null ? "—" : axis.value.toFixed(1)}
         <span
           className="text-lg text-ink-3 ml-1"
           style={{ fontFamily: "var(--cw-mono)" }}
@@ -206,11 +221,11 @@ function Gauge({ axis }: GaugeProps) {
 
       {/* Bar */}
       <div className="relative h-2 rounded-sm bg-paper-3 mt-4">
-        <div
+        {axis.fillPct !== null && <div
           className="absolute inset-y-0 left-0 rounded-sm"
           style={{ width: `${axis.fillPct}%`, background: fill }}
           aria-hidden
-        />
+        />}
         <div
           className="absolute top-[-3px] bottom-[-3px] w-px bg-ink-3"
           style={{ left: `${axis.markerPct}%` }}
@@ -222,6 +237,18 @@ function Gauge({ axis }: GaugeProps) {
       <p className="text-sm text-ink-2 leading-relaxed mt-4 flex-1">
         {axis.verdict}
       </p>
+      <p className="text-xs text-ink-3 leading-relaxed mt-3">
+        {axis.source === "fallback"
+          ? `Bundled illustration, not current provider data. Example period age: ${axis.observationAgeDays} days${axis.freshness === "stale" ? `; exceeds the ${axis.staleAfterDays}-day display threshold` : ""}.`
+          : axis.source === "unavailable"
+            ? "No usable observation is available."
+            : axis.freshness === "stale"
+              ? `Older observation: ${axis.observationAgeDays} days since its period began (display threshold: ${axis.staleAfterDays} days).`
+              : `Observation period began ${axis.observationAgeDays} days ago.`}
+      </p>
+      <a href={`https://fred.stlouisfed.org/series/${axis.seriesId}`} target="_blank" rel="noopener noreferrer" className="text-xs underline mt-2">
+        View source series
+      </a>
 
       {/* Footer — anchored bottom via flex layout. */}
       <div
@@ -360,8 +387,9 @@ function Methodology() {
           >
             FRED API
           </a>
-          . Snapshot fallbacks are used when the upstream is unavailable and
-          labelled inline.
+          . Dates identify observation periods, not release or retrieval dates.
+          Bundled fallbacks are illustrative snapshots with no recorded source
+          verification date. They are labelled on every affected card.
         </p>
       </div>
     </section>
