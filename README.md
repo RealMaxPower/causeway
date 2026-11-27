@@ -52,7 +52,7 @@ A user must be able to stop at any layer without feeling pushed. Each layer is c
 | Regime dashboard (`/regime`) | Lab mode (`/lab`) |
 |--|--|
 | [![Live regime dashboard](docs/screenshots/regime.png)](https://www.causewayecon.org/regime) | [![Lab mode — drive every widget from one shared regime](docs/screenshots/lab.png)](https://www.causewayecon.org/lab) |
-| One screen reading the macro environment across four orthogonal axes, wired live to [FRED](https://fred.stlouisfed.org/). | Pin a scenario, dial four axes, and drive every widget from the same shared regime — then share it as a URL. |
+| One screen reading the macro environment across four separate axes, wired live to [FRED](https://fred.stlouisfed.org/). | Pin a scenario, dial four axes, and drive every widget from the same shared regime — then share it as a URL. |
 
 ---
 
@@ -66,7 +66,7 @@ pnpm dev
 
 Open <http://localhost:3000>.
 
-The app runs fully without any keys — all 44 nodes, widgets, lab, and the FRED-backed `/regime` dashboard work out of the box. Two env vars are optional: `ANTHROPIC_API_KEY` enables the in-app AI tutor, and a `FRED_API_KEY` raises the rate limit on live regime data (it falls back to cached values without one).
+All 44 nodes, widgets, and the lab run without API keys. Without `FRED_API_KEY`, the `/regime` dashboard uses clearly labelled bundled illustrations; a key enables requests for FRED observations. `ANTHROPIC_API_KEY` enables the optional in-app AI tutor.
 
 ## Stack
 

@@ -79,19 +79,25 @@ export function latest(observations: FredObservation[]): FredObservation | null 
   return newest;
 }
 
-/** CPI YoY requires positive indexes on the same period date one year apart. */
+/** Newest complete CPI YoY pair, with positive indexes exactly one year apart.
+ * A newer incomplete period stays in the series but cannot date the YoY value.
+ */
 export function yoyChange(observations: FredObservation[]): { value: number; date: string } | null {
-  const newest = latest(observations);
-  if (!newest || newest.value === null || newest.value <= 0) return null;
-  const previousDate = `${String(Number(newest.date.slice(0, 4)) - 1).padStart(4, "0")}${newest.date.slice(4)}`;
-  const previous = observations.find((row) => validObservation(row) && row.date === previousDate);
-  if (!previous || previous.value === null || previous.value <= 0) return null;
-  const value = (newest.value / previous.value - 1) * 100;
-  return Number.isFinite(value) ? { value, date: newest.date } : null;
+  let newest: { value: number; date: string } | null = null;
+  for (const current of observations) {
+    if (!validObservation(current) || current.value === null || current.value <= 0
+      || (newest && current.date <= newest.date)) continue;
+    const previousDate = `${String(Number(current.date.slice(0, 4)) - 1).padStart(4, "0")}${current.date.slice(4)}`;
+    const previous = observations.find((row) => validObservation(row) && row.date === previousDate);
+    if (!previous || previous.value === null || previous.value <= 0) continue;
+    const value = (current.value / previous.value - 1) * 100;
+    if (Number.isFinite(value)) newest = { value, date: current.date };
+  }
+  return newest;
 }
 
 /**
- * Fetch newest observations. CPI callers require a usable prior-year comparison;
+ * Fetch newest observations. CPI callers use the latest complete annual pair;
  * a fallback is selected as a whole series, never spliced into live history.
  */
 export async function fetchFredSeries(
